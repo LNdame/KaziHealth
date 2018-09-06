@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="mandela.cct.ansteph.kazihealth.view.profile.EditProfile"
+    tools:showIn="@layout/activity_edit_profile">
+
+
+    <FrameLayout
+        android:background="@color/colorPrimary"
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+
+        android:paddingBottom="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+    </FrameLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avatar"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="58dp"
+        android:background="@drawable/diagonallayout_circle"
+
+        android:src="@drawable/user" />
+
+    <LinearLayout
+        android:id="@+id/lytdetials"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/avatar"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical">
+
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+        <LinearLayout
+            android:layout_marginRight="6dp"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/borderfilled"
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/editFullName"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Full name"
+                android:fontFamily="sans-serif-light"
+                android:textColor="#3e3e3e"
+                android:textSize="18sp"
+                android:ems="10"
+                android:inputType="text" />
+
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:fontFamily="sans-serif-light"
+                android:textColor="#3e3e3e"
+                android:textSize="18sp"
+                android:ems="10"
+                android:inputType="text" />
+            <TextView
+                style="@style/edit_box_other"
+
+                android:id="@+id/editDob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Date of birth e.g. 1980/01/01"
+                android:textSize="18sp"
+                android:inputType="text" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/textColorPrimary"/>
+
+            <TextView
+                android:text="Touch to select gender"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Spinner
+                style="@style/edit_box_other"
+
+                android:id="@+id/spnGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                />
+
+
+            <Button
+                style="@style/button_style_alternate"
+                android:id="@+id/btnChangePass"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:padding="16dp"
+                android:layout_above="@+id/btnRedo"
+                android:onClick="onChangePasswordClicked"
+                android:layout_marginRight="6dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="6dp"
+                android:text="CHANGE PASSWORD" />
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/lytPassword"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/done"
+                    android:paddingTop="8dp"
+                    android:paddingLeft="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/editOldPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Old Password "
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="#3e3e3e"
+                    android:textSize="18sp"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+                <EditText
+                    android:id="@+id/editPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password "
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="#3e3e3e"
+                    android:textSize="18sp"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+
+                <EditText
+                    android:id="@+id/editConPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Confirm Password"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="#3e3e3e"
+                    android:textSize="18sp"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/lytKhNumber"
+                android:padding="16dp"
+                android:background="@drawable/buttonbg_alternate"
+                android:layout_marginRight="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp"
+                android:elevation="8dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:layout_weight="9"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/subheading"
+                    android:text="KH Number" />
+
+                <TextView
+                    android:id="@+id/txtKhNumbre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/subheading"
+                    android:gravity="center_vertical|end"
+                    android:text="000000000" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
+                    app:srcCompat="@drawable/ic_chevron_right" />
+
+            </LinearLayout>
+
+            <TextView
+
+                android:visibility="gone"
+                android:id="@+id/txtfoundprofile"
+                android:fontFamily="sans-serif-light"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textStyle="normal"
+                android:text="@string/profile_found" />
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+</ScrollView>
+
+
+
+
+    </LinearLayout>
+    <Button
+        style="@style/button_style_alternate"
+        android:id="@+id/btnChangePic"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:padding="6dp"
+        android:layout_below="@+id/avatar"
+        android:onClick="onChangePictureClicked"
+        android:layout_marginRight="56dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="6dp"
+        android:text="CHANGE PICTURE" />
+
+
+
+</RelativeLayout>

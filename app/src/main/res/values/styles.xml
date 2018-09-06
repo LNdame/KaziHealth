@@ -1,0 +1,66 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- <item name="android:windowBackground">@drawable/splash_back</item> -->
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+
+        <item name="android:windowBackground">@color/colorPrimary</item>
+
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="edit_box_other">
+
+        <item name="android:background">@drawable/borderfilled</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:maxHeight">140dp</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:textSize">@dimen/body_regular</item>
+        <!-- <item name="android:background">@drawable/edit_border</item> -->
+    </style>
+
+    <style name="button_style">
+        <item name="android:background">@color/grey_back</item>
+        <item name="android:textColor">@color/colorWhite</item>
+
+    </style>
+
+    <style name="button_style_actract">
+        <item name="android:background">@drawable/buttonbg</item>
+        <item name="android:textColor">@color/colorWhite</item>
+
+    </style>
+
+    <style name="button_style_alternate">
+        <item name="android:background">@drawable/buttonbg_alternate</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+
+    </style>
+
+    <style name="EditTextTintTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+    </style>
+
+
+
+
+</resources>

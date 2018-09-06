@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey_back"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="mandela.cct.ansteph.kazihealth.view.appmanagement.AppDownload"
+    tools:showIn="@layout/activity_app_download">
+
+
+    <FrameLayout
+        android:background="@drawable/aboutbg"
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+
+        android:paddingBottom="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_margin="8dp"
+        android:background="@drawable/borderfilled"
+        android:layout_below="@+id/topPanel"
+        android:layout_above="@+id/btnImport"
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imglargeIcon"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            app:srcCompat="@mipmap/ic_hifit" />
+
+        <TextView
+            android:id="@+id/txtfoundprofile"
+            android:fontFamily="sans-serif-light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:textStyle="normal"
+            android:text="@string/info_download" />
+
+        <TextView
+            android:id="@+id/txtlinktoVid"
+            android:fontFamily="sans-serif-light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:onClick="onLinkClicked"
+            android:clickable="true"
+            android:textStyle="normal"
+            android:text="Link to 'How to' video" />
+
+    </LinearLayout>
+
+
+    <Button
+        style="@style/button_style_alternate"
+        android:id="@+id/btnImport"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:padding="16dp"
+        android:layout_alignParentBottom="true"
+        android:onClick="onGoogleClicked"
+        android:layout_marginRight="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="6dp"
+        android:text="DOWNLOAD FROM GOOGLE PLAY STORE" />
+
+</RelativeLayout>

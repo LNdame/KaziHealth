@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="mandela.cct.ansteph.kazihealth">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".app.GlobalRetainer"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Splash"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="bd5e725a5ba4820e8068afcc3893bb8bf07a1ad0" />
+
+        <activity
+            android:name=".view.register.Login"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.register.Register"
+            android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.profile.Profile"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.profile.RiskProfile"
+            android:label="@string/title_activity_risk_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.appmanagement.Apps"
+            android:label="@string/title_activity_apps"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.tip.Tips"
+            android:label="@string/title_activity_tips"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.tip.About"
+            android:label="@string/title_activity_about"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.tip.TipDetail"
+            android:label="@string/title_activity_tip_detail"
+            android:parentActivityName=".view.tip.Tips"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mandela.cct.ansteph.kazihealth.view.tip.Tips" />
+        </activity>
+        <activity
+            android:name=".view.appmanagement.AppDownload"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_app_download"
+            android:parentActivityName=".view.appmanagement.Apps"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mandela.cct.ansteph.kazihealth.view.appmanagement.Apps" />
+        </activity>
+        <activity
+            android:name=".view.profile.UploadProfile"
+            android:label="@string/title_activity_upload_profile"
+            android:parentActivityName=".view.profile.Profile"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mandela.cct.ansteph.kazihealth.view.profile.Profile" />
+        </activity>
+
+        <provider
+            android:name=".contentprovider.UserContentProvider"
+            android:authorities="mandela.cct.ansteph.kazihealth.contentprovider.usercontentprovider"
+            android:enabled="true"
+            android:exported="false" />
+        <provider
+            android:name=".contentprovider.RiskProfileContentProvider"
+            android:authorities="mandela.cct.ansteph.kazihealth.contentprovider.riskprofilecontentprovider"
+            android:enabled="true"
+            android:exported="true" />
+        <provider
+            android:name=".contentprovider.RiskItemContentProvider"
+            android:authorities="mandela.cct.ansteph.kazihealth.contentprovider.riskitemcontentprovider"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".view.profile.EditProfile"
+            android:label="@string/title_activity_edit_profile"
+            android:parentActivityName=".view.profile.Profile"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mandela.cct.ansteph.kazihealth.view.profile.Profile" />
+        </activity>
+
+        <service android:name=".service.KaziFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".service.KaziFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".view.intro.WelcomePage" />
+        <activity
+            android:name=".view.tip.Legal"
+            android:label="@string/title_activity_legal"
+            android:parentActivityName=".view.tip.About"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mandela.cct.ansteph.kazihealth.view.tip.About" />
+        </activity>
+    </application>
+
+</manifest>

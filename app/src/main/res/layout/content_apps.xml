@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey_back"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="mandela.cct.ansteph.kazihealth.view.appmanagement.Apps"
+    tools:showIn="@layout/app_bar_apps">
+
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+    <RelativeLayout
+        android:id="@+id/lytPhysical"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:background="@drawable/tipbg"
+            android:id="@+id/topPhysical"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+
+            android:paddingBottom="16dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:background="@drawable/buttonbg_alternate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="160dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:fontFamily="sans-serif"
+                android:textSize="28sp"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="16dp"
+                android:text="Physical Activity" />
+
+           <LinearLayout
+               android:orientation="horizontal"
+               android:layout_marginBottom="16dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:visibility="gone"
+                   android:layout_weight="1"
+                   android:orientation="vertical">
+
+                   <ImageButton
+                       android:id="@+id/imgbtnHifit"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:background="@null"
+                       android:onClick="gotoHiFit"
+                       app:srcCompat="@mipmap/ic_hifit" />
+
+                   <TextView
+
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="center"
+                       android:fontFamily="sans-serif"
+                       android:textSize="@dimen/body_regular"
+                       android:text="HiFit" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:orientation="vertical">
+
+                   <ImageButton
+                       android:id="@+id/imgbtnWorkout"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:onClick="gotoWorkout"
+                       android:background="@null"
+                       app:srcCompat="@mipmap/ic_workout" />
+
+                   <TextView
+
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="center"
+                       android:fontFamily="sans-serif"
+                       android:textSize="@dimen/body_regular"
+                       android:text="Workout\nTrainer" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:orientation="vertical">
+
+                   <ImageButton
+                       android:id="@+id/imgbtnStepCounter"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:background="@null"
+                       android:onClick="gotoStepCounter"
+                       app:srcCompat="@mipmap/ic_stepcounter" />
+
+                   <TextView
+
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:gravity="center"
+                       android:fontFamily="sans-serif"
+                       android:textSize="@dimen/body_regular"
+                       android:text="Step Counter" />
+               </LinearLayout>
+
+
+           </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lytNutrition"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:background="@drawable/nutritionbg"
+            android:id="@+id/topNutrition"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+
+            android:paddingBottom="16dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:background="@drawable/buttonbg_alternate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="160dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:fontFamily="sans-serif"
+                android:textSize="28sp"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="16dp"
+                android:text="Nutrition" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/imgbtnFitnessPal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:onClick="gotoMyFitnessPal"
+                        app:srcCompat="@mipmap/ic_fitnesspal" />
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:fontFamily="sans-serif"
+                        android:textSize="@dimen/body_regular"
+                        android:text="MyFitnessPal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/imgbtnLifeSum"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:onClick="gotoLifesum"
+                        app:srcCompat="@mipmap/ic_lifesum" />
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:fontFamily="sans-serif"
+                        android:textSize="@dimen/body_regular"
+                        android:text="Lifesum" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/imgbtnSeeHowEat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:onClick="gotoSeeHowEat"
+                        app:srcCompat="@mipmap/ic_seehoweat" />
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:fontFamily="sans-serif"
+                        android:textSize="@dimen/body_regular"
+                        android:text="See How You Eat" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/lytStress"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:background="@drawable/stress_image"
+            android:id="@+id/topStress"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+
+            android:paddingBottom="16dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:background="@drawable/buttonbg_alternate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="160dp"
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:fontFamily="sans-serif"
+                android:textSize="28sp"
+                android:gravity="center"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="16dp"
+                android:text="Stress Management" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/imgbtnCatchIt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:onClick="gotoCatchIt"
+                        app:srcCompat="@mipmap/ic_catchit" />
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:fontFamily="sans-serif"
+                        android:textSize="@dimen/body_regular"
+                        android:text="Catch It" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/imgbtnStepBreathe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:onClick="gotoStopBreathe"
+                        app:srcCompat="@mipmap/ic_stopbreathe" />
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:fontFamily="sans-serif"
+                        android:textSize="@dimen/body_regular"
+                        android:text="Stop, Breathe\n &amp; Think" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/imgbtnSmilingMind"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:onClick="gotoSmiling"
+                        app:srcCompat="@mipmap/ic_smilingmind" />
+
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:fontFamily="sans-serif"
+                        android:textSize="@dimen/body_regular"
+                        android:text="Smiling Mind" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

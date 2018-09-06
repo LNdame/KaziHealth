@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@mipmap/ic_profile"
+            android:title="My profile" />
+        <item
+            android:id="@+id/nav_risk"
+            android:icon="@mipmap/ic_risk_profile"
+            android:title="Risk profile" />
+        <item
+            android:id="@+id/nav_tips"
+            android:icon="@mipmap/ic_tip_manage"
+            android:title="Tips to manage risks" />
+        <item
+            android:id="@+id/nav_apps"
+            android:icon="@mipmap/ic_manage_risk"
+            android:title="Apps to manage risks" />
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@mipmap/ic_about"
+            android:title="About" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@mipmap/ic_logout"
+            android:title="Logout" />
+    </group>
+
+
+</menu>

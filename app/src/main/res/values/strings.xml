@@ -1,0 +1,676 @@
+<resources>
+    <string name="app_name">KaziHealth</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_profile">Profile</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_risk_profile">Risk Profile</string>
+    <string name="title_activity_apps">Apps</string>
+    <string name="title_activity_tips">Tips</string>
+    <string name="title_activity_about">About</string>
+    <string name="toast_pick_file_error">Unable to pick file. Check status of file manager.</string>
+
+    <string name="profile_found">You can import a risk assessment from the KaziBantu server or use the risk assessment tool by pressing "DO ASSESSMENT" button
+
+     </string>
+
+    <string name="profile_found1">We have found a profile for you on the Risk Assessment Tool. Would you like to import that profile
+     or do the assessment again?</string>
+
+    <string name="info_download">Click the \"How to\" link below to view the instructional video for this application.</string>
+
+    <string name="title_activity_tip_detail">Tip Details</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+
+    <string name="btn_text_input_dialog">Text input dialog</string>
+    <string name="text_input_title">Type your name</string>
+    <string name="text_input_message">Input must match \\\\w+ or dialog won\'t accept it. That is because TextFilter object is set.</string>
+    <string name="text_input_error_message">Please type something matching the input.</string>
+
+
+    <string name="bp_input_title">Enter blood pressure</string>
+    <string name="hr_input_title">Enter heart rate</string>
+    <string name="chl_input_title">Enter total Cholesterol</string>
+    <string name="bgl_input_title">Enter blood Glucose</string>
+    <string name="hg_input_title">Enter height</string>
+    <string name="wg_input_title">Enter weight</string>
+    <string name="waist_input_title">Enter waist circumference</string>
+    <string name="hip_input_title">Enter hip circumference</string>
+
+
+    <string name="error_field_required">This field is required</string>
+
+    <string name="error_invalid_password">The password should be at least 6 characters long</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_confirmation">This password does not match confirmation</string>
+
+
+    <string-array name="tip">
+        <item>@string/tip_blood_pressure</item>
+        <item>@string/tip_weight</item>
+        <item>@string/tip_cholesterol</item>
+        <item>@string/tip_blood_glucose</item>
+    </string-array>
+
+
+    <string-array name="tip_title">
+        <item>@string/tip_title_blood_pressure</item>
+        <item>@string/tip_title_weight</item>
+        <item>@string/tip_title_cholesterol</item>
+        <item>@string/tip_title_blood_glucose</item>
+    </string-array>
+
+    <string name="large_text">
+        "Material is the metaphor.\n\n"
+
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic.\n"
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics.\n"
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts.\n\n"
+
+        "Bold, graphic, intentional.\n\n"
+
+        "The foundational elements of print based design typography, grids, space, scale, color, "
+        "and use of imagery guide visual treatments. These elements do far more than please the "
+        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
+        "imagery, large scale typography, and intentional white space create a bold and graphic "
+        "interface that immerse the user in the experience.\n"
+        "An emphasis on user actions makes core functionality immediately apparent and provides "
+        "waypoints for the user.\n\n"
+
+        "Motion provides meaning.\n\n"
+
+        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
+        "inflection points that initiate motion, transforming the whole design.\n"
+        "All action takes place in a single environment. Objects are presented to the user without "
+        "breaking the continuity of experience even as they transform and reorganize.\n"
+        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
+        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
+
+        "3D world.\n\n"
+
+        "The material environment is a 3D space, which means all objects have x, y, and z "
+        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
+        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
+        "position along the z-axis and has a standard 1dp thickness.\n"
+        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
+        "emulated by manipulating the y-axis.\n\n"
+
+        "Light and shadow.\n\n"
+
+        "Within the material environment, virtual lights illuminate the scene. Key lights create "
+        "directional shadows, while ambient light creates soft shadows from all angles.\n"
+        "Shadows in the material environment are cast by these two light sources. In Android "
+        "development, shadows occur when light sources are blocked by sheets of material at "
+        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
+        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
+
+        "Resting elevation.\n\n"
+
+        "All material objects, regardless of size, have a resting elevation, or default elevation "
+        "that does not change. If an object changes elevation, it should return to its resting "
+        "elevation as soon as possible.\n\n"
+
+        "Component elevations.\n\n"
+
+        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
+        "does not vary from 6dp in one app to 16dp in another app).\n"
+        "Components may have different resting elevations across platforms, depending on the depth "
+        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
+
+        "Responsive elevation and dynamic elevation offsets.\n\n"
+
+        "Some component types have responsive elevation, meaning they change elevation in response "
+        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
+        "changes are consistently implemented using dynamic elevation offsets.\n"
+        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
+        "to the component’s resting state. They ensure that elevation changes are consistent "
+        "across actions and component types. For example, all components that lift on press have "
+        "the same elevation change relative to their resting elevation.\n"
+        "Once the input event is completed or cancelled, the component will return to its resting "
+        "elevation.\n\n"
+
+        "Avoiding elevation interference.\n\n"
+
+        "Components with responsive elevations may encounter other components as they move between "
+        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
+        "through other material, components avoid interfering with one another any number of ways, "
+        "whether on a per component basis or using the entire app layout.\n"
+        "On a component level, components can move or be removed before they cause interference. "
+        "For example, a floating action button (FAB) can disappear or move off screen before a "
+        "user picks up a card, or it can move if a snackbar appears.\n"
+        "On the layout level, design your app layout to minimize opportunities for interference. "
+        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
+        "when a user tries to pick up one of cards.\n\n"
+    </string>
+
+    <string name="tip_title_weight">
+
+          Weight Management
+    </string>
+
+    <string name="tip_title_cholesterol">
+         Cholesterol
+
+    </string>
+
+
+    <string name="tip_title_blood_glucose">
+         Blood Glucose Levels
+    </string>
+
+    <string name="tip_title_blood_pressure">
+         Blood Pressure
+    </string>
+
+
+    <string name="tip_title">
+        %1$s
+    </string>
+
+
+    <string name="tip_weight">
+
+        Eat a healthy balanced diet:\n\n
+" Reduce salt and saturated fat intake such as butter, full cream milk, yogurt, cream and coconut oil."\n
+" Limit refined, processed and pre-packaged foods such as ham, bacon and polony, since they contain a lot of salt."\n
+" Include at least 2 fruits and 3 vegetables per day, since they:"\n
+  "\t\t \u2022 Provide a rich source of vitamins, minerals, and fibre."\n
+  "\t\t \u2022 Are naturally low in calories and fat."\n
+  "\t\t \u2022 Serve as a great snack."\n
+" Eat lean meats such as skinless chicken and red meat with the fat trimmed off."\n
+" Eat at least three meals a day."\n
+" Add a healthy snack between each meal such as raw unsalted nuts, small fat-free yogurt or a cup of popcorn."\n
+" Do not skip breakfast! "\n
+" Have plenty of vegetables with lunch and dinner daily, the size of both your hands."\n\n
+
+Be Active:	\n\n
+" Try to achieve at least 30 minutes of activity per day."\n
+" Participate in a variety of different activities for overall health and well-being, including:"\n
+ "\t\t \u2022 Moderate intensity aerobic activity for good cardiovascular health."\n
+ "\t\t \u2022 Muscle strengthening activities such as lifting boxes and carrying grocery bags."\n
+ "\t\t \u2022 Endurance exercises such as brisk walking, dancing, playing soccer and walking up the stairs."\n
+" Avoid becoming bored with your exercise regimen by including several types of activities."\n\n
+
+Decrease or eliminate harmful substance use:\n\n
+" Limit alcohol intake to only 3 units of alcohol per week, or less."\n
+" Cigarette smoking causes your blood vessels to thicken and narrow."\n
+" Smoking also raises your blood pressure and increases your risk for other heart diseases."\n
+" If you smoke, find ways to decrease your smoking until you can stop."\n
+" If you do not smoke, do not ever start."\n\n
+
+Reduce Stress:\n\n
+" Stress increases blood pressure significantly."\n
+" If you are stressed, hormones are released that increases your blood pressure, your heart rate and can cause your blood vessels to narrow."\n
+" Find ways to decrease your stress, for example:"\n
+  "\t\t \u2022 Increase your physical activity,"\n
+  "\t\t \u2022 Follow a healthy balanced diet,"\n
+  "\t\t \u2022 Improving your sleep patterns,"\n
+  "\t\t \u2022 Performing breathing exercises,"\n
+  "\t\t \u2022 Do yoga or gentle stretching,"\n
+  "\t\t \u2022 Focus on decreasing your breathing rate and heart rate, and"\n
+  "\t\t \u2022 Try to clear your mind when feeling stressed."\n
+" Being stressed for a prolonged period of time can lead to depression and burnout."\n
+" Practice ways to destress today. Refer to the KaziBantu Stress Manual."\n
+
+    </string>
+
+    <string name="tip_weight_block_1">
+
+" Reduce salt and saturated fat intake such as butter, full cream milk, yogurt, cream and coconut oil."\n
+" Limit refined, processed and pre-packaged foods such as ham, bacon and polony, since they contain a lot of salt."\n
+" Include at least 2 fruits and 3 vegetables per day, since they:"\n
+  "\t\t \u2022 Provide a rich source of vitamins, minerals, and fibre."\n
+  "\t\t \u2022 Are naturally low in calories and fat."\n
+  "\t\t \u2022 Serve as a great snack."\n
+" Eat lean meats such as skinless chicken and red meat with the fat trimmed off."\n
+" Eat at least three meals a day."\n
+" Add a healthy snack between each meal such as raw unsalted nuts, small fat-free yogurt or a cup of popcorn."\n
+" Do not skip breakfast! "\n
+" Have plenty of vegetables with lunch and dinner daily, the size of both your hands."\n\n
+
+    </string>
+
+
+    <string name="tip_weight_block_2">
+
+" Try to achieve at least 30 minutes of activity per day."\n
+" Participate in a variety of different activities for overall health and well-being, including:"\n
+ "\t\t \u2022 Moderate intensity aerobic activity for good cardiovascular health."\n
+ "\t\t \u2022 Muscle strengthening activities such as lifting boxes and carrying grocery bags."\n
+ "\t\t \u2022 Endurance exercises such as brisk walking, dancing, playing soccer and walking up the stairs."\n
+" Avoid becoming bored with your exercise regimen by including several types of activities."\n\n
+
+    </string>
+
+    <string name="tip_weight_block_3">
+
+" Limit alcohol intake to only 3 units of alcohol per week, or less."\n
+" Cigarette smoking causes your blood vessels to thicken and narrow."\n
+" Smoking also raises your blood pressure and increases your risk for other heart diseases."\n
+
+
+    </string>
+
+    <string name="tip_weight_block_4">
+
+" Stress increases blood pressure significantly."\n
+" If you are stressed, hormones are released that increases your blood pressure, your heart rate and can cause your blood vessels to narrow."\n
+" Find ways to decrease your stress, for example:"\n
+  "\t\t \u2022 Increase your physical activity,"\n
+  "\t\t \u2022 Follow a healthy balanced diet,"\n
+  "\t\t \u2022 Improving your sleep patterns,"\n
+  "\t\t \u2022 Performing breathing exercises,"\n
+  "\t\t \u2022 Do yoga or gentle stretching,"\n
+  "\t\t \u2022 Focus on decreasing your breathing rate and heart rate, and"\n
+  "\t\t \u2022 Try to clear your mind when feeling stressed."\n
+" Being stressed for a prolonged period of time can lead to depression and burnout."\n
+
+    </string>
+
+    <string-array name="tip_weight_block">
+        <item>@string/tip_weight_block_1</item>
+        <item>@string/tip_weight_block_2</item>
+        <item>@string/tip_weight_block_3</item>
+        <item>@string/tip_weight_block_4</item>
+
+    </string-array>
+
+
+    <string name="tip_cholesterol">
+       Eat a Healthy Balanced Diet:\n\n
+" Saturated fats, found primarily in red meat and dairy products, raise your total cholesterol and low-density lipoprotein (LDL) cholesterol, the \"bad\" cholesterol."\n
+" Eliminate saturated fats such as butter, full cream milk, yogurt, cream and coconut oil."\n
+" Choose healthier fats such as avocados, cheese, eggs, sardines, salmon and nuts"\n
+" Eat foods rich in omega-3 fatty acids such as sardines, salmon, soybeans, walnuts and canola oil."\n
+" Eat at least 2 fruits and 3 vegetables per day. "\n
+" Eat a balanced diet consisting of non-starchy vegetables, whole grain starch and protein such as plant-based protein such as beans."\n\n
+
+
+        Be Active:\n\n
+" Moderate physical activity helps:"\n
+ "\t\t \u2022 Raise high-density lipoprotein (HDL) cholesterol, the "good" cholesterol, and " \n
+ "\t\t \u2022 Reduce LDL cholesterol and total cholesterol."\n
+" Partake in aerobic exercise for at least 30 minutes per day, on most days of the week."\n
+" Examples of physical activity include brisk walking, dancing, playing soccer, gardening and taking the stairs instead of the lift."\n\n
+
+Lose Excess Weight:\n\n
+" Try to lose excess weight, even just 5 kg, will help improve cholesterol levels."\n
+" Try to reduce weight around the waistline, as weight in this area increases the risk for other metabolic diseases such as blood pressure and diabetes."\n\n
+
+ Decrease or eliminate harmful substance use:\n\n
+" Limit alcohol intake to only 3 units of alcohol per week, or less."\n
+" Too much alcohol can lead to serious health problems, including high blood pressure, heart failure and stroke."\n
+" Cigarette smoking increases your risk for heart disease."\n
+" If you smoke, find ways to decrease your smoking until you can stop."\n\n
+
+ Reduce Stress:\n\n
+" Stress can lead to having less healthy dietary habits and a higher body weight, all of which are known risk factors for high cholesterol."\n
+" Find ways to decrease your stress, for example:"\n
+  "\t\t \u2022 Increase your physical activity, "\n
+ "\t\t \u2022 Follow a healthy balanced diet, "\n
+ "\t\t \u2022 Improving your sleep patterns,"\n
+ "\t\t \u2022 Performing breathing exercises,"\n
+ "\t\t \u2022 Do yoga or gentle stretching, "\n
+ "\t\t \u2022 Focus on decreasing your breathing rate and heart rate, and"\n
+ "\t\t \u2022 Try to clear your mind when feeling stressed" \n
+
+    </string>
+
+    <string name="tip_cholesterol_block_1">
+
+
+" Saturated fats, found primarily in red meat and dairy products, raise your total cholesterol and low-density lipoprotein (LDL) cholesterol, the \"bad\" cholesterol."\n
+" Eliminate saturated fats such as butter, full cream milk, yogurt, cream and coconut oil."\n
+" Choose healthier fats such as avocados, cheese, eggs, sardines, salmon and nuts"\n
+" Eat foods rich in omega-3 fatty acids such as sardines, salmon, soybeans, walnuts and canola oil."\n
+" Eat at least 2 fruits and 3 vegetables per day. "\n
+" Eat a balanced diet consisting of non-starchy vegetables, whole grain starch and protein such as plant-based protein such as beans."\n\n
+
+    </string>
+
+
+    <string name="tip_cholesterol_block_2">
+
+" Moderate physical activity helps:"\n
+ "\t\t \u2022 Raise high-density lipoprotein (HDL) cholesterol, the "good" cholesterol, and " \n
+ "\t\t \u2022 Reduce LDL cholesterol and total cholesterol."\n
+" Partake in aerobic exercise for at least 30 minutes per day, on most days of the week."\n
+" Examples of physical activity include brisk walking, dancing, playing soccer, gardening and taking the stairs instead of the lift."\n\n
+
+    </string>
+
+
+    <string name="tip_cholesterol_block_3">
+
+" Try to lose excess weight, even just 5 kg, will help improve cholesterol levels."\n
+" Try to reduce weight around the waistline, as weight in this area increases the risk for other metabolic diseases such as blood pressure and diabetes."\n\n
+
+    </string>
+
+    <string name="tip_cholesterol_block_4">
+
+" Limit alcohol intake to only 3 units of alcohol per week, or less."\n
+" Too much alcohol can lead to serious health problems, including high blood pressure, heart failure and stroke."\n
+" Cigarette smoking increases your risk for heart disease."\n
+
+
+    </string>
+
+    <string name="tip_cholesterol_block_5">
+
+" Stress can lead to having less healthy dietary habits and a higher body weight, all of which are known risk factors for high cholesterol."\n
+" Find ways to decrease your stress, for example:"\n
+        "\t\t \u2022 Increase your physical activity, "\n
+ "\t\t \u2022 Follow a healthy balanced diet, "\n
+ "\t\t \u2022 Improving your sleep patterns,"\n
+ "\t\t \u2022 Performing breathing exercises,"\n
+ "\t\t \u2022 Do yoga or gentle stretching, "\n
+ "\t\t \u2022 Focus on decreasing your breathing rate and heart rate, and"\n
+ "\t\t \u2022 Try to clear your mind when feeling stressed" \n
+
+    </string>
+
+    <string-array name="tip_cholesterol_block">
+        <item>@string/tip_cholesterol_block_1</item>
+        <item>@string/tip_cholesterol_block_2</item>
+        <item>@string/tip_cholesterol_block_3</item>
+        <item>@string/tip_cholesterol_block_4</item>
+        <item>@string/tip_cholesterol_block_5</item>
+    </string-array>
+
+
+    <string name="tip_blood_glucose">
+        Eat a Healthy Balanced Diet:\n\n
+" Diet should promote weight loss or weight maintenance, depending on your current weight status. " \n
+" Plan meals by choosing healthy options to maintain consistent blood glucose levels." \n
+" Eat three meals. Breakfast, lunch and supper." \n
+" Include healthy snacks between meals." \n
+" If you are overweight, eat smaller portions. " \n
+" Include a variety of whole grains, fruits, vegetables, low-fat dairy and meat in your diet." \n
+" Limit your saturated fat and salt intake." \n
+" Plan meals according to your medications and exercise routine. " \n
+" Avoid food options such as sugary foods, full fat dairy, white rice, white bread and flour, fatty cuts of meat, fried food and processed food such as ham, bacon and polony. " \n\n
+
+Be Active:\n\n
+" Regular physical activity improves insulin sensitivity." \n
+" Dedicate 30 minutes to yourself everyday by performing physical activity." \n
+" Activity improves your blood sugar levels because blood sugar is used for energy. When you use your muscles, your cells absorb sugar from the blood for energy." \n
+Decrease or eliminate harmful substance use:
+" Limit alcohol intake to only 3 units of alcohol per week or less." \n
+" If you smoke, find ways to decrease your smoking until you can stop." \n\n
+
+Reduce Stress:\n\n
+" If you are under mental or physical stress, the hormones your body produces in response to prolonged stress may cause a rise in your blood sugar level. " \n
+" Find ways to decrease your stress, for example:" \n
+ "\t\t \u2022 Increase your physical activity, " \n
+ "\t\t \u2022 Follow a healthy balanced diet, " \n
+ "\t\t \u2022 Improving your sleep patterns," \n
+ "\t\t \u2022 Performing breathing exercises," \n
+ "\t\t \u2022 Do yoga or gentle stretching, " \n
+ "\t\t \u2022 Focus on decreasing your breathing rate and heart rate, and" \n
+ "\t\t \u2022 Try to clear your mind when feeling stressed." \n\n
+
+Behavioural Intervention:\n\n
+" Monitor your blood glucose levels regularly, if you have been diagnosed with diabetes." \n
+" Check the blood circulation of your feet regularly." \n
+" Floss regularly to ensure healthy gums." \n
+" Be sure to have your eyes examined once a year." \n
+
+    </string>
+
+
+    <string name="tip_blood_glucose_block_1">
+
+" Diet should promote weight loss or weight maintenance, depending on your current weight status. " \n
+" Plan meals by choosing healthy options to maintain consistent blood glucose levels." \n
+" Eat three meals. Breakfast, lunch and supper." \n
+" Include healthy snacks between meals." \n
+" If you are overweight, eat smaller portions. " \n
+" Include a variety of whole grains, fruits, vegetables, low-fat dairy and meat in your diet." \n
+" Limit your saturated fat and salt intake." \n
+" Plan meals according to your medications and exercise routine. " \n
+" Avoid food options such as sugary foods, full fat dairy, white rice, white bread and flour, fatty cuts of meat, fried food and processed food such as ham, bacon and polony. " \n\n
+
+    </string>
+
+    <string name="tip_blood_glucose_block_2">
+
+" Regular physical activity improves insulin sensitivity." \n
+" Dedicate 30 minutes to yourself everyday by performing physical activity." \n
+" Activity improves your blood sugar levels because blood sugar is used for energy. When you use your muscles, your cells absorb sugar from the blood for energy." \n\n
+
+    </string>
+
+    <string name="tip_blood_glucose_block_3">
+
+" Limit alcohol intake to only 3 units of alcohol per week or less." \n
+    </string>
+
+    <string name="tip_blood_glucose_block_4">
+
+" If you are under mental or physical stress, the hormones your body produces in response to prolonged stress may cause a rise in your blood sugar level. " \n
+" Find ways to decrease your stress, for example:" \n
+ "\t\t \u2022 Increase your physical activity, " \n
+ "\t\t \u2022 Follow a healthy balanced diet, " \n
+ "\t\t \u2022 Improving your sleep patterns," \n
+ "\t\t \u2022 Performing breathing exercises," \n
+ "\t\t \u2022 Do yoga or gentle stretching, " \n
+ "\t\t \u2022 Focus on decreasing your breathing rate and heart rate, and" \n
+ "\t\t \u2022 Try to clear your mind when feeling stressed." \n\n
+    </string>
+
+    <string name="tip_blood_glucose_block_5">
+
+" Monitor your blood glucose levels regularly, if you have been diagnosed with diabetes." \n
+" Check the blood circulation of your feet regularly." \n
+" Floss regularly to ensure healthy gums." \n
+" Be sure to have your eyes examined once a year." \n
+    </string>
+
+    <string-array name="tip_blood_glucose_block">
+        <item>@string/tip_blood_glucose_block_1</item>
+        <item>@string/tip_blood_glucose_block_2</item>
+        <item>@string/tip_blood_glucose_block_3</item>
+        <item>@string/tip_blood_glucose_block_4</item>
+        <item>@string/tip_blood_glucose_block_5</item>
+    </string-array>
+
+    <string name="tip_blood_pressure">
+        "Eat a Healthy Balanced Diet:"\n\n
+" Reduce salt and saturated fat intake such as butter, full cream milk, yogurt, cream and coconut oil. "\n
+" Limit refined, processed and pre-packaged foods such as ham, bacon and polony, since they contain a lot of salt. "\n
+" Eat less salt by cooking at home and refrain from adding extra salt to your food. "\n
+" Season your food with herbs and spices instead of salt."\n
+" Consume at least 2 fruits and 3 vegetables per day."\n\n
+
+Be Active:\n\n
+" Get enough physical activity: at least 30 minutes per day."\n
+" Exercise improves the most important muscle in your body: your heart. "\n
+" A healthy heart and blood vessels helps to lower blood pressure."\n
+" Examples of physical activity include brisk walking, dancing, playing soccer, gardening and taking the stairs instead of the lift."\n
+
+        Lose Excess Weight:\n\n
+" Weight loss is one of the most effective lifestyle changes for controlling blood pressure. "\n
+" Blood pressure can be reduced, even if you lose just 5kg."\n
+" Excess weight around your waistline places pressure on your vital organs."\n
+" Losing excess weight also decreases your risk for other metabolic diseases."\n\n
+
+        Quit Smoking:\n\n
+" Cigarette smoking causes your blood vessels to thicken and narrow. "\n
+" Smoking also raises your blood pressure and increases your risk for other heart diseases."\n
+" If you smoke, find ways to decrease your smoking until you can stop. "\n
+" If you do not smoke, do not ever start."\n\n
+
+        Medicate, as prescribed by your doctor:\n\n
+" Continue with your high blood pressure medication and/or other medication prescribed by your doctor. "\n
+" Not taking your prescribed blood pressure medicine puts you at risk for a stroke or heart problems."\n
+" Important to note: High blood pressure doesn't have any symptoms."\n
+" Even if you don't feel sick, you still need to take your blood pressure medication."\n
+" Consult your doctor regularly."\n\n
+
+        Reduce Stress:\n\n
+" Stress increases blood pressure significantly. "\n
+" If you are stressed, hormones are released that increases your blood pressure, your heart rate and can cause your blood vessels to narrow."\n
+" Find ways to decrease your stress, for example:"\n
+        "\t\t \u2022 Increase your physical activity. "\n
+ "\t\t \u2022 Follow a healthy balanced diet. "\n
+ "\t\t \u2022 Improving your sleep patterns."\n
+ "\t\t \u2022 Performing breathing exercises."\n
+ "\t\t \u2022 Do yoga or gentle stretching. "\n
+ "\t\t \u2022 Focus on decreasing your breathing rate and heart rate."\n
+ "\t\t \u2022 Try to clear your mind when feeling stressed."\n
+" Being stressed for a prolonged period of time can lead to depression and burnout."\n
+" Practice ways to destress today. Refer to the KaziBantu Stress Manual."\n
+
+    </string>
+
+
+    <string name="tip_blood_pressure_block_1">
+
+" Reduce salt and saturated fat intake such as butter, full cream milk, yogurt, cream and coconut oil. "\n
+" Limit refined, processed and pre-packaged foods such as ham, bacon and polony, since they contain a lot of salt. "\n
+" Eat less salt by cooking at home and refrain from adding extra salt to your food. "\n
+" Season your food with herbs and spices instead of salt."\n
+" Consume at least 2 fruits and 3 vegetables per day."\n\n
+    </string>
+
+    <string name="tip_blood_pressure_block_2">
+
+" Get enough physical activity: at least 30 minutes per day."\n
+" Exercise improves the most important muscle in your body: your heart. "\n
+" A healthy heart and blood vessels helps to lower blood pressure."\n
+" Examples of physical activity include brisk walking, dancing, playing soccer, gardening and taking the stairs instead of the lift."\n\n
+
+    </string>
+
+    <string name="tip_blood_pressure_block_3">
+
+" Weight loss is one of the most effective lifestyle changes for controlling blood pressure. "\n
+" Blood pressure can be reduced, even if you lose just 5kg."\n
+" Excess weight around your waistline places pressure on your vital organs."\n
+" Losing excess weight also decreases your risk for other metabolic diseases."\n\n
+    </string>
+    <string name="tip_blood_pressure_block_4">
+
+" Cigarette smoking causes your blood vessels to thicken and narrow. "\n
+" Smoking also raises your blood pressure and increases your risk for other heart diseases."\n
+    </string>
+    <string name="tip_blood_pressure_block_5">
+
+" Continue with your high blood pressure medication and/or other medication prescribed by your doctor. "\n
+" Not taking your prescribed blood pressure medicine puts you at risk for a stroke or heart problems."\n
+" Important to note: High blood pressure does not have any symptoms."\n
+" Even if you do not feel sick, you still need to take your blood pressure medication."\n
+" Consult your doctor regularly."\n\n
+
+    </string>
+    <string name="tip_blood_pressure_block_6">
+
+" Stress increases blood pressure significantly. "\n
+" If you are stressed, hormones are released that increases your blood pressure, your heart rate and can cause your blood vessels to narrow."\n
+" Find ways to decrease your stress, for example:"\n
+        "\t\t \u2022 Increase your physical activity. "\n
+ "\t\t \u2022 Follow a healthy balanced diet. "\n
+ "\t\t \u2022 Improving your sleep patterns."\n
+ "\t\t \u2022 Performing breathing exercises."\n
+ "\t\t \u2022 Do yoga or gentle stretching. "\n
+ "\t\t \u2022 Focus on decreasing your breathing rate and heart rate."\n
+ "\t\t \u2022 Try to clear your mind when feeling stressed."\n
+" Being stressed for a prolonged period of time can lead to depression and burnout."\n
+
+    </string>
+    <string-array name="tip_blood_pressure_block">
+        <item>@string/tip_blood_pressure_block_1</item>
+        <item>@string/tip_blood_pressure_block_2</item>
+        <item>@string/tip_blood_pressure_block_3</item>
+        <item>@string/tip_blood_pressure_block_4</item>
+        <item>@string/tip_blood_pressure_block_5</item>
+        <item>@string/tip_blood_pressure_block_6</item>
+
+    </string-array>
+
+
+    <string name="about_kazi">
+
+        "KaziHealth is a workplace health promotion programme that educates and improves health behaviours in individuals. The programme starts with an individualised health risk assessment, followed by face-to-face lifestyle coaching sessions and self-monitoring and motivation through the KaziHealth app. These tools are aimed at reducing the risks for cardiovascular diseases and improve physical activity and physical fitness, nutrition and diet, and psychosocial health."\n\n
+"The KaziHealth mobile app integrates three lifestyle interventions namely, physical activity, nutrition and stress management to guide individuals in achieving their personal health goals. Education, motivation and self-monitoring is provided within the KaziHealth app to keep individuals motivated and "
+
+
+    </string>
+
+    <string name="about_funder">
+
+        " The Novartis Foundation funds the joint collaborative project between Nelson Mandela University in South Africa, University of Basel and the Swiss Tropical and Public Health Institute in Switzerland."\n\n
+
+" The "KaziBantu" Project is translated into "Active People" and aims at creating - Healthy Schools for Healthy Communities."\n\n
+
+" The Novartis Foundation is a philanthropic organization which strives to have a sustainable impact on the health of low-income communities through a combination of programmatic work, health outcomes research, and its translation into policy to tackle global health challenges. "
+
+
+
+
+    </string>
+
+    <string name="about_teams">
+
+        ""
+    </string>
+    <string name="title_activity_app_download">AppTitle</string>
+    <string name="title_activity_upload_profile">Upload Profile</string>
+
+
+    <string name="text_input_bp">Input must match 999/99 or dialog won\'t accept it.</string>
+    <string name="text_input_hr">Input must match 99 or dialog won\'t accept it.</string>
+    <string name="text_input_ch">Input must match 99.9 or dialog won\'t accept it.</string>
+    <string name="text_input_bg">Input must match 99.9 or dialog won\'t accept it.</string>
+    <string name="text_input_hg">Input must match 999 - 999.9  or dialog won\'t accept it.</string>
+    <string name="text_input_wg">Input must match 999 - 999.9  or dialog won\'t accept it.</string>
+    <string name="text_input_wt">Input must match 999 or dialog won\'t accept it.</string>
+    <string name="text_input_hip">Input must match 999  or dialog won\'t accept it.</string>
+
+
+    <string name="text_save_profile">Your profile has been saved. You can now leave this page .</string>
+    <string name="text_save_title">Saved!</string>
+
+    <string name="text_picture_title">Picture</string>
+    <string name="text_picture_profile">Pick your utmost flattering selfie!</string>
+
+    <string name="text_save_ok">Leave</string>
+    <string name="text_save_cancel">Cancel</string>
+
+    <string name="text_pict_camera">From camera</string>
+    <string name="text_pict_gallery">From gallery</string>
+
+    <string name="text_input_khnumber">Input your unique ID. Format: ZAF/15/1/1</string>
+
+    <string name="text_kh_title">Input your unique ID.</string>
+
+    <string name="action_done">Done</string>
+
+    <string-array name="gender">
+        <item>Female</item>
+        <item>Male</item>
+    </string-array>
+    <string name="title_activity_edit_profile">Edit Profile</string>
+
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+    <string name="title_activity_legal">Terms &amp; Conditions</string>
+
+    <string name = "done">Press \'Done\' when you are done without closing the tab</string>
+
+</resources>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="mandela.cct.ansteph.kazihealth.view.tip.About"
+    tools:showIn="@layout/app_bar_about">
+
+
+    <FrameLayout
+        android:background="@drawable/aboutbg"
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+
+        android:paddingBottom="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+    </FrameLayout>
+
+
+
+
+    <LinearLayout
+        android:background="@drawable/buttonbg_alternate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="160dp"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+
+
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:orientation="vertical"
+                android:paddingTop="16dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent">
+
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="94dp"
+                    app:srcCompat="@drawable/abouticon" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textView2"
+                    android:fontFamily="sans-serif"
+                    android:textSize="28sp"
+                    android:gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="About " />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:fontFamily="sans-serif"
+                    android:textSize="28sp"
+                    android:gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text=" KaziHealth" />
+            </LinearLayout>
+
+                <com.mpt.android.stv.SpannableTextView
+                    android:id="@+id/stvAboutKH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="Tip Details"
+                    />
+
+
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.2"
+                    android:background="@color/textColorPrimary"/>
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="94dp"
+                    app:srcCompat="@drawable/novartis_logox" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:fontFamily="sans-serif"
+                    android:textSize="28sp"
+                    android:gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="Our Funder" />
+
+                <com.mpt.android.stv.SpannableTextView
+                    android:id="@+id/stvfunderKH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="Our funder"
+                    />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.5"
+                    android:background="@color/textColorPrimary"/>
+                <TextView
+                    android:id="@+id/textView4"
+                    android:fontFamily="sans-serif"
+                    android:textSize="28sp"
+                    android:gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="Teams" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:text="@string/about_teams" />
+
+
+                <ImageView
+                    android:id="@+id/imguninmu"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:clickable="true"
+                    android:onClick="onLogoClicked"
+                    app:srcCompat="@drawable/nmu" />
+
+                <ImageView
+                    android:id="@+id/imgunibasel"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="12dp"
+                    android:clickable="true"
+                    android:onClick="onLogoClicked"
+                    app:srcCompat="@drawable/uni_basel" />
+
+                <ImageView
+                    android:id="@+id/imgdsbg"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="12dp"
+                    android:layout_height="150dp"
+                    android:clickable="true"
+                    android:onClick="onLogoClicked"
+                    app:srcCompat="@drawable/dsbg" />
+                <ImageView
+                    android:id="@+id/imgtph"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="12dp"
+                    android:layout_height="100dp"
+                    android:clickable="true"
+                    android:onClick="onLogoClicked"
+                    app:srcCompat="@drawable/swisstph" />
+
+
+            </LinearLayout>
+
+
+
+
+        </android.support.v4.widget.NestedScrollView>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</RelativeLayout>

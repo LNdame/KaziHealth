@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lighter_grey_back"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="mandela.cct.ansteph.kazihealth.view.profile.UploadProfile"
+    tools:showIn="@layout/activity_upload_profile">
+    <FrameLayout
+        android:background="@color/colorPrimary"
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+
+        android:paddingBottom="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+    </FrameLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avatar"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/diagonallayout_circle"
+
+        android:src="@drawable/user" />
+
+
+    <LinearLayout
+        android:id="@+id/lytdetials"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/avatar"
+        android:layout_above="@+id/btnImport"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:textStyle="normal"
+
+        android:text="Vuyo Bergen" />
+
+    <TextView
+        android:id="@+id/txtUserEmail"
+        android:fontFamily="sans-serif-light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textStyle="normal"
+        android:text="vuyo.b@gmail.com" />
+
+       <android.support.v4.widget.NestedScrollView
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+
+           <LinearLayout
+               android:orientation="vertical"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent">
+
+
+               <!-- the assessment items  -->
+               <LinearLayout
+                   android:id="@+id/lytBloodPressure"
+                   android:padding="16dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:layout_marginRight="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginBottom="4dp"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="9"
+                       android:textStyle="bold"
+                       android:textSize="@dimen/subheading"
+                       android:text="Blood pressure" />
+
+                   <TextView
+                       android:id="@+id/txtBloodPres"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="1"
+                       android:textSize="@dimen/subheading"
+                       android:gravity="center_vertical|end"
+                       android:text="120/66 mmHg" />
+
+                   <ImageView
+                       android:id="@+id/imageView3"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+
+                       app:srcCompat="@drawable/ic_chevron_right" />
+
+               </LinearLayout>
+               <LinearLayout
+                   android:id="@+id/lytHeartRate"
+                   android:padding="16dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:layout_marginRight="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginBottom="4dp"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="9"
+                       android:textStyle="bold"
+                       android:textSize="@dimen/subheading"
+                       android:text="Heart rate" />
+
+                   <TextView
+                       android:id="@+id/txtHeartRate"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="1"
+                       android:textSize="@dimen/subheading"
+                       android:gravity="center_vertical|right"
+                       android:text="68 bpm" />
+
+                   <ImageView
+                       android:id="@+id/imageView4"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+
+                       app:srcCompat="@drawable/ic_chevron_right" />
+
+               </LinearLayout>
+               <LinearLayout
+                   android:id="@+id/lytCholesterol"
+                   android:padding="16dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:layout_marginRight="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginBottom="4dp"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="9"
+                       android:textStyle="bold"
+                       android:textSize="@dimen/subheading"
+                       android:text="Total Cholesterol" />
+
+                   <TextView
+                       android:id="@+id/txtCholesterol"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="1"
+                       android:textSize="@dimen/subheading"
+                       android:gravity="center_vertical|right"
+                       android:text="5.5 mmol/L" />
+
+                   <ImageView
+                       android:id="@+id/imageView5"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+
+                       app:srcCompat="@drawable/ic_chevron_right" />
+
+               </LinearLayout>
+               <LinearLayout
+                   android:id="@+id/lytBloodGlucose"
+                   android:padding="16dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:layout_marginRight="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginBottom="4dp"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="9"
+                       android:textStyle="bold"
+                       android:textSize="@dimen/subheading"
+                       android:text="Blood Glucose level" />
+
+                   <TextView
+                       android:id="@+id/txtBloodGlu"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="1"
+                       android:textSize="@dimen/subheading"
+                       android:gravity="center_vertical|right"
+                       android:text="5.5 mmol/L" />
+
+                   <ImageView
+                       android:id="@+id/imageView6"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+
+                       app:srcCompat="@drawable/ic_chevron_right" />
+
+               </LinearLayout>
+
+               <LinearLayout
+                   android:id="@+id/lytHeight"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginBottom="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginRight="4dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:padding="16dp">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="9"
+                       android:gravity="center_vertical"
+                       android:text="Height"
+                       android:textSize="@dimen/subheading"
+                       android:textStyle="bold" />
+
+                   <TextView
+                       android:id="@+id/txtHeight"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="1"
+                       android:gravity="center_vertical|right"
+                       android:text="161 cm"
+                       android:textSize="@dimen/subheading" />
+
+                   <ImageView
+                       android:id="@+id/imageView7"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+
+                       app:srcCompat="@drawable/ic_chevron_right" />
+
+               </LinearLayout>
+               <LinearLayout
+                   android:id="@+id/lytWeight"
+                   android:padding="16dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:layout_marginRight="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginBottom="4dp"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="9"
+                       android:textStyle="bold"
+                       android:textSize="@dimen/subheading"
+                       android:text="Weight" />
+
+                   <TextView
+                       android:id="@+id/txtBloodWeight"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="1"
+                       android:gravity="center_vertical|right"
+                       android:text="75 kg"
+                       android:textSize="@dimen/subheading" />
+
+                   <ImageView
+                       android:id="@+id/imageView8"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+
+                       app:srcCompat="@drawable/ic_chevron_right" />
+
+               </LinearLayout>
+               <LinearLayout
+                   android:id="@+id/lytBMI"
+                   android:padding="16dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:layout_marginRight="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginBottom="4dp"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="9"
+                       android:textStyle="bold"
+                       android:textSize="@dimen/subheading"
+                       android:text="BMI" />
+
+                   <TextView
+                       android:id="@+id/txtBMI"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="1"
+                       android:gravity="center_vertical|right"
+                       android:text="28.9 kg.m2 | Overweight"
+                       android:textSize="@dimen/subheading" />
+
+
+
+               </LinearLayout>
+               <LinearLayout
+                   android:id="@+id/lytWaist"
+                   android:padding="16dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:layout_marginRight="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginBottom="4dp"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="9"
+                       android:textStyle="bold"
+                       android:textSize="@dimen/subheading"
+                       android:text="Waist circumference" />
+
+                   <TextView
+                       android:id="@+id/txtWaist"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="1"
+                       android:textSize="@dimen/subheading"
+                       android:gravity="center_vertical|right"
+                       android:text="100 cm" />
+
+                   <ImageView
+                       android:id="@+id/imageView10"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+
+                       app:srcCompat="@drawable/ic_chevron_right" />
+
+               </LinearLayout>
+               <LinearLayout
+                   android:id="@+id/lytHip"
+                   android:padding="16dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:layout_marginRight="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginBottom="4dp"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="9"
+                       android:textStyle="bold"
+                       android:textSize="@dimen/subheading"
+                       android:text="Hip circumference" />
+
+                   <TextView
+                       android:id="@+id/txtHip"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="1"
+                       android:textSize="@dimen/subheading"
+                       android:gravity="center_vertical|right"
+                       android:text="130 cm" />
+
+                   <ImageView
+                       android:id="@+id/imageView11"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
+
+                       app:srcCompat="@drawable/ic_chevron_right" />
+
+               </LinearLayout>
+               <LinearLayout
+                   android:id="@+id/lytW2HRatio"
+                   android:padding="16dp"
+                   android:background="@drawable/buttonbg_alternate"
+                   android:layout_marginRight="4dp"
+                   android:layout_marginLeft="4dp"
+                   android:layout_marginBottom="4dp"
+                   android:elevation="8dp"
+                   android:orientation="horizontal"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:gravity="center_vertical"
+                       android:layout_weight="9"
+                       android:textStyle="bold"
+                       android:textSize="@dimen/subheading"
+                       android:text="Waist to Hip Ratio" />
+
+                   <TextView
+                       android:id="@+id/txtWaistHipRatio"
+                       android:layout_width="wrap_content"
+                       android:layout_height="30dp"
+                       android:layout_weight="1"
+                       android:textSize="@dimen/subheading"
+                       android:gravity="center_vertical|right"
+                       android:text="0.77 | Moderate Risk" />
+
+
+
+               </LinearLayout>
+
+
+               <!-- the end assessment items  -->
+
+
+               <Button
+                   style="@style/button_style_actract"
+                   android:id="@+id/btnSaveAssess"
+                   android:layout_width="match_parent"
+                   android:layout_height="64dp"
+                   android:padding="16dp"
+                   android:layout_above="@+id/btnRedo"
+                   android:onClick="onSaveAssessClicked"
+                   android:layout_marginRight="6dp"
+                   android:layout_marginLeft="6dp"
+                   android:layout_marginTop="8dp"
+                   android:layout_marginBottom="6dp"
+                   android:text="SAVE ASSESSMENT" />
+
+
+
+           </LinearLayout>
+
+       </android.support.v4.widget.NestedScrollView>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

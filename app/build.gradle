@@ -1,0 +1,97 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
+
+plugins {
+    id 'com.onesignal.androidsdk.onesignal-gradle-plugin' version '0.8.1'
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://maven.google.com" }
+    maven { url 'https://dl.bintray.com/milaptank/SpannableTextView' }
+}
+
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "mandela.cct.ansteph.kazihealth"
+
+        manifestPlaceholders = [
+                onesignal_app_id               : "ebb78bb4-f686-4d84-8ec8-9796a595cf2a",
+                // Project number pulled from dashboard, local value is ignored.
+                onesignal_google_project_number: "REMOTE"
+        ]
+
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 2
+        versionName "1.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    flavorDimensions "cct"
+    productFlavors {
+        free {
+            dimension "cct"
+            minSdkVersion 19
+            applicationId 'mandela.cct.ansteph.kazihealth'
+            targetSdkVersion 26
+            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+            versionCode 2
+            versionName '1.1'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.yarolegovich:lovely-dialog:1.1.0'
+    implementation 'com.google.firebase:firebase-core:11.4.2'
+    implementation 'com.google.firebase:firebase-messaging:11.4.2'
+    compile 'com.google.firebase:firebase-auth:11.4.2'
+    compile 'com.google.android.gms:play-services-auth:11.4.2'
+
+    compile 'com.milaptank:stv:1.0.0'
+    compile project(':android-pdf-viewer')
+
+    implementation 'com.onesignal:OneSignal:[3.9.1, 3.99.99]'
+
+    implementation('com.shagi:material-datepicker:1.3') {
+        exclude group: 'com.android.support'
+    }
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
+        transitive = true;
+    }
+}
+apply plugin: 'com.google.gms.google-services'

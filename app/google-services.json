@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "990847632390",
+    "firebase_url": "https://oasis-445c2.firebaseio.com",
+    "project_id": "oasis-445c2",
+    "storage_bucket": "oasis-445c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990847632390:android:1267abb52e79a9aa",
+        "android_client_info": {
+          "package_name": "inqb8.ansteph.oasis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990847632390-1fcaiqh9j7amabtii5bnjsq9e1f0f6eh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCnfniWEbE-LZoAZ5QNfqK4pUUSrHGp1s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990847632390:android:4dd36bc7402fd1a6",
+        "android_client_info": {
+          "package_name": "mandela.cct.ansteph.kazihealth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990847632390-1fcaiqh9j7amabtii5bnjsq9e1f0f6eh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCnfniWEbE-LZoAZ5QNfqK4pUUSrHGp1s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
