@@ -11,13 +11,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.api.ContentTypes;
 import mandela.cct.ansteph.kazihealth.api.columns.UserColumns;
 import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
 import mandela.cct.ansteph.kazihealth.model.User;
+import mandela.cct.ansteph.kazihealth.view.firebasereg.Register_Firebase;
 import mandela.cct.ansteph.kazihealth.view.profile.RiskProfile;
 
 public class Login extends AppCompatActivity {
@@ -26,6 +30,7 @@ public class Login extends AppCompatActivity {
     EditText edtPassword, edtEmail;
 
     GlobalRetainer mGlobalRetainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +60,8 @@ public class Login extends AppCompatActivity {
 
     public void onRegisterClicked (View view)
     {
-        startActivity(new Intent(getApplicationContext(),Register.class));
+        //startActivity(new Intent(getApplicationContext(),Register.class));
+        startActivity(new Intent(getApplicationContext(),Register_Firebase.class));
     }
 
     public void onLoginClicked (View view)

@@ -1,8 +1,11 @@
 package mandela.cct.ansteph.kazihealth.view.profile;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -23,13 +28,29 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
 import com.yarolegovich.lovelydialog.LovelySaveStateHandler;
 import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import mandela.cct.ansteph.kazihealth.R;
+import mandela.cct.ansteph.kazihealth.api.ContentTypes;
+import mandela.cct.ansteph.kazihealth.api.RestAPI;
+import mandela.cct.ansteph.kazihealth.api.columns.RiskProfileColumns;
 import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.model.RiskProfileItem;
+import mandela.cct.ansteph.kazihealth.model.User;
 import mandela.cct.ansteph.kazihealth.view.appmanagement.Apps;
+import mandela.cct.ansteph.kazihealth.view.firebasereg.Login_Firebase;
 import mandela.cct.ansteph.kazihealth.view.register.Login;
 import mandela.cct.ansteph.kazihealth.view.tip.About;
 import mandela.cct.ansteph.kazihealth.view.tip.Tips;
@@ -47,12 +68,34 @@ public class Profile extends AppCompatActivity
     RadioButton radYes, radNo;
 
     LinearLayout lytKhNumber,lytKBpart;
+
+    EditText edtKhNumber;
+    Button btnImport;
+
+
+    private static final int RID_BP= 1;
+    private static final int RID_HR= 2;
+    private static final int RID_CHL= 3;
+    private static final int RID_BGL= 4;
+    private static final int RID_HEIGHT= 5;
+    private static final int RID_WEIGHT= 6;
+    private static final int RID_BMI= 7;
+    private static final int RID_WAIST= 8;
+    private static final int RID_HIP= 9;
+    private static final int RID_W2H= 10;
+
+    RiskProfileItem rBp, rHeartRate,rChol, rBgl,rHeight,rWeight,rBMI, rWaist,rHip, rW2H;
+    User cUser;
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mAuth = FirebaseAuth.getInstance();
 
         mGlobalRetainer = (GlobalRetainer)getApplicationContext();
         saveStateHandler = new LovelySaveStateHandler();
@@ -76,7 +119,7 @@ public class Profile extends AppCompatActivity
 
         if(mGlobalRetainer.get_grUser()!=null)
         {
-            //cUser = mGlobalRetainer.get_grUser();
+            cUser = mGlobalRetainer.get_grUser();
 
             txtName.setText(mGlobalRetainer.get_grUser().getName());
             txtEmail.setText(mGlobalRetainer.get_grUser().getEmail());
@@ -135,6 +178,8 @@ public class Profile extends AppCompatActivity
             }
         });
 
+       // btnImport = (Button) findViewById(R.id.btnImport);
+        edtKhNumber = (EditText) findViewById(R.id.editKHNumber);
 
     }
 
@@ -166,7 +211,16 @@ public class Profile extends AppCompatActivity
 
     public void onImportAssessmentClicked(View view)
     {
-        Toast.makeText(getApplicationContext(),"Unable to connect to KaziBantu server try again later", Toast.LENGTH_LONG).show();
+        RestAPI rAPI = new RestAPI();
+
+        String userID = edtKhNumber.getText().toString();
+
+        JSONObject userData;
+
+        new DownloadUserData().execute(userID);
+
+
+
 
     }
 
@@ -259,6 +313,11 @@ public class Profile extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+    private void signOut() {
+        mAuth.signOut();
+        startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
+        //updateUI(null);
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -277,7 +336,8 @@ public class Profile extends AppCompatActivity
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(getApplicationContext(), About.class));
         }else if (id == R.id.nav_logout) {
-            startActivity(new Intent(getApplicationContext(), Login.class));
+            signOut();
+          //  startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -289,4 +349,180 @@ public class Profile extends AppCompatActivity
     public void onClick(View v) {
         showLovelyDialog(v.getId(), null);
     }
+
+
+    private void getKaziAssessmentData(String uid) throws JSONException{
+        String url = String.format("", uid);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                //loadPromo(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(jsonArrayRequest);
+    }
+
+
+
+
+
+
+//                        rWaist = new RiskProfileItem(cUser.getId(), RID_WAIST,text,"");
+
+
+    public int recordProfileItem(RiskProfileItem riskProfileItem){
+
+
+        try {
+            ContentValues values = new ContentValues();
+
+            values.put(RiskProfileColumns.USER_ID, riskProfileItem.getUser_id()) ;
+            values.put(RiskProfileColumns.RISK_ITEM_ID , riskProfileItem.getRisk_item_id()) ;
+            values.put(RiskProfileColumns.MEASUREMENT , riskProfileItem.getMeasurement()) ;
+            values.put(RiskProfileColumns.COMMENT , riskProfileItem.getComment()) ;
+
+
+            getContentResolver().insert(ContentTypes.RISK_PROFILE_CONTENT_URI, values);
+
+            return 1;
+
+
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+
+            return 0;
+        }
+
+    }
+
+
+
+
+    private class DownloadUserData extends AsyncTask<String, String, JSONObject>{
+
+       /* private String userID;
+
+        public DownloadUserData(String userID) {
+            this.userID = userID;
+        }*/
+
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+
+            RestAPI rAPI = new RestAPI();
+            JSONObject userData;
+            try {
+                userData = rAPI.KaziHealthParametersByTeacherUniqueID(strings[0],"kaziWSuserTOconsume","43007e66a22569f6b7e0682d83ce824b91bed696") ;
+                return userData;
+            } catch (Exception e) {
+                e.printStackTrace();
+               // Toast.makeText(getApplicationContext(),"Unable to connect to KaziBantu server try again later", Toast.LENGTH_LONG).show();
+
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jsonObject) {
+           // super.onPostExecute(jsonObject);
+
+            recordUserData(jsonObject);
+        }
+    }
+
+
+
+
+    public  void recordUserData(JSONObject jsonObject){
+
+        JSONObject jo = jsonObject;
+        String value =null;
+        JSONArray fromStringValue= null;
+        try {
+             value = jo.getString("Value");
+             fromStringValue = new JSONArray(value);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (value!=null)
+        {
+            try{
+                JSONObject userdata = fromStringValue.getJSONObject(0);
+                String bp  = userdata.getString("ceBPOutcomeValue1")+"/"+userdata.getString("ceBPOutcomeValue2");
+                String hr  = userdata.getString("ceHROutcomeValue");
+                String chol  = userdata.getString("ceTotalCholesterol");
+                String bgl  = userdata.getString("ceAlereHbA1cMol");
+                String height  = userdata.getString("aabcHeight");
+                String weight  = userdata.getString("aabcWeight");
+                String bmi  = userdata.getString("aabcBMI");
+                String waist  = userdata.getString("aabcWaist");
+                String hip  = userdata.getString("aabcHip");
+                String w2h  = userdata.getString("aabcWaistToHipValue");
+
+                rBp = new RiskProfileItem(cUser.getId(), RID_BP, bp,"");
+                rHeartRate = new RiskProfileItem(cUser.getId(), RID_HR, hr,"");
+                rChol = new RiskProfileItem(cUser.getId(), RID_CHL, chol,"");
+                rBgl = new RiskProfileItem(cUser.getId(), RID_BGL, bgl,"");
+                rHeight = new RiskProfileItem(cUser.getId(), RID_HEIGHT, height,"");
+                rWeight = new RiskProfileItem(cUser.getId(), RID_WEIGHT, weight,"");
+                rBMI = new RiskProfileItem(cUser.getId(), RID_BMI, bmi,userdata.getString("BMIClassification"));
+                rWaist = new RiskProfileItem(cUser.getId(), RID_WAIST, waist,"");
+                rHip = new RiskProfileItem(cUser.getId(), RID_HIP, hip,"");
+                rW2H = new RiskProfileItem(cUser.getId(), RID_W2H, w2h,userdata.getString("WaistToHipRatioClassification"));
+
+                recorded();
+
+
+            }catch (Exception e ){
+                e.printStackTrace();
+            }
+
+
+
+         //   rBp, rHeartRate,, rBgl,,,, rWaist,, ;
+           // rWaist = new RiskProfileItem(cUser.getId(), RID_WAIST,value.getString(Integer.parseInt("aabcWaist")),"");
+        }
+
+    }
+
+
+
+
+    public void recorded()
+    {
+        //save all the record  rBp, rHeartRate,rChol, rBgl,rHeight,rWeight,rBMI, rWaist,rHip, rW2H;
+        recordProfileItem(rBp);
+
+        recordProfileItem(rHeartRate);
+        recordProfileItem(rChol);
+        recordProfileItem(rBgl);
+
+        recordProfileItem(rHeight);
+        recordProfileItem(rWeight);
+        recordProfileItem(rBMI);
+        recordProfileItem(rWaist);
+
+        recordProfileItem(rHip);
+        recordProfileItem(rW2H);
+
+
+        Toast.makeText(getApplicationContext(),"RisK Profile Saved", Toast.LENGTH_LONG).show();
+
+
+    }
+
+
 }

@@ -1,58 +1,35 @@
 {
   "project_info": {
-    "project_number": "990847632390",
-    "firebase_url": "https://oasis-445c2.firebaseio.com",
-    "project_id": "oasis-445c2",
-    "storage_bucket": "oasis-445c2.appspot.com"
+    "project_number": "284880298151",
+    "firebase_url": "https://kazihealth.firebaseio.com",
+    "project_id": "kazihealth",
+    "storage_bucket": "kazihealth.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:990847632390:android:1267abb52e79a9aa",
-        "android_client_info": {
-          "package_name": "inqb8.ansteph.oasis"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "990847632390-1fcaiqh9j7amabtii5bnjsq9e1f0f6eh.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDCnfniWEbE-LZoAZ5QNfqK4pUUSrHGp1s"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:990847632390:android:4dd36bc7402fd1a6",
+        "mobilesdk_app_id": "1:284880298151:android:4dd36bc7402fd1a6",
         "android_client_info": {
           "package_name": "mandela.cct.ansteph.kazihealth"
         }
       },
       "oauth_client": [
         {
-          "client_id": "990847632390-1fcaiqh9j7amabtii5bnjsq9e1f0f6eh.apps.googleusercontent.com",
+          "client_id": "284880298151-iqm88fie7b82s76gpkds653n2la7gang.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mandela.cct.ansteph.kazihealth",
+            "certificate_hash": "6780cfff4e26bf18488dc3f5be32409f44a8430e"
+          }
+        },
+        {
+          "client_id": "284880298151-n3a9dpstp70j3uakctjrph7f3r4mnsal.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDCnfniWEbE-LZoAZ5QNfqK4pUUSrHGp1s"
+          "current_key": "AIzaSyBkRd2n9a61R3bA2u96gLreR1xCg7PwNA0"
         }
       ],
       "services": {
@@ -60,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284880298151-n3a9dpstp70j3uakctjrph7f3r4mnsal.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

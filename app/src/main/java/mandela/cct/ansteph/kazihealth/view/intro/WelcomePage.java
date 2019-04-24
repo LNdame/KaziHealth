@@ -22,6 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import mandela.cct.ansteph.kazihealth.R;
+import mandela.cct.ansteph.kazihealth.view.firebasereg.Login_Firebase;
+import mandela.cct.ansteph.kazihealth.view.firebasereg.SaveFireDB;
 import mandela.cct.ansteph.kazihealth.view.profile.RiskProfile;
 import mandela.cct.ansteph.kazihealth.view.register.Login;
 import mandela.cct.ansteph.kazihealth.view.register.Register;
@@ -99,7 +101,7 @@ public class WelcomePage extends AppCompatActivity {
 
 
     private void gotoWelcome(){
-        startActivity(new Intent(getApplication(), Login.class));
+        startActivity(new Intent(getApplication(), Login_Firebase.class));
         finish();
     }
 

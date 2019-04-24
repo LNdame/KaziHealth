@@ -671,6 +671,10 @@ Be Active:\n\n
     <string name="start">GOT IT</string>
     <string name="title_activity_legal">Terms &amp; Conditions</string>
 
-    <string name = "done">Press \'Done\' when you are done without closing the tab</string>
+    <string name="done">Press \'Done\' when you are done without closing the tab</string>
+    <string name="title_activity_register__firebase">Register</string>
+
+    <string name="registration_success">Registered Successfully</string>
+    <string name="title_activity_reset_password">Reset Password</string>
 
 </resources>
