@@ -421,7 +421,9 @@ public class Profile extends AppCompatActivity
             RestAPI rAPI = new RestAPI();
             JSONObject userData;
             try {
-                userData = rAPI.KaziHealthParametersByTeacherUniqueID(strings[0],"kaziWSuserTOconsume","43007e66a22569f6b7e0682d83ce824b91bed696") ;
+              //  userData = rAPI.KaziHealthParametersByTeacherUniqueID(strings[0],"kaziWSuserTOconsume","43007e66a22569f6b7e0682d83ce824b91bed696") ;
+                userData = rAPI.KaziHealthParametersByTeacherUniqueID(strings[0]) ;
+
                 return userData;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -455,6 +457,8 @@ public class Profile extends AppCompatActivity
 
         } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(),"No Data Found", Toast.LENGTH_LONG).show();
+
         }
 
         if (value!=null)
@@ -488,6 +492,8 @@ public class Profile extends AppCompatActivity
 
             }catch (Exception e ){
                 e.printStackTrace();
+                Toast.makeText(getApplicationContext(),"No Data Found", Toast.LENGTH_LONG).show();
+
             }
 
 

@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 public class RestAPI {
-    private final String urlString = "https://mandelacct.dedicated.co.za/kazichatwsauth/context.ashx";
+    private final String urlString = "https://mandelacct.dedicated.co.za/kazichatws/context.ashx";
 
     private static String convertStreamToUTF8String(InputStream stream) throws IOException {
         String result = "";
@@ -103,19 +103,17 @@ public class RestAPI {
         return finalValue;
     }
 
-    public JSONObject KaziHealthParametersByTeacherUniqueID(String ID,String wsuUserName,String wsuPassword) throws Exception {
+    public JSONObject KaziHealthParametersByTeacherUniqueID(String ID) throws Exception {
         JSONObject result = null;
         JSONObject o = new JSONObject();
         JSONObject p = new JSONObject();
         o.put("interface","RestAPI");
         o.put("method", "KaziHealthParametersByTeacherUniqueID");
         p.put("ID",mapObject(ID));
-        p.put("wsuUserName",mapObject(wsuUserName));
-        p.put("wsuPassword",mapObject(wsuPassword));
         o.put("parameters", p);
         String s = o.toString();
         String r = load(s);
-        result = new JSONObject(r);
+         result = new JSONObject(r);
         return result;
     }
 

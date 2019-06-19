@@ -36,8 +36,8 @@ android {
 
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 4
-        versionName "1.4"
+        versionCode 5
+        versionName "1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -59,8 +59,8 @@ android {
             applicationId 'mandela.cct.ansteph.kazihealth'
             targetSdkVersion 26
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-            versionCode 4
-            versionName '1.4'
+            versionCode 5
+            versionName '1.5'
         }
     }
 }
