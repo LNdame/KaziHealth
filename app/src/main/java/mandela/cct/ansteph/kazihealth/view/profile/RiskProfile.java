@@ -176,13 +176,19 @@ public class RiskProfile extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         TextView navName = (TextView) headerView.findViewById(R.id.txtNavName);
-        TextView navEmail= (TextView) headerView.findViewById(R.id.txtNavEmail);
+        TextView navEmail = (TextView) headerView.findViewById(R.id.txtNavEmail);
 
-        ImageView navAvatar = (ImageView)headerView.findViewById(R.id.avatar);
-        if(cUser.getProfilePic()!=null)
-        {            Bitmap bitmap = BitmapFactory.decodeByteArray(cUser.getProfilePic(), 0, cUser.getProfilePic().length);
-            navAvatar.setImageBitmap(bitmap);
+        ImageView navAvatar = (ImageView) headerView.findViewById(R.id.avatar);
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeByteArray(cUser.getProfilePic(), 0, cUser.getProfilePic().length);
+        } catch (NullPointerException ne) {
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.user);
         }
+
+        navAvatar.setImageBitmap(bitmap);
+
 
         navName.setText(mGlobalRetainer.get_grUser().getName());
         navEmail.setText(mGlobalRetainer.get_grUser().getEmail());
