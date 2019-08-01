@@ -97,7 +97,7 @@
                        android:layout_weight="9"
                        android:textStyle="bold"
                        android:textSize="@dimen/subheading"
-                       android:text="Blood pressure" />
+                       android:text="Blood Pressure" />
 
                    <TextView
                        android:id="@+id/txtBloodPres"
@@ -136,7 +136,7 @@
                        android:layout_weight="9"
                        android:textStyle="bold"
                        android:textSize="@dimen/subheading"
-                       android:text="Heart rate" />
+                       android:text="Heart Rate" />
 
                    <TextView
                        android:id="@+id/txtHeartRate"
@@ -214,7 +214,7 @@
                        android:layout_weight="9"
                        android:textStyle="bold"
                        android:textSize="@dimen/subheading"
-                       android:text="Blood Glucose level" />
+                       android:text="Blood Glucose Level" />
 
                    <TextView
                        android:id="@+id/txtBloodGlu"
@@ -366,7 +366,7 @@
                        android:layout_weight="9"
                        android:textStyle="bold"
                        android:textSize="@dimen/subheading"
-                       android:text="Waist circumference" />
+                       android:text="Waist Circumference" />
 
                    <TextView
                        android:id="@+id/txtWaist"
@@ -405,7 +405,7 @@
                        android:layout_weight="9"
                        android:textStyle="bold"
                        android:textSize="@dimen/subheading"
-                       android:text="Hip circumference" />
+                       android:text="Hip Circumference" />
 
                    <TextView
                        android:id="@+id/txtHip"
