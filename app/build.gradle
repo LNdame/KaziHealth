@@ -24,7 +24,7 @@ repositories {
 
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
     defaultConfig {
         applicationId "mandela.cct.ansteph.kazihealth"
 
@@ -35,9 +35,9 @@ android {
         ]
 
         minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 4
-        versionName "1.4"
+        targetSdkVersion 28
+        versionCode 5
+        versionName "1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -57,20 +57,20 @@ android {
             dimension "cct"
             minSdkVersion 19
             applicationId 'mandela.cct.ansteph.kazihealth'
-            targetSdkVersion 26
+            targetSdkVersion 28
             testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-            versionCode 4
-            versionName '1.4'
+            versionCode 5
+            versionName '1.5'
         }
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:design:28.0.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.yarolegovich:lovely-dialog:1.1.0'
     implementation 'com.google.firebase:firebase-core:11.4.2'
