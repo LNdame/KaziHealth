@@ -26,8 +26,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
 
 import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.api.ContentTypes;
@@ -35,11 +38,11 @@ import mandela.cct.ansteph.kazihealth.api.RiskItemID;
 import mandela.cct.ansteph.kazihealth.api.columns.RiskProfileColumns;
 import mandela.cct.ansteph.kazihealth.api.columns.UserColumns;
 import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.helper.SessionManager;
 import mandela.cct.ansteph.kazihealth.model.RiskProfileItem;
 import mandela.cct.ansteph.kazihealth.model.User;
 import mandela.cct.ansteph.kazihealth.view.appmanagement.Apps;
-import mandela.cct.ansteph.kazihealth.view.intro.WelcomePage;
-import mandela.cct.ansteph.kazihealth.view.register.Login;
+import mandela.cct.ansteph.kazihealth.view.firebasereg.Login_Firebase;
 import mandela.cct.ansteph.kazihealth.view.tip.About;
 import mandela.cct.ansteph.kazihealth.view.tip.Tips;
 
@@ -59,11 +62,15 @@ public class RiskProfile extends AppCompatActivity
     ImageView mImgAvatar;
 
     RelativeLayout ltyNoriskp;
+    SessionManager sessionManager;
 
    // int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
    // int colorModerateRisk =ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
    // int colorHighRisk =ContextCompat.getColor(this, R.color.riskColorHigh);  //getResources().getColor(R.color.riskColorHigh);
     User cUser;
+
+    FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,16 @@ public class RiskProfile extends AppCompatActivity
         setContentView(R.layout.activity_risk_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        if (mAuth.getCurrentUser() == null) {
+            finish();
+            startActivity(new Intent(this, Login_Firebase.class));
+        }
+
+
+        sessionManager =new SessionManager(getApplicationContext());
 
         mGlobalRetainer = (GlobalRetainer) getApplicationContext();
         mImgAvatar =(ImageView)findViewById(R.id.avatar);
@@ -119,9 +136,32 @@ public class RiskProfile extends AppCompatActivity
         {
             fillRecord();
         }else{
-            if(mGlobalRetainer.get_grUser()!=null){
+            if(mGlobalRetainer.get_grUser()!=null && mGlobalRetainer.get_grUser().getId()!=0){
+
+
                 cUser =mGlobalRetainer.get_grUser();
                 fillRecord();
+            }else {
+                HashMap<String, String> user = sessionManager.getUserDetails();
+                String fullname =  user.get(SessionManager.KEY_NAME);
+                try{
+                    int id = Integer.parseInt(user.get(SessionManager.KEY_ID));
+
+                    mGlobalRetainer.set_grUser(new User(id, fullname,
+                            user.get(SessionManager.KEY_EMAIL),
+                            user.get(SessionManager.KEY_DOB),
+                            user.get(SessionManager.KEY_PASSWORD),
+                            user.get(SessionManager.KEY_GENDER)
+                    ));
+
+                    cUser =mGlobalRetainer.get_grUser();
+                    fillRecord();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+
             }
         }
         setNoRiskPanel();
@@ -136,13 +176,19 @@ public class RiskProfile extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         TextView navName = (TextView) headerView.findViewById(R.id.txtNavName);
-        TextView navEmail= (TextView) headerView.findViewById(R.id.txtNavEmail);
+        TextView navEmail = (TextView) headerView.findViewById(R.id.txtNavEmail);
 
-        ImageView navAvatar = (ImageView)headerView.findViewById(R.id.avatar);
-        if(cUser.getProfilePic()!=null)
-        {            Bitmap bitmap = BitmapFactory.decodeByteArray(cUser.getProfilePic(), 0, cUser.getProfilePic().length);
-            navAvatar.setImageBitmap(bitmap);
+        ImageView navAvatar = (ImageView) headerView.findViewById(R.id.avatar);
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeByteArray(cUser.getProfilePic(), 0, cUser.getProfilePic().length);
+        } catch (NullPointerException ne) {
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.user);
         }
+
+        navAvatar.setImageBitmap(bitmap);
+
 
         navName.setText(mGlobalRetainer.get_grUser().getName());
         navEmail.setText(mGlobalRetainer.get_grUser().getEmail());
@@ -223,6 +269,13 @@ public class RiskProfile extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private void signOut() {
+        mAuth.signOut();
+        startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
+        //updateUI(null);
+    }
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -240,7 +293,8 @@ public class RiskProfile extends AppCompatActivity
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(getApplicationContext(), About.class));
         }else if (id == R.id.nav_logout) {
-            startActivity(new Intent(getApplicationContext(), Login.class));
+            signOut();
+           // startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -616,6 +670,19 @@ public class RiskProfile extends AppCompatActivity
 
     }
 
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (mAuth.getCurrentUser() != null) {
+           // finish();
+           // startActivity(new Intent(this, RiskProfile.class));
+        }else{
+            startActivity(new Intent(this, Login_Firebase.class));
+        }
+    }
 
 
 }

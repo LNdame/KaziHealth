@@ -149,7 +149,7 @@
 
 
                         <TextView
-                            android:text="Blood pressure "
+                            android:text="Blood Pressure "
                             android:textAlignment="center"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="16sp"
@@ -453,7 +453,7 @@
 
 
                         <TextView
-                            android:text="Blood glucose \n(non-fasting)"
+                            android:text="Blood Glucose \n(non-fasting)"
                             android:textAlignment="center"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="16sp"

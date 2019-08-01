@@ -25,7 +25,7 @@ public class Splash extends AppCompatActivity {
                 }finally{
                     /**
                      * Call this function whenever you want to check user login
-                     * This will redirect user to Login is he is not
+                     * This will redirect user to Login_Firebase is he is not
                      * logged in
                      * */
                   //  sessionManager.checkReg();

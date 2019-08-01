@@ -2,9 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mandela.cct.ansteph.kazihealth">
 
+    <permission android:name="permission"
+        android:protectionLevel="signature"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <application
         android:name=".app.GlobalRetainer"
@@ -94,7 +98,7 @@
             android:name=".contentprovider.RiskProfileContentProvider"
             android:authorities="mandela.cct.ansteph.kazihealth.contentprovider.riskprofilecontentprovider"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <provider
             android:name=".contentprovider.RiskItemContentProvider"
             android:authorities="mandela.cct.ansteph.kazihealth.contentprovider.riskitemcontentprovider"
@@ -131,6 +135,24 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mandela.cct.ansteph.kazihealth.view.tip.About" />
+        </activity>
+        <activity
+            android:name=".view.firebasereg.Login_Firebase"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.firebasereg.Register_Firebase"
+            android:label="@string/title_activity_register__firebase"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.firebasereg.SaveFireDB" />
+        <activity
+            android:name=".view.firebasereg.ResetPassword"
+            android:label="@string/title_activity_reset_password"
+            android:parentActivityName=".view.firebasereg.Login_Firebase"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="mandela.cct.ansteph.kazihealth.view.firebasereg.Login_Firebase" />
         </activity>
     </application>
 

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="mandela.cct.ansteph.kazihealth.view.firebasereg.Register_Firebase"
+    tools:showIn="@layout/activity_register_firebase">
+    <RelativeLayout
+        android:gravity="center"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_above="@+id/scrollReg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/kazihealth_logo_white_250" />
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:id="@+id/scrollReg"
+        android:layout_above="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_above="@+id/btnRegister"
+            android:background="@drawable/borderfilled"
+            android:orientation="vertical"
+            android:id="@+id/linearLayout">
+
+            <EditText
+                style="@style/edit_box_other"
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:ems="10"
+                android:hint="First name*"
+                android:inputType="textPersonName"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/textColorPrimary"/>
+
+            <EditText
+                style="@style/edit_box_other"
+                android:id="@+id/editlName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:ems="10"
+                android:hint="Last name*"
+                android:inputType="textPersonName"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/textColorPrimary"/>
+            <EditText
+                style="@style/edit_box_other"
+
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Email*"
+
+                android:inputType="textEmailAddress" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/textColorPrimary"/>
+
+            <TextView
+                style="@style/edit_box_other"
+
+                android:id="@+id/editDob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Date of birth e.g. 1980/01/01"
+
+                android:inputType="text" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/textColorPrimary"/>
+
+            <TextView
+                android:text="Touch to select gender*"
+                android:paddingTop="8dp"
+                android:paddingLeft="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Spinner
+                style="@style/edit_box_other"
+
+                android:id="@+id/spnGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/textColorPrimary"/>
+
+            <EditText
+                style="@style/edit_box_other"
+
+                android:id="@+id/editPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password*"
+
+                android:ems="10"
+                android:inputType="textPassword" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/textColorPrimary"/>
+
+            <EditText
+                style="@style/edit_box_other"
+
+                android:id="@+id/editConPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirm password*"
+
+                android:ems="10"
+                android:inputType="textPassword" />
+
+        </LinearLayout>
+
+    </ScrollView>
+    <Button
+        style="@style/button_style_alternate"
+        android:id="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/lytLog"
+        android:padding="16dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="onRegisterClicked"
+        android:text="Register" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_marginBottom="48dp"
+        android:id="@+id/lytLog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/colorWhite"
+            android:text="ALREADY HAVE AN ACCOUNT?" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:onClick="onLoginClicked"
+            android:layout_alignParentBottom="true"
+            android:text=" LOG IN!" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+
+</RelativeLayout>

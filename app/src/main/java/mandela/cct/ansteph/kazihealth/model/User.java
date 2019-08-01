@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     int id;
+    String fid;
     String  name, email,kh_number, password, dob , gender;
 
     byte [] profilePic;
@@ -16,18 +17,29 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(int id, String name, String email, String kh_number, String password) {
+
+    public User(String fid, String name, String gender) {
+        this.fid = fid;
+        this.name = name;
+        this.gender = gender;
+    }
+
+
+    public User(String name, String email, String password,String dob) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+
+        this.dob =dob;
+    }
+
+    public User(int id, String name, String email, String dob,String password,String gender) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.kh_number = kh_number;
+        this.dob = dob;
         this.password = password;
-    }
-
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
+        this.gender= gender;
     }
 
     public int getId() {

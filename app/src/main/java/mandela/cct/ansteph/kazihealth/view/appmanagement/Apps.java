@@ -19,8 +19,11 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.view.firebasereg.Login_Firebase;
 import mandela.cct.ansteph.kazihealth.view.profile.Profile;
 import mandela.cct.ansteph.kazihealth.view.profile.RiskProfile;
 import mandela.cct.ansteph.kazihealth.view.register.Login;
@@ -32,6 +35,7 @@ public class Apps extends AppCompatActivity
 
 
     GlobalRetainer mGlobalRetainer;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,9 @@ public class Apps extends AppCompatActivity
         setContentView(R.layout.activity_apps);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mAuth = FirebaseAuth.getInstance();
+
         mGlobalRetainer = (GlobalRetainer) getApplicationContext();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -219,6 +226,12 @@ public class Apps extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private void signOut() {
+        mAuth.signOut();
+        startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
+        //updateUI(null);
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -236,7 +249,8 @@ public class Apps extends AppCompatActivity
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(getApplicationContext(), About.class));
         }else if (id == R.id.nav_logout) {
-            startActivity(new Intent(getApplicationContext(), Login.class));
+            signOut();
+            //startActivity(new Intent(getApplicationContext(), Login.class));
         }
 
 
