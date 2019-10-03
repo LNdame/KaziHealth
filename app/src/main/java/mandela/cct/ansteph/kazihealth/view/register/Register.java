@@ -3,16 +3,13 @@ package mandela.cct.ansteph.kazihealth.view.register;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.SQLException;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
@@ -31,7 +28,6 @@ import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.api.ContentTypes;
 import mandela.cct.ansteph.kazihealth.api.columns.UserColumns;
 import mandela.cct.ansteph.kazihealth.model.User;
-import mandela.cct.ansteph.kazihealth.view.profile.RiskProfile;
 
 public class Register extends AppCompatActivity {
 

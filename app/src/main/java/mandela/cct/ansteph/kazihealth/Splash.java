@@ -1,12 +1,11 @@
 package mandela.cct.ansteph.kazihealth;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 import mandela.cct.ansteph.kazihealth.view.intro.WelcomePage;
-import mandela.cct.ansteph.kazihealth.view.register.Register;
 
 public class Splash extends AppCompatActivity {
 

@@ -16,7 +16,7 @@
 package com.inqb8.ansteph.android_pdf_viewer;
 
 import android.graphics.RectF;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 
 import com.inqb8.ansteph.android_pdf_viewer.model.PagePart;

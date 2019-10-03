@@ -6,10 +6,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -18,7 +18,7 @@ import com.inqb8.ansteph.android_pdf_viewer.PDFView;
 import com.inqb8.ansteph.android_pdf_viewer.listener.OnLoadCompleteListener;
 import com.inqb8.ansteph.android_pdf_viewer.listener.OnPageChangeListener;
 import com.inqb8.ansteph.android_pdf_viewer.scroll.DefaultScrollHandle;
-import com.shockwave.pdfium.PdfDocument;
+//import com.shockwave.pdfium.PdfDocument;
 
 import java.util.List;
 
@@ -153,17 +153,17 @@ public class Legal extends AppCompatActivity implements OnPageChangeListener, On
 
     @Override
     public void loadComplete(int nbPages) {
-        PdfDocument.Meta meta = pdfView.getDocumentMeta();
-        Log.e(TAG, "title = " + meta.getTitle());
-        Log.e(TAG, "author = " + meta.getAuthor());
-        Log.e(TAG, "subject = " + meta.getSubject());
-        Log.e(TAG, "keywords = " + meta.getKeywords());
-        Log.e(TAG, "creator = " + meta.getCreator());
-        Log.e(TAG, "producer = " + meta.getProducer());
-        Log.e(TAG, "creationDate = " + meta.getCreationDate());
-        Log.e(TAG, "modDate = " + meta.getModDate());
+//        PdfDocument.Meta meta = pdfView.getDocumentMeta();
+//        Log.e(TAG, "title = " + meta.getTitle());
+//        Log.e(TAG, "author = " + meta.getAuthor());
+//        Log.e(TAG, "subject = " + meta.getSubject());
+//        Log.e(TAG, "keywords = " + meta.getKeywords());
+//        Log.e(TAG, "creator = " + meta.getCreator());
+//        Log.e(TAG, "producer = " + meta.getProducer());
+//        Log.e(TAG, "creationDate = " + meta.getCreationDate());
+//        Log.e(TAG, "modDate = " + meta.getModDate());
 
-        printBookmarksTree(pdfView.getTableOfContents(), "-");
+       // printBookmarksTree(pdfView.getTableOfContents(), "-");
 
     }
 
@@ -173,15 +173,15 @@ public class Legal extends AppCompatActivity implements OnPageChangeListener, On
         setTitle(String.format("%s %s / %s", getResources().getString(R.string.title_activity_legal), page + 1, pageCount));
     }
 
-    public void printBookmarksTree(List<PdfDocument.Bookmark> tree, String sep) {
-        for (PdfDocument.Bookmark b : tree) {
-
-            Log.e(TAG, String.format("%s %s, p %d", sep, b.getTitle(), b.getPageIdx()));
-
-            if (b.hasChildren()) {
-                printBookmarksTree(b.getChildren(), sep + "-");
-            }
-        }
-    }
+//    public void printBookmarksTree(List<PdfDocument.Bookmark> tree, String sep) {
+//        for (PdfDocument.Bookmark b : tree) {
+//
+//            Log.e(TAG, String.format("%s %s, p %d", sep, b.getTitle(), b.getPageIdx()));
+//
+//            if (b.hasChildren()) {
+//                printBookmarksTree(b.getChildren(), sep + "-");
+//            }
+//        }
+//    }
 
 }

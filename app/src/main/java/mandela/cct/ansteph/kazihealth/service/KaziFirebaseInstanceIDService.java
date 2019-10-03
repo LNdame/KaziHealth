@@ -6,10 +6,10 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
+
 import com.google.firebase.messaging.FirebaseMessaging;
 
-public class KaziFirebaseInstanceIDService extends FirebaseInstanceIdService {
+public class KaziFirebaseInstanceIDService {
 
 
     private static final String TAG = "FirebaseIIDService";
@@ -21,7 +21,7 @@ public class KaziFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * is initially generated so this is where you would retrieve the token.
      */
     // [START refresh_token]
-    @Override
+
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
