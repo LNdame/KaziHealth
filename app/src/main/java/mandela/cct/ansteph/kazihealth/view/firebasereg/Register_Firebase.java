@@ -112,7 +112,7 @@ public class Register_Firebase extends AppCompatActivity {
 
 
     public void onLoginClicked(View view) {
-        startActivity(new Intent(getApplicationContext(), mandela.cct.ansteph.kazihealth.view.register.Login.class));
+        startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
     }
 
 
