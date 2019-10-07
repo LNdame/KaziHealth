@@ -16,7 +16,7 @@ import android.widget.Toast;
 import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.api.ContentTypes;
 import mandela.cct.ansteph.kazihealth.api.columns.UserColumns;
-import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.app.KaziApp;
 import mandela.cct.ansteph.kazihealth.view.firebasereg.Register_Firebase;
 import mandela.cct.ansteph.kazihealth.view.profile.RiskProfile;
 
@@ -25,7 +25,7 @@ public class Login extends AppCompatActivity {
      public static String TAG = Login.class.getSimpleName();
     EditText edtPassword, edtEmail;
 
-    GlobalRetainer mGlobalRetainer;
+    KaziApp mKaziApp;
 
 
     @Override
@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mGlobalRetainer = (GlobalRetainer)getApplicationContext();
+        mKaziApp = (KaziApp)getApplicationContext();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

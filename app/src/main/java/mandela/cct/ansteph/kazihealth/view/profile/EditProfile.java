@@ -54,7 +54,10 @@ import java.util.Locale;
 import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.api.ContentTypes;
 import mandela.cct.ansteph.kazihealth.api.columns.UserColumns;
-import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.app.KaziApp;
+import mandela.cct.ansteph.kazihealth.data.AppExecutors;
+import mandela.cct.ansteph.kazihealth.data.KaziDatabase;
+import mandela.cct.ansteph.kazihealth.helper.SessionManager;
 import mandela.cct.ansteph.kazihealth.model.User;
 
 public class EditProfile extends AppCompatActivity {
@@ -64,7 +67,7 @@ public class EditProfile extends AppCompatActivity {
     Button btnChangePic, btnChangePassword;
 
     Boolean isChangePassOpen;
-    GlobalRetainer mGlobalRetainer;
+    KaziApp mKaziApp;
     User cUser;
 
     ImageView mImgAvatar;
@@ -84,15 +87,18 @@ public class EditProfile extends AppCompatActivity {
     Spinner spnGender;
     ArrayAdapter<CharSequence> originAdapter;
     private TextView mDateofBirth;
-
+    private KaziDatabase kDB;
+    SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mGlobalRetainer = (GlobalRetainer) getApplicationContext();
+        mKaziApp = (KaziApp) getApplicationContext();
+        kDB = KaziDatabase.getInstance(getApplicationContext());
         saveStateHandler = new LovelySaveStateHandler();
+        sessionManager = new SessionManager(getApplicationContext());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -131,8 +137,6 @@ public class EditProfile extends AppCompatActivity {
         mDateofBirth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 DatePickerFragmentDialog dialog = DatePickerFragmentDialog.newInstance(new DatePickerFragmentDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePickerFragmentDialog view, int year, int monthOfYear, int dayOfMonth) {
@@ -144,12 +148,7 @@ public class EditProfile extends AppCompatActivity {
                         mDateofBirth.setText(bod);
                     }
                 } , 1985,01,01);
-
                 dialog.show(getSupportFragmentManager(), "Date Picker");
-
-
-
-
             }
         });
 
@@ -158,10 +157,18 @@ public class EditProfile extends AppCompatActivity {
         isChangePassOpen= false;
 
 
-        if(mGlobalRetainer.get_grUser()!=null){
-            cUser =mGlobalRetainer.get_grUser();
-            fillRecord();
-        }
+       AppExecutors.getInstance().getDiskIO().execute(
+               new Runnable() {
+                   @Override
+                   public void run() {
+                       User currentUser = kDB.userDao().findUserByUID(sessionManager.getUserDetails().get(SessionManager.KEY_UID));
+                       fillRecord(currentUser);
+                   }
+               }
+       );
+//            cUser = mKaziApp.get_grUser();
+//            fillRecord();
+
 
         requestPermission();
 
@@ -180,22 +187,22 @@ public class EditProfile extends AppCompatActivity {
     }
 
 
-    public void fillRecord() {
+    public void fillRecord(User curUser) {
+        cUser = curUser;
+        edtFullName.setText(curUser.getName());
+        edtEmail.setText(curUser.getEmail());
 
-        edtFullName.setText(cUser.getName());
-        edtEmail.setText(cUser.getEmail());
+        mDateofBirth.setText(curUser.getDob());
 
-        mDateofBirth.setText(cUser.getDob());
-
-        if(!cUser.getGender().equals(null))
+        if(!cUser.getGender().isEmpty())
         {
-            int pos = originAdapter.getPosition(cUser.getGender());
+            int pos = originAdapter.getPosition(curUser.getGender());
             spnGender.setSelection(pos);
         }
 
         if(cUser.getProfilePic()!=null)
         {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(cUser.getProfilePic(), 0, cUser.getProfilePic().length);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(curUser.getProfilePic(), 0, curUser.getProfilePic().length);
             mImgAvatar.setImageBitmap(bitmap);
 
         }
@@ -206,8 +213,6 @@ public class EditProfile extends AppCompatActivity {
 
     public void onChangePictureClicked(View view)
     {
-       // takePicture();
-
         showLovelyDialog(view.getId(), null);
     }
 
@@ -300,7 +305,6 @@ public class EditProfile extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==REQUEST_IMAGE_CAPTURE && resultCode==RESULT_OK){
@@ -340,31 +344,41 @@ public class EditProfile extends AppCompatActivity {
 
     }
 
+    //TOOD replace with roo db functions
     int SaveImage(Bitmap picBitmap)
     {
-
         byte [] picByteArray =bitmaptoByte(picBitmap);
-        String u_id = String.valueOf(cUser.getId());
+       final int u_id = cUser.getId();
 
-        try {
-            ContentValues values = new ContentValues();
+        AppExecutors.getInstance().getDiskIO().execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                       kDB.userDao().updateUserImage(picByteArray, u_id);
+                    }
+                }
+        );
 
-
-            values.put(UserColumns.PROFILE_IMAGE,picByteArray) ;
-
-            getContentResolver().update(ContentTypes.USER_CONTENT_URI, values , UserColumns._ID+" =?",new String[]{u_id});
-
-            mGlobalRetainer.get_grUser().setProfilePic(picByteArray);
-
-            return 1;
-
-
-        }catch (SQLException e)
-        {
-            e.printStackTrace();
-
-            return 0;
-        }
+        return 1;
+//        try {
+//            ContentValues values = new ContentValues();
+//
+//
+//            values.put(UserColumns.PROFILE_IMAGE,picByteArray) ;
+//
+//            getContentResolver().update(ContentTypes.USER_CONTENT_URI, values , UserColumns._ID+" =?",new String[]{u_id});
+//
+//            mKaziApp.get_grUser().setProfilePic(picByteArray);
+//
+//            return 1;
+//
+//
+//        }catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//
+//            return 0;
+//        }
 
       /*  ContentValues imagevalues = new ContentValues();
 
@@ -386,7 +400,6 @@ public class EditProfile extends AppCompatActivity {
 
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
         b.compress(Bitmap.CompressFormat.PNG,0,blob);
-
 
         return  blob.toByteArray();
     }
@@ -424,7 +437,7 @@ public class EditProfile extends AppCompatActivity {
 
        String oldPwd = edtOldPass.getText().toString();
 
-        User user = new User (); //(edtName.getText().toString(),edtEmail.getText().toString(),edtPassword.getText().toString());
+        User user =cUser; //(edtName.getText().toString(),edtEmail.getText().toString(),edtPassword.getText().toString());
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
@@ -465,45 +478,10 @@ public class EditProfile extends AppCompatActivity {
 
     private void showLovelyDialog(int dialogId, Bundle savedInstanceState) {
         switch (dialogId) {
-
-            case ID_KHN_INPUT_DIALOG: showKHNumberInputDialog(savedInstanceState);
-                break;
             case ID_PICTURE_DIALOG: showPictureDialog(savedInstanceState);
                 break;
-
         }
     }
-
-
-
-    private void showKHNumberInputDialog(Bundle savedInstanceState) {
-        new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
-                .setTopColorRes(R.color.colorPrimary)
-                .setTitle(R.string.hr_input_title)
-                .setMessage(R.string.text_input_hr)
-                .setIcon(R.mipmap.ic_pro_heart)
-                .setInstanceStateHandler(ID_KHN_INPUT_DIALOG, saveStateHandler)
-                .setInputFilter(R.string.text_input_error_message, new LovelyTextInputDialog.TextFilter() {
-                    @Override
-                    public boolean check(String text) {
-                        return text.matches("^\\d{1,3}$");
-                    }
-                })
-
-                .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
-                    @Override
-                    public void onTextInputConfirmed(String text) {
-                        ( (TextView) findViewById(R.id.txtHeartRate)).setText(text +" ");
-                       // rHeartRate = new RiskProfileItem(cUser.getId(), RID_HR,text,"");
-                    }
-                })
-                .setNegativeButton(android.R.string.no, null)
-                .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
-
-                .show();
-    }
-
 
 
     private void showPictureDialog(Bundle savedInstanceState) {
@@ -533,11 +511,6 @@ public class EditProfile extends AppCompatActivity {
     }
 
 
-
-
-
-
-
     private void requestPermission()
     {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED)
@@ -557,7 +530,6 @@ public class EditProfile extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
         switch (requestCode)
         {
             case REQUEST_CODE_ASK_PERMISSIONS:
@@ -570,91 +542,76 @@ public class EditProfile extends AppCompatActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
-
-
        /* if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
             Log.i(TAG, "Permission " +permissions[0]+ " was " +grantResults[0]);
         }*/
     }
 
 
-    public int updatePwd(User user){
-
-        String u_id = String.valueOf( user.getId());
-        try {
-            ContentValues values = new ContentValues();
-
-
-            values.put(UserColumns.PASSWORD,user.getPassword()) ;
-
-            getContentResolver().update(ContentTypes.USER_CONTENT_URI, values , UserColumns._ID+" =?",new String[]{u_id});
-
-
-            return 1;
-
-
-        }catch (SQLException e)
-        {
-            e.printStackTrace();
-
-            return 0;
-        }
-
+    public void updatePwd(User user) {
+        AppExecutors.getInstance().getDiskIO().execute(()->kDB.userDao().updateUserPwd(user.getPassword(), user.getUid()));
+        //        String u_id = String.valueOf(user.getId());
+//        try {
+//            ContentValues values = new ContentValues();
+//            values.put(UserColumns.PASSWORD, user.getPassword());
+//            getContentResolver().update(ContentTypes.USER_CONTENT_URI, values, UserColumns._ID + " =?", new String[]{u_id});
+//            return 1;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return 0;
+//        }
     }
 
-    public int updateUser(User user){
 
-        String u_id = String.valueOf( user.getId());
-        try {
-            ContentValues values = new ContentValues();
+    public void updateUser(final User user){
 
-            values.put(UserColumns.NAME,user.getName()) ;
-            values.put(UserColumns.EMAIL ,user.getEmail()) ;
-            values.put(UserColumns.DOB,user.getDob()) ;
-            values.put(UserColumns.GENDER,user.getGender()) ;
-
-
-            getContentResolver().update(ContentTypes.USER_CONTENT_URI, values , UserColumns._ID+" =?",new String[]{u_id});
-
-
-            return 1;
-
-
-        }catch (SQLException e)
-        {
-            e.printStackTrace();
-
-            return 0;
-        }
+        AppExecutors.getInstance().getDiskIO().execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                       kDB.userDao().updateUser(user);
+                    }
+                }
+        );
+//
+        //        String u_id = String.valueOf( user.getId());
+//        try {
+//            ContentValues values = new ContentValues();
+//            values.put(UserColumns.NAME,user.getName()) ;
+//            values.put(UserColumns.EMAIL ,user.getEmail()) ;
+//            values.put(UserColumns.DOB,user.getDob()) ;
+//            values.put(UserColumns.GENDER,user.getGender()) ;
+//            getContentResolver().update(ContentTypes.USER_CONTENT_URI, values , UserColumns._ID+" =?",new String[]{u_id});
+//            return 1;
+//        }catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//
+//            return 0;
+//        }
 
     }
 
 
+    boolean checkUser(String uid, String password) {
 
-
-    boolean checkUser(String id, String password)
-    {
-        ContentResolver resolver = getContentResolver();
-        // cursor = resolver.query(ContentTypes.RECORDEDACTIVITY_CONTENT_URI, RecordedActivtyColumns.PROJECTION,
-        // RecordedActivtyColumns.TIME_CREATED +">=? and " + RecordedActivtyColumns.TIME_CREATED+"<=?", new String[]{startDate, endDate},null);
-
-        Cursor cursor = resolver.query(ContentTypes.USER_CONTENT_URI, UserColumns.PROJECTION,UserColumns._ID+ " = ?" + " AND " + UserColumns.PASSWORD + " = ?",
-                new String[]{id, password}, null);
-
-
-
-        int cursorCount = cursor.getCount();
-        if (cursor != null && !cursor.isClosed()) {
-            cursor.close();
-        }
-
-        if(cursorCount>0)
-        {
-            return true;
-        }
-
-        return false;
-
+        List<User> users  = kDB.userDao().checkPassword(uid, password);
+        return users.size()>0;
+//        ContentResolver resolver = getContentResolver();
+//        // cursor = resolver.query(ContentTypes.RECORDEDACTIVITY_CONTENT_URI, RecordedActivtyColumns.PROJECTION,
+//        // RecordedActivtyColumns.TIME_CREATED +">=? and " + RecordedActivtyColumns.TIME_CREATED+"<=?", new String[]{startDate, endDate},null);
+//        Cursor cursor = resolver.query(ContentTypes.USER_CONTENT_URI, UserColumns.PROJECTION, UserColumns._ID + " = ?" + " AND " + UserColumns.PASSWORD + " = ?",
+//                new String[]{id, password}, null);
+//
+//        int cursorCount = cursor.getCount();
+//        if (cursor != null && !cursor.isClosed()) {
+//            cursor.close();
+//        }
+//
+//        if (cursorCount > 0) {
+//            return true;
+//        }
+//        return false;
     }
 
 

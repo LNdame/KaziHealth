@@ -46,7 +46,10 @@ import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.api.ContentTypes;
 import mandela.cct.ansteph.kazihealth.api.RestAPI;
 import mandela.cct.ansteph.kazihealth.api.columns.RiskProfileColumns;
-import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.app.KaziApp;
+import mandela.cct.ansteph.kazihealth.data.AppExecutors;
+import mandela.cct.ansteph.kazihealth.data.KaziDatabase;
+import mandela.cct.ansteph.kazihealth.helper.SessionManager;
 import mandela.cct.ansteph.kazihealth.model.RiskProfileItem;
 import mandela.cct.ansteph.kazihealth.model.User;
 import mandela.cct.ansteph.kazihealth.view.appmanagement.Apps;
@@ -57,7 +60,7 @@ import mandela.cct.ansteph.kazihealth.view.tip.Tips;
 public class Profile extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,View.OnClickListener {
 
-    GlobalRetainer mGlobalRetainer;
+    KaziApp mKaziApp;
     TextView txtName, txtEmail;
 
     CircleImageView circleImageView;
@@ -86,17 +89,19 @@ public class Profile extends AppCompatActivity
     RiskProfileItem rBp, rHeartRate,rChol, rBgl,rHeight,rWeight,rBMI, rWaist,rHip, rW2H;
     User cUser;
     FirebaseAuth mAuth;
-
+    SessionManager sessionManager;
+    private KaziDatabase kDB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        kDB = KaziDatabase.getInstance(getApplicationContext());
 
         mAuth = FirebaseAuth.getInstance();
 
-        mGlobalRetainer = (GlobalRetainer)getApplicationContext();
+        mKaziApp = (KaziApp)getApplicationContext();
         saveStateHandler = new LovelySaveStateHandler();
 
         circleImageView = (CircleImageView) findViewById(R.id.avatar);
@@ -116,17 +121,17 @@ public class Profile extends AppCompatActivity
         txtName = (TextView) findViewById(R.id.txtName);
         txtEmail= (TextView) findViewById(R.id.txtUserEmail);;
 
-        if(mGlobalRetainer.get_grUser()!=null)
+        if(mKaziApp.get_grUser()!=null)
         {
-            cUser = mGlobalRetainer.get_grUser();
+            cUser = mKaziApp.get_grUser();
 
-            txtName.setText(mGlobalRetainer.get_grUser().getName());
-            txtEmail.setText(mGlobalRetainer.get_grUser().getEmail());
+            txtName.setText(mKaziApp.get_grUser().getName());
+            txtEmail.setText(mKaziApp.get_grUser().getEmail());
 
 
-            if(mGlobalRetainer.get_grUser().getProfilePic()!=null)
+            if(mKaziApp.get_grUser().getProfilePic()!=null)
             {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(mGlobalRetainer.get_grUser().getProfilePic(), 0, mGlobalRetainer.get_grUser().getProfilePic().length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(mKaziApp.get_grUser().getProfilePic(), 0, mKaziApp.get_grUser().getProfilePic().length);
                 circleImageView.setImageBitmap(bitmap);
             }
         }
@@ -191,13 +196,13 @@ public class Profile extends AppCompatActivity
         TextView navEmail= (TextView) headerView.findViewById(R.id.txtNavEmail);
         ImageView navAvatar = (ImageView)headerView.findViewById(R.id.avatar);
 
-        if(mGlobalRetainer.get_grUser().getProfilePic()!=null)
-        {            Bitmap bitmap = BitmapFactory.decodeByteArray(mGlobalRetainer.get_grUser().getProfilePic(), 0, mGlobalRetainer.get_grUser().getProfilePic().length);
+        if(mKaziApp.get_grUser().getProfilePic()!=null)
+        {            Bitmap bitmap = BitmapFactory.decodeByteArray(mKaziApp.get_grUser().getProfilePic(), 0, mKaziApp.get_grUser().getProfilePic().length);
             navAvatar.setImageBitmap(bitmap);
         }
 
-        navName.setText(mGlobalRetainer.get_grUser().getName());
-        navEmail.setText(mGlobalRetainer.get_grUser().getEmail());
+        navName.setText(mKaziApp.get_grUser().getName());
+        navEmail.setText(mKaziApp.get_grUser().getEmail());
 
 
     }
@@ -217,9 +222,6 @@ public class Profile extends AppCompatActivity
         JSONObject userData;
 
         new DownloadUserData().execute(userID);
-
-
-
 
     }
 
@@ -377,29 +379,35 @@ public class Profile extends AppCompatActivity
 //                        rWaist = new RiskProfileItem(cUser.getId(), RID_WAIST,text,"");
 
 
-    public int recordProfileItem(RiskProfileItem riskProfileItem){
+    private void recordProfileItem(RiskProfileItem... riskProfileItems){
+
+        AppExecutors.getInstance().getDiskIO().execute(()-> {
+            kDB.riskProfileDao().deleteAll();
+            kDB.riskProfileDao().insertAll(riskProfileItems);
+        });
 
 
-        try {
-            ContentValues values = new ContentValues();
 
-            values.put(RiskProfileColumns.USER_ID, riskProfileItem.getUser_id()) ;
-            values.put(RiskProfileColumns.RISK_ITEM_ID , riskProfileItem.getRisk_item_id()) ;
-            values.put(RiskProfileColumns.MEASUREMENT , riskProfileItem.getMeasurement()) ;
-            values.put(RiskProfileColumns.COMMENT , riskProfileItem.getComment()) ;
-
-
-            getContentResolver().insert(ContentTypes.RISK_PROFILE_CONTENT_URI, values);
-
-            return 1;
-
-
-        }catch (SQLException e)
-        {
-            e.printStackTrace();
-
-            return 0;
-        }
+//        try {
+//            ContentValues values = new ContentValues();
+//
+//            values.put(RiskProfileColumns.USER_ID, riskProfileItem.getUser_id()) ;
+//            values.put(RiskProfileColumns.RISK_ITEM_ID , riskProfileItem.getRisk_item_id()) ;
+//            values.put(RiskProfileColumns.MEASUREMENT , riskProfileItem.getMeasurement()) ;
+//            values.put(RiskProfileColumns.COMMENT , riskProfileItem.getComment()) ;
+//
+//
+//            getContentResolver().insert(ContentTypes.RISK_PROFILE_CONTENT_URI, values);
+//
+//            return 1;
+//
+//
+//        }catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//
+//            return 0;
+//        }
 
     }
 
@@ -503,19 +511,22 @@ public class Profile extends AppCompatActivity
     public void recorded()
     {
         //save all the record  rBp, rHeartRate,rChol, rBgl,rHeight,rWeight,rBMI, rWaist,rHip, rW2H;
-        recordProfileItem(rBp);
+        RiskProfileItem[] riskProfileItems = {
+                rBp, rHeartRate, rChol, rBgl, rHeight, rWeight, rBMI, rWaist, rHip, rW2H
+        };
+        recordProfileItem( riskProfileItems);
 
-        recordProfileItem(rHeartRate);
-        recordProfileItem(rChol);
-        recordProfileItem(rBgl);
-
-        recordProfileItem(rHeight);
-        recordProfileItem(rWeight);
-        recordProfileItem(rBMI);
-        recordProfileItem(rWaist);
-
-        recordProfileItem(rHip);
-        recordProfileItem(rW2H);
+//        recordProfileItem(rHeartRate);
+//        recordProfileItem(rChol);
+//        recordProfileItem(rBgl);
+//
+//        recordProfileItem(rHeight);
+//        recordProfileItem(rWeight);
+//        recordProfileItem(rBMI);
+//        recordProfileItem(rWaist);
+//
+//        recordProfileItem(rHip);
+//        recordProfileItem(rW2H);
 
 
         Toast.makeText(getApplicationContext(),"RisK Profile Saved", Toast.LENGTH_LONG).show();

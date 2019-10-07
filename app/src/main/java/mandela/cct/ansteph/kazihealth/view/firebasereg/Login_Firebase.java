@@ -17,7 +17,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import mandela.cct.ansteph.kazihealth.R;
-import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.app.KaziApp;
+import mandela.cct.ansteph.kazihealth.helper.SessionManager;
 import mandela.cct.ansteph.kazihealth.view.profile.RiskProfile;
 
 public class Login_Firebase extends AppCompatActivity {
@@ -26,10 +27,10 @@ public class Login_Firebase extends AppCompatActivity {
     public static String TAG = Login_Firebase.class.getSimpleName();
     EditText edtPassword, edtEmail;
 
-    GlobalRetainer mGlobalRetainer;
+    KaziApp mKaziApp;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
-
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,8 @@ public class Login_Firebase extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
-        mGlobalRetainer = (GlobalRetainer)getApplicationContext();
-
+        mKaziApp = (KaziApp)getApplicationContext();
+        sessionManager = new SessionManager(getApplicationContext());
 
         edtEmail=(EditText) findViewById(R.id.editEmail);
         edtPassword=(EditText) findViewById(R.id.editPass);
@@ -50,13 +51,11 @@ public class Login_Firebase extends AppCompatActivity {
 
     public void onRegisterClicked (View view)
     {
-        //startActivity(new Intent(getApplicationContext(),Register.class));
         startActivity(new Intent(getApplicationContext(),Register_Firebase.class));
     }
 
     public void onForgotClicked (View view)
     {
-        //startActivity(new Intent(getApplicationContext(),Register.class));
         startActivity(new Intent(getApplicationContext(),ResetPassword.class));
     }
 
@@ -105,6 +104,8 @@ public class Login_Firebase extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
+                    String uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    sessionManager.createLoginSession(uid,email,password);
                     finish();
                     Intent intent = new Intent(getApplicationContext(), RiskProfile.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -118,14 +119,11 @@ public class Login_Firebase extends AppCompatActivity {
 
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-
         return Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches();
     }
 
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 6;
     }
 

@@ -2,9 +2,11 @@ package mandela.cct.ansteph.kazihealth.view.firebasereg;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -18,9 +20,7 @@ import mandela.cct.ansteph.kazihealth.R;
 
 public class ResetPassword extends AppCompatActivity {
 
-
     private EditText edtEmail;
-
     FirebaseAuth mAuth;
 
     @Override
@@ -32,27 +32,15 @@ public class ResetPassword extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        edtEmail=(EditText) findViewById(R.id.editEmail);
+        edtEmail = (EditText) findViewById(R.id.editEmail);
     }
 
-
-
-
-    public void onRegisterClicked (View view)
-    {
-        //startActivity(new Intent(getApplicationContext(),Register.class));
+    public void onRegisterClicked(View view) {
         startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
     }
 
-
-
-    public void onResetClicked (View view)
-    {
-
+    public void onResetClicked(View view) {
         String email = edtEmail.getText().toString().trim();
-
         if (email.isEmpty()) {
             edtEmail.setError("Email is required");
             edtEmail.requestFocus();
@@ -76,9 +64,8 @@ public class ResetPassword extends AppCompatActivity {
                         }
                     }
 
-                        });
+                });
 
-        //startActivity(new Intent(getApplicationContext(),Register.class));
         startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
     }
 

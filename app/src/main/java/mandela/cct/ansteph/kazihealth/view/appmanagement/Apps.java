@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import mandela.cct.ansteph.kazihealth.R;
-import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.app.KaziApp;
 import mandela.cct.ansteph.kazihealth.view.firebasereg.Login_Firebase;
 import mandela.cct.ansteph.kazihealth.view.profile.Profile;
 import mandela.cct.ansteph.kazihealth.view.profile.RiskProfile;
@@ -32,7 +32,7 @@ public class Apps extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    GlobalRetainer mGlobalRetainer;
+    KaziApp mKaziApp;
     FirebaseAuth mAuth;
 
     @Override
@@ -44,7 +44,7 @@ public class Apps extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
 
-        mGlobalRetainer = (GlobalRetainer) getApplicationContext();
+        mKaziApp = (KaziApp) getApplicationContext();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,12 +74,12 @@ public class Apps extends AppCompatActivity
         TextView navEmail= (TextView) headerView.findViewById(R.id.txtNavEmail);
         ImageView navAvatar = (ImageView)headerView.findViewById(R.id.avatar);
 
-        if(mGlobalRetainer.get_grUser().getProfilePic()!=null)
-        {            Bitmap bitmap = BitmapFactory.decodeByteArray(mGlobalRetainer.get_grUser().getProfilePic(), 0, mGlobalRetainer.get_grUser().getProfilePic().length);
+        if(mKaziApp.get_grUser().getProfilePic()!=null)
+        {            Bitmap bitmap = BitmapFactory.decodeByteArray(mKaziApp.get_grUser().getProfilePic(), 0, mKaziApp.get_grUser().getProfilePic().length);
             navAvatar.setImageBitmap(bitmap);
         }
-        navName.setText(mGlobalRetainer.get_grUser().getName());
-        navEmail.setText(mGlobalRetainer.get_grUser().getEmail());
+        navName.setText(mKaziApp.get_grUser().getName());
+        navEmail.setText(mKaziApp.get_grUser().getEmail());
     }
 
     public void gotoHiFit(View view)
@@ -181,16 +181,6 @@ public class Apps extends AppCompatActivity
         intent.setData(Uri.parse("market://details?id=com.smilingmind.app"));
         startActivity(intent);*/
     }
-
-
-
-
-
-
-
-
-
-
 
     @Override
     public void onBackPressed() {

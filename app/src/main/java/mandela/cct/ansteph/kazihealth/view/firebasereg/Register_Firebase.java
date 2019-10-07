@@ -34,25 +34,23 @@ import java.util.Locale;
 import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.api.ContentTypes;
 import mandela.cct.ansteph.kazihealth.api.columns.UserColumns;
+import mandela.cct.ansteph.kazihealth.data.AppExecutors;
+import mandela.cct.ansteph.kazihealth.data.KaziDatabase;
 import mandela.cct.ansteph.kazihealth.helper.SessionManager;
 import mandela.cct.ansteph.kazihealth.model.User;
 
 public class Register_Firebase extends AppCompatActivity {
-
 
     public static String TAG = Register_Firebase.class.getSimpleName();
 
     EditText edtName, edtfName, edtEmail, edtPassword, edtConfirmPass;
     Spinner spnGender;
     ArrayAdapter<CharSequence> originAdapter;
-
     private TextView mDateofBirth;
-
     private FirebaseAuth mAuth;
-
     private ProgressBar progressBar;
-
     SessionManager sessionManager;
+    private KaziDatabase kDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +59,7 @@ public class Register_Firebase extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        kDB = KaziDatabase.getInstance(getApplicationContext());
         sessionManager = new SessionManager(getApplicationContext());
 
         edtName = (EditText) findViewById(R.id.editName);
@@ -82,8 +81,6 @@ public class Register_Firebase extends AppCompatActivity {
             public void onClick(View v) {
                 // DialogFragment nf = new DatePickerFragment();
                 // nf.show(getSupportFragmentManager(), "Date Picker");
-
-
                 DatePickerFragmentDialog dialog = DatePickerFragmentDialog.newInstance(new DatePickerFragmentDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePickerFragmentDialog view, int year, int monthOfYear, int dayOfMonth) {
@@ -95,19 +92,12 @@ public class Register_Firebase extends AppCompatActivity {
                         mDateofBirth.setText(bod);
                     }
                 }, 1985, 01, 01);
-
                 dialog.show(getSupportFragmentManager(), "Date Picker");
-
             }
         });
-
-
         originAdapter = ArrayAdapter.createFromResource(this,R.array.gender, android.R.layout.simple_spinner_item);
         originAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spnGender.setAdapter(originAdapter);
-
-
     }
 
 
@@ -118,14 +108,11 @@ public class Register_Firebase extends AppCompatActivity {
 
     public boolean isFormCancelled() {
         //Reset the errors
-
-
         edtName.setError(null);
         edtfName.setError(null);
         edtEmail.setError(null);
         edtPassword.setError(null);
         edtConfirmPass.setError(null);
-
         //flash storing
         String name = edtName.getText().toString();
         String lname = edtfName.getText().toString();
@@ -133,10 +120,8 @@ public class Register_Firebase extends AppCompatActivity {
         String password = edtPassword.getText().toString();
         String conpassword = edtConfirmPass.getText().toString();
 
-
         boolean cancel = false;
         View focusView = null;
-
         //Check
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
@@ -147,14 +132,11 @@ public class Register_Firebase extends AppCompatActivity {
             edtPassword.setError(getString(R.string.error_invalid_password));
             focusView = edtPassword;
             cancel = true;
-
         } else if (!password.equals(conpassword)) {
             edtConfirmPass.setError(getString(R.string.error_invalid_confirmation));
             focusView = edtConfirmPass;
             cancel = true;
         }
-
-
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             edtEmail.setError(getString(R.string.error_field_required));
@@ -168,19 +150,15 @@ public class Register_Firebase extends AppCompatActivity {
             edtName.setError(getString(R.string.error_field_required));
             focusView = edtName;
             cancel = true;
-
         } else if (TextUtils.isEmpty(lname)) {
             edtfName.setError(getString(R.string.error_field_required));
             focusView = edtfName;
             cancel = true;
         }
         //Check
-
-
         if (cancel) {
             focusView.requestFocus();
         }
-
         return cancel;
     }
 
@@ -199,7 +177,6 @@ public class Register_Firebase extends AppCompatActivity {
 
     void registerUser(){
         if(!isFormCancelled()){
-
             //flash storing
             String name = edtName.getText().toString();
             String lname = edtfName.getText().toString();
@@ -236,18 +213,17 @@ public class Register_Firebase extends AppCompatActivity {
                                         }
                                     }
                                 });
-
-                                if(registerUser(user)==1){
-
-                                    String id= String.valueOf(getLastID());
-                                    sessionManager.createLoginSession(id,user.getName(),user.getName(),user.getEmail(),user.getDob(),user.getPassword(), user.getGender());
-
-                                    startActivity(new Intent(getApplicationContext(),Login_Firebase.class));
-
-
-                                }
-
-
+                                user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                registerUserRoom(user);
+//                                if(registerUser(user)==1){
+//
+//                                    String id= String.valueOf(getLastID());
+//                                    sessionManager.createLoginSession(id,user.getName(),user.getName(),user.getEmail(),user.getDob(),user.getPassword(), user.getGender());
+//
+//                                    startActivity(new Intent(getApplicationContext(),Login_Firebase.class));
+//
+//
+//                                }
 
                             }else{
                                 Toast.makeText(Register_Firebase.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -259,9 +235,13 @@ public class Register_Firebase extends AppCompatActivity {
         }
     }
 
+    public void registerUserRoom(User user){
+        AppExecutors.getInstance().getDiskIO().execute(()->kDB.userDao().insertAll(user));
+        sessionManager.createLoginSession(user.getUid(),user.getName(),user.getName(),user.getEmail(),user.getDob(),user.getPassword(), user.getGender());
+        startActivity(new Intent(getApplicationContext(),Login_Firebase.class));
+    }
 
     public int registerUser(User user){
-
 
         try {
             ContentValues values = new ContentValues();
@@ -315,7 +295,7 @@ public class Register_Firebase extends AppCompatActivity {
         {
             lastId =(cursor.getString(0))!=null ? Integer.parseInt(cursor.getString(0)):0;
           //  lastInsertedID = lastId;
-         //   mGlobalRetainer.get_grCurrentAudit().set_id(lastId);
+         //   mKaziApp.get_grCurrentAudit().set_id(lastId);
             Log.d(TAG, String.valueOf(lastId) );
         }
         if (cursor != null && !cursor.isClosed()) {
