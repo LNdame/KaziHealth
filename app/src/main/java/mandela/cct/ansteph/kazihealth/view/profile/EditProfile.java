@@ -62,33 +62,28 @@ import mandela.cct.ansteph.kazihealth.model.User;
 
 public class EditProfile extends AppCompatActivity {
 
-    EditText edtFullName, edtEmail,edtOldPass, edtPass, edtConPass;
+    EditText edtFullName, edtEmail, edtOldPass, edtPass, edtConPass;
     LinearLayout ltyPassword;
     Button btnChangePic, btnChangePassword;
-
     Boolean isChangePassOpen;
     KaziApp mKaziApp;
     User cUser;
-
     ImageView mImgAvatar;
-
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-
     private static final int ID_KHN_INPUT_DIALOG = R.id.lytKhNumber;
     private static final int ID_PICTURE_DIALOG = R.id.btnChangePic;
 
-    LinearLayout lytKhNumber ;
-
+    LinearLayout lytKhNumber;
     private LovelySaveStateHandler saveStateHandler;
-    static final int REQUEST_IMAGE_CAPTURE =0;
-    static final int REQUEST_IMAGE_GALLERY =1;
-
+    static final int REQUEST_IMAGE_CAPTURE = 0;
+    static final int REQUEST_IMAGE_GALLERY = 1;
 
     Spinner spnGender;
     ArrayAdapter<CharSequence> originAdapter;
     private TextView mDateofBirth;
     private KaziDatabase kDB;
     SessionManager sessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,22 +106,22 @@ public class EditProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         edtFullName = (EditText) findViewById(R.id.editFullName);
-        edtEmail=(EditText) findViewById(R.id.editEmail);
-        edtOldPass=(EditText) findViewById(R.id.editOldPass);
-        edtPass=(EditText) findViewById(R.id.editPass);
-        edtConPass=(EditText) findViewById(R.id.editConPass);
+        edtEmail = (EditText) findViewById(R.id.editEmail);
+        edtOldPass = (EditText) findViewById(R.id.editOldPass);
+        edtPass = (EditText) findViewById(R.id.editPass);
+        edtConPass = (EditText) findViewById(R.id.editConPass);
 
-        mImgAvatar =(ImageView)findViewById(R.id.avatar);
+        mImgAvatar = (ImageView) findViewById(R.id.avatar);
 
-        ltyPassword =(LinearLayout) findViewById(R.id.lytPassword) ;
+        ltyPassword = (LinearLayout) findViewById(R.id.lytPassword);
         lytKhNumber = (LinearLayout) findViewById(R.id.lytKhNumber);
 
-        btnChangePic =(Button) findViewById(R.id.btnChangePic);
-        btnChangePassword=(Button) findViewById(R.id.btnChangePass);
+        btnChangePic = (Button) findViewById(R.id.btnChangePic);
+        btnChangePassword = (Button) findViewById(R.id.btnChangePass);
 
-        spnGender  =(Spinner)findViewById(R.id.spnGender);
+        spnGender = (Spinner) findViewById(R.id.spnGender);
 
-        originAdapter = ArrayAdapter.createFromResource(this,R.array.gender, android.R.layout.simple_spinner_item);
+        originAdapter = ArrayAdapter.createFromResource(this, R.array.gender, android.R.layout.simple_spinner_item);
         originAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spnGender.setAdapter(originAdapter);
@@ -141,51 +136,40 @@ public class EditProfile extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePickerFragmentDialog view, int year, int monthOfYear, int dayOfMonth) {
                         Calendar cal = Calendar.getInstance();
-                        cal.set(year,monthOfYear,dayOfMonth);
+                        cal.set(year, monthOfYear, dayOfMonth);
 
                         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                        String bod= simpleDateFormat.format(cal.getTime());
+                        String bod = simpleDateFormat.format(cal.getTime());
                         mDateofBirth.setText(bod);
                     }
-                } , 1985,01,01);
+                }, 1985, 01, 01);
                 dialog.show(getSupportFragmentManager(), "Date Picker");
             }
         });
 
+        isChangePassOpen = false;
 
-
-        isChangePassOpen= false;
-
-
-       AppExecutors.getInstance().getDiskIO().execute(
-               new Runnable() {
-                   @Override
-                   public void run() {
-                       User currentUser = kDB.userDao().findUserByUID(sessionManager.getUserDetails().get(SessionManager.KEY_UID));
-                       fillRecord(currentUser);
-                   }
-               }
-       );
-//            cUser = mKaziApp.get_grUser();
-//            fillRecord();
-
-
+        AppExecutors.getInstance().getDiskIO().execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        User currentUser = kDB.userDao().findUserByUID(sessionManager.getUserDetails().get(SessionManager.KEY_UID));
+                        fillRecord(currentUser);
+                    }
+                }
+        );
         requestPermission();
-
     }
 
-
-    public void onChangePasswordClicked(View view)
-    {
-        if(!isChangePassOpen){
+    public void onChangePasswordClicked(View view) {
+        if (!isChangePassOpen) {
             ltyPassword.setVisibility(View.VISIBLE);
-            isChangePassOpen= true;
-        }else{
+            isChangePassOpen = true;
+        } else {
             ltyPassword.setVisibility(View.GONE);
-            isChangePassOpen= false;
+            isChangePassOpen = false;
         }
     }
-
 
     public void fillRecord(User curUser) {
         cUser = curUser;
@@ -193,58 +177,47 @@ public class EditProfile extends AppCompatActivity {
         edtEmail.setText(curUser.getEmail());
 
         mDateofBirth.setText(curUser.getDob());
-
-        if(!cUser.getGender().isEmpty())
-        {
+        if (!cUser.getGender().isEmpty()) {
             int pos = originAdapter.getPosition(curUser.getGender());
             spnGender.setSelection(pos);
         }
 
-        if(cUser.getProfilePic()!=null)
-        {
+        if (cUser.getProfilePic() != null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(curUser.getProfilePic(), 0, curUser.getProfilePic().length);
             mImgAvatar.setImageBitmap(bitmap);
-
         }
-
     }
 
-
-
-    public void onChangePictureClicked(View view)
-    {
+    public void onChangePictureClicked(View view) {
         showLovelyDialog(view.getId(), null);
     }
 
-
-    public void takePicture()
-    {
+    public void takePicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(takePictureIntent.resolveActivity(getPackageManager())!=null){
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
-    public void pickfromGallery()
-    {
+    public void pickfromGallery() {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        if(pickPhoto.resolveActivity(getPackageManager())!=null){
-            startActivityForResult(pickPhoto,REQUEST_IMAGE_GALLERY);
+        if (pickPhoto.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(pickPhoto, REQUEST_IMAGE_GALLERY);
         }
     }
 
 
-    public Intent getIntentPicture(){
+    public Intent getIntentPicture() {
 
         // Determine Uri of camera image to save.
         Uri outputFileUri = getCaptureImageOutputUri();
 
-        List <Intent> allIntents = new ArrayList();
+        List<Intent> allIntents = new ArrayList();
         PackageManager packageManager = getPackageManager();
 
         // collect all camera intents
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        List <ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
 
         for (ResolveInfo res : listCam) {
 
@@ -257,11 +230,10 @@ public class EditProfile extends AppCompatActivity {
             allIntents.add(intent);
         }
 
-
         // collect all gallery intents
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
-        List <ResolveInfo> listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
+        List<ResolveInfo> listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
         for (ResolveInfo res : listGallery) {
             Intent intent = new Intent(galleryIntent);
             intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
@@ -291,7 +263,6 @@ public class EditProfile extends AppCompatActivity {
 
     }
 
-
     /**
      * Get URI to image received from capture by camera.
      */
@@ -304,94 +275,52 @@ public class EditProfile extends AppCompatActivity {
         return outputFileUri;
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==REQUEST_IMAGE_CAPTURE && resultCode==RESULT_OK){
-            Bundle extras= data.getExtras();
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
 
             mImgAvatar.setImageBitmap(imageBitmap);
 
-            if(SaveImage(imageBitmap)==1){
-                Toast.makeText(getApplicationContext(),"Profile Image Changed",Toast.LENGTH_LONG).show();
+            if (SaveImage(imageBitmap) == 1) {
+                Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
             }
-
-
-            // if(getCurrentPicRequester()!=null){
-           //     getCurrentPicRequester().setRequestedPicBitmap(imageBitmap);
-           // }
         }
 
-        if(requestCode==REQUEST_IMAGE_GALLERY && resultCode==RESULT_OK){
-                Uri imageGallery = data.getData();
-                 mImgAvatar.setImageURI(imageGallery);
+        if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
+            Uri imageGallery = data.getData();
+            mImgAvatar.setImageURI(imageGallery);
 
-            Bundle extras= data.getExtras();
-
+            Bundle extras = data.getExtras();
             try {
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageGallery);
-
-                if(SaveImage(imageBitmap)==1){
-                    Toast.makeText(getApplicationContext(),"Profile Image Changed",Toast.LENGTH_LONG).show();
+                if (SaveImage(imageBitmap) == 1) {
+                    Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
-    //TOOD replace with roo db functions
-    int SaveImage(Bitmap picBitmap)
-    {
-        byte [] picByteArray =bitmaptoByte(picBitmap);
-       final int u_id = cUser.getId();
+    int SaveImage(Bitmap picBitmap) {
+        byte[] picByteArray = bitmaptoByte(picBitmap);
+        final int u_id = cUser.getId();
 
         AppExecutors.getInstance().getDiskIO().execute(
                 new Runnable() {
                     @Override
                     public void run() {
-                       kDB.userDao().updateUserImage(picByteArray, u_id);
+                        kDB.userDao().updateUserImage(picByteArray, u_id);
                     }
                 }
         );
-
         return 1;
-//        try {
-//            ContentValues values = new ContentValues();
-//
-//
-//            values.put(UserColumns.PROFILE_IMAGE,picByteArray) ;
-//
-//            getContentResolver().update(ContentTypes.USER_CONTENT_URI, values , UserColumns._ID+" =?",new String[]{u_id});
-//
-//            mKaziApp.get_grUser().setProfilePic(picByteArray);
-//
-//            return 1;
-//
-//
-//        }catch (SQLException e)
-//        {
-//            e.printStackTrace();
-//
-//            return 0;
-//        }
-
-      /*  ContentValues imagevalues = new ContentValues();
-
-        imagevalues.put(AnswerImageColumns.ANSWER_ID, id);
-        imagevalues.put(AnswerImageColumns.IMAGE_BINARY, ansI.getImage_binary());
-
-        getActivity().getContentResolver().insert(ContentTypes.ANWSERIMAGE_CONTENT_URI, imagevalues);*/
-
     }
 
 
-    public byte [] bitmaptoByte (Bitmap b)
-    {
+    public byte[] bitmaptoByte(Bitmap b) {
         int bytes = b.getByteCount();
         ByteBuffer buffer = ByteBuffer.allocate(bytes);
 
@@ -399,9 +328,9 @@ public class EditProfile extends AppCompatActivity {
         byte[] array = buffer.array();
 
         ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        b.compress(Bitmap.CompressFormat.PNG,0,blob);
+        b.compress(Bitmap.CompressFormat.PNG, 0, blob);
 
-        return  blob.toByteArray();
+        return blob.toByteArray();
     }
 
 
@@ -427,36 +356,33 @@ public class EditProfile extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onDoneClicked()
-    {
+    public void onDoneClicked() {
         //flash storing
         String name = edtFullName.getText().toString();
         String email = edtEmail.getText().toString();
-       String mDBO = mDateofBirth.getText().toString();
-       String password = edtPass.getText().toString();
+        String mDBO = mDateofBirth.getText().toString();
+        String password = edtPass.getText().toString();
 
-       String oldPwd = edtOldPass.getText().toString();
+        String oldPwd = edtOldPass.getText().toString();
 
-        User user =cUser; //(edtName.getText().toString(),edtEmail.getText().toString(),edtPassword.getText().toString());
+        User user = cUser; //(edtName.getText().toString(),edtEmail.getText().toString(),edtPassword.getText().toString());
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
         user.setDob(mDateofBirth.getText().toString());
-        user.setGender((String)spnGender.getSelectedItem());
+        user.setGender((String) spnGender.getSelectedItem());
 
+        updateUser(user);
 
-        updateUser( user);
-
-        if(isChangePassOpen){
-            if(checkUser(String.valueOf(cUser.getId()),oldPwd)){
+        if (isChangePassOpen) {
+            if (checkUser(String.valueOf(cUser.getId()), oldPwd)) {
                 user.setId(cUser.getId());
                 updatePwd(user);
             }
-
         }
 
-        Toast.makeText(getApplicationContext(),"Changes saved",Toast.LENGTH_LONG).show();
-        startActivity(new Intent(getApplicationContext(),Profile.class));
+        Toast.makeText(getApplicationContext(), "Changes saved", Toast.LENGTH_LONG).show();
+        startActivity(new Intent(getApplicationContext(), Profile.class));
 
     }
 
@@ -478,15 +404,15 @@ public class EditProfile extends AppCompatActivity {
 
     private void showLovelyDialog(int dialogId, Bundle savedInstanceState) {
         switch (dialogId) {
-            case ID_PICTURE_DIALOG: showPictureDialog(savedInstanceState);
+            case ID_PICTURE_DIALOG:
+                showPictureDialog(savedInstanceState);
                 break;
         }
     }
 
-
     private void showPictureDialog(Bundle savedInstanceState) {
         new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
-                .setTopColorRes( R.color.colorAccent)
+                .setTopColorRes(R.color.colorAccent)
                 .setButtonsColorRes(R.color.colorPrimaryDark)
                 .setIcon(R.drawable.ic_camera_alt)
                 .setTitle(R.string.text_picture_title)
@@ -496,29 +422,25 @@ public class EditProfile extends AppCompatActivity {
                 .setPositiveButton(R.string.text_pict_camera, LovelyDialogCompat.wrap(new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                               takePicture();
+                                takePicture();
 
                             }
                         })
                 )
-                .setNegativeButton(R.string.text_pict_gallery,LovelyDialogCompat.wrap(new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.text_pict_gallery, LovelyDialogCompat.wrap(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                pickfromGallery();
+                        pickfromGallery();
                     }
                 }))
                 .show();
     }
 
-
-    private void requestPermission()
-    {
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_CODE_ASK_PERMISSIONS);
+    private void requestPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_PERMISSIONS);
         }
     }
-
 
     /**
      * Listener for response to user permission request
@@ -530,90 +452,40 @@ public class EditProfile extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
-                if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-                  //  Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                }else{
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //  Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                } else {
                     //Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-                }break;
+                }
+                break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-
-       /* if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-            Log.i(TAG, "Permission " +permissions[0]+ " was " +grantResults[0]);
-        }*/
     }
 
 
     public void updatePwd(User user) {
-        AppExecutors.getInstance().getDiskIO().execute(()->kDB.userDao().updateUserPwd(user.getPassword(), user.getUid()));
-        //        String u_id = String.valueOf(user.getId());
-//        try {
-//            ContentValues values = new ContentValues();
-//            values.put(UserColumns.PASSWORD, user.getPassword());
-//            getContentResolver().update(ContentTypes.USER_CONTENT_URI, values, UserColumns._ID + " =?", new String[]{u_id});
-//            return 1;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return 0;
-//        }
+        AppExecutors.getInstance().getDiskIO().execute(() -> kDB.userDao()
+                .updateUserPwd(user.getPassword(), user.getUid()));
     }
 
 
-    public void updateUser(final User user){
-
+    public void updateUser(final User user) {
         AppExecutors.getInstance().getDiskIO().execute(
                 new Runnable() {
                     @Override
                     public void run() {
-                       kDB.userDao().updateUser(user);
+                        kDB.userDao().updateUser(user);
                     }
                 }
         );
-//
-        //        String u_id = String.valueOf( user.getId());
-//        try {
-//            ContentValues values = new ContentValues();
-//            values.put(UserColumns.NAME,user.getName()) ;
-//            values.put(UserColumns.EMAIL ,user.getEmail()) ;
-//            values.put(UserColumns.DOB,user.getDob()) ;
-//            values.put(UserColumns.GENDER,user.getGender()) ;
-//            getContentResolver().update(ContentTypes.USER_CONTENT_URI, values , UserColumns._ID+" =?",new String[]{u_id});
-//            return 1;
-//        }catch (SQLException e)
-//        {
-//            e.printStackTrace();
-//
-//            return 0;
-//        }
-
     }
-
 
     boolean checkUser(String uid, String password) {
-
-        List<User> users  = kDB.userDao().checkPassword(uid, password);
-        return users.size()>0;
-//        ContentResolver resolver = getContentResolver();
-//        // cursor = resolver.query(ContentTypes.RECORDEDACTIVITY_CONTENT_URI, RecordedActivtyColumns.PROJECTION,
-//        // RecordedActivtyColumns.TIME_CREATED +">=? and " + RecordedActivtyColumns.TIME_CREATED+"<=?", new String[]{startDate, endDate},null);
-//        Cursor cursor = resolver.query(ContentTypes.USER_CONTENT_URI, UserColumns.PROJECTION, UserColumns._ID + " = ?" + " AND " + UserColumns.PASSWORD + " = ?",
-//                new String[]{id, password}, null);
-//
-//        int cursorCount = cursor.getCount();
-//        if (cursor != null && !cursor.isClosed()) {
-//            cursor.close();
-//        }
-//
-//        if (cursorCount > 0) {
-//            return true;
-//        }
-//        return false;
+        List<User> users = kDB.userDao().checkPassword(uid, password);
+        return users.size() > 0;
     }
-
-
 
 }

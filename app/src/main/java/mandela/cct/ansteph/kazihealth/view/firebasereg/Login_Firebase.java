@@ -117,11 +117,9 @@ public class Login_Firebase extends AppCompatActivity {
         });
     }
 
-
     private boolean isEmailValid(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches();
     }
-
 
     private boolean isPasswordValid(String password) {
         return password.length() > 6;
@@ -131,11 +129,6 @@ public class Login_Firebase extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-      /*  if (mAuth.getCurrentUser() != null) {
-            finish();
-            startActivity(new Intent(this, RiskProfile.class));
-        }*/
     }
 
 }
