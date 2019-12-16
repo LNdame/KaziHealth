@@ -36,8 +36,8 @@ android {
 
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 7
-        versionName "1.7"
+        versionCode 8
+        versionName "1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -51,6 +51,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    lintOptions{
+        checkReleaseBuilds false
+        abortOnError false
+    }
 
     flavorDimensions "cct"
     productFlavors {
@@ -60,8 +64,8 @@ android {
             applicationId 'mandela.cct.ansteph.kazihealth'
             targetSdkVersion 29
             testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-            versionCode 7
-            versionName '1.7'
+            versionCode 8
+            versionName '1.8'
 
         }
     }

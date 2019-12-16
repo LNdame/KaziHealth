@@ -5,7 +5,6 @@ package mandela.cct.ansteph.kazihealth.api.columns;
  */
 
 public interface UserColumns extends DataColumns {
-
     String NAME  = "name";
     String EMAIL  = "email";
     String DOB  = "dob";
@@ -13,7 +12,6 @@ public interface UserColumns extends DataColumns {
     String PROFILE_IMAGE = "profile_image";
     String KH_NUMBER = "kh_number";
     String PASSWORD = "password";
-
 
     String[]PROJECTION = new String[]{_ID,NAME,EMAIL,PROFILE_IMAGE,KH_NUMBER,DOB,GENDER};
 }

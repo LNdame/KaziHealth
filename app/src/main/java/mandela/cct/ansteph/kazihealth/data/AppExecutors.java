@@ -4,6 +4,8 @@ import android.os.Looper;
 import android.os.Handler;
 import androidx.annotation.NonNull;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -15,11 +17,13 @@ public class AppExecutors {
     private final Executor diskIO;
     private final Executor mainThread;
     private final Executor networkIO;
+    private final Executor serialExecIO;
 
-    private AppExecutors(Executor diskIO, Executor mainThread, Executor networkIO) {
+    private AppExecutors(Executor diskIO, Executor mainThread, Executor networkIO , Executor serialExecIO) {
         this.diskIO = diskIO;
         this.mainThread = mainThread;
         this.networkIO = networkIO;
+        this.serialExecIO = serialExecIO;
     }
 
     public static AppExecutors getInstance(){
@@ -28,7 +32,13 @@ public class AppExecutors {
                 instance = new AppExecutors(
                         Executors.newSingleThreadExecutor(),
                         Executors.newFixedThreadPool(3),
-                        new MainThreadExecutor()
+                        new MainThreadExecutor(),
+                        new SerialExecutor(new Executor() {
+                            @Override
+                            public void execute(Runnable runnable) {
+
+                            }
+                        })
                 );
             }
         }
@@ -47,6 +57,10 @@ public class AppExecutors {
         return networkIO;
     }
 
+    public Executor getSerialExecIO() {
+        return serialExecIO;
+    }
+
     private  static class MainThreadExecutor implements  Executor{
 
         private Handler mainthreadHandler = new Handler(Looper.getMainLooper()) ;
@@ -56,4 +70,41 @@ public class AppExecutors {
             mainthreadHandler.post(runnable);
         }
     }
+
+
+   private static class SerialExecutor implements Executor {
+        final Queue<Runnable> tasks = new ArrayDeque<>();
+        final Executor executor;
+        Runnable active;
+
+        SerialExecutor(Executor executor) {
+            this.executor = executor;
+        }
+
+        public synchronized void execute( final Runnable r) {
+            tasks.add(new Runnable() {
+                public void run() {
+                    try {
+                        r.run();
+                    } finally {
+                        scheduleNext();
+                    }
+                }
+            });
+            if (active == null) {
+                scheduleNext();
+            }
+        }
+
+        protected synchronized void scheduleNext() {
+            if ((active = tasks.poll()) != null) {
+                executor.execute(active);
+            }
+        }
+    }
+
+
+
+
+
 }

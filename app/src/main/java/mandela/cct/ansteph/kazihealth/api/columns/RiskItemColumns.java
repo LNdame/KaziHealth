@@ -6,9 +6,7 @@ package mandela.cct.ansteph.kazihealth.api.columns;
 
 public interface RiskItemColumns extends DataColumns {
 
-
     String NAME  = "name";
     String UNIT  = "unit";
-
     String[]PROJECTION = new String[]{_ID,NAME,UNIT};
 }

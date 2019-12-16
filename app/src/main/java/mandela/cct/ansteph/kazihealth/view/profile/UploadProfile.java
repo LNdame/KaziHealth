@@ -1,11 +1,7 @@
 package mandela.cct.ansteph.kazihealth.view.profile;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -34,14 +30,11 @@ import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import mandela.cct.ansteph.kazihealth.R;
-import mandela.cct.ansteph.kazihealth.api.ContentTypes;
-import mandela.cct.ansteph.kazihealth.api.columns.RiskProfileColumns;
 import mandela.cct.ansteph.kazihealth.app.KaziApp;
 import mandela.cct.ansteph.kazihealth.data.AppExecutors;
 import mandela.cct.ansteph.kazihealth.data.KaziDatabase;

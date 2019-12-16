@@ -12,8 +12,8 @@ import mandela.cct.ansteph.kazihealth.model.User;
 
 @Dao
 public interface UserDao {
-    @Query("SELECT * From user")
-    List<User> getall();
+    @Query("SELECT * FROM user where uid= :uid  ")
+    List<User> checkUser(String uid);
 
     @Query("SELECT * FROM user where _id IN (:userIds)")
     List<User> loadAllbyIds(int [] userIds);

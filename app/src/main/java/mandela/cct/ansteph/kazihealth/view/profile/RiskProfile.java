@@ -1,8 +1,6 @@
 package mandela.cct.ansteph.kazihealth.view.profile;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -36,14 +34,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.HashMap;
 import java.util.List;
 
 import mandela.cct.ansteph.kazihealth.R;
-import mandela.cct.ansteph.kazihealth.api.ContentTypes;
 import mandela.cct.ansteph.kazihealth.api.RiskItemID;
-import mandela.cct.ansteph.kazihealth.api.columns.RiskProfileColumns;
-import mandela.cct.ansteph.kazihealth.api.columns.UserColumns;
 import mandela.cct.ansteph.kazihealth.app.KaziApp;
 import mandela.cct.ansteph.kazihealth.data.AppExecutors;
 import mandela.cct.ansteph.kazihealth.data.KaziDatabase;

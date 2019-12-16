@@ -2,14 +2,10 @@ package mandela.cct.ansteph.kazihealth.view.profile;
 
 import android.Manifest;
 import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -39,7 +35,6 @@ import com.shagi.materialdatepicker.date.DatePickerFragmentDialog;
 import com.yarolegovich.lovelydialog.LovelyDialogCompat;
 import com.yarolegovich.lovelydialog.LovelySaveStateHandler;
 import com.yarolegovich.lovelydialog.LovelyStandardDialog;
-import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -52,8 +47,6 @@ import java.util.List;
 import java.util.Locale;
 
 import mandela.cct.ansteph.kazihealth.R;
-import mandela.cct.ansteph.kazihealth.api.ContentTypes;
-import mandela.cct.ansteph.kazihealth.api.columns.UserColumns;
 import mandela.cct.ansteph.kazihealth.app.KaziApp;
 import mandela.cct.ansteph.kazihealth.data.AppExecutors;
 import mandela.cct.ansteph.kazihealth.data.KaziDatabase;
