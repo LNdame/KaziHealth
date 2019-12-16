@@ -1,25 +1,29 @@
 package mandela.cct.ansteph.kazihealth.view.profile;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -30,14 +34,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.util.HashMap;
+import java.util.List;
 
 import mandela.cct.ansteph.kazihealth.R;
-import mandela.cct.ansteph.kazihealth.api.ContentTypes;
 import mandela.cct.ansteph.kazihealth.api.RiskItemID;
-import mandela.cct.ansteph.kazihealth.api.columns.RiskProfileColumns;
-import mandela.cct.ansteph.kazihealth.api.columns.UserColumns;
-import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.app.KaziApp;
+import mandela.cct.ansteph.kazihealth.data.AppExecutors;
+import mandela.cct.ansteph.kazihealth.data.KaziDatabase;
 import mandela.cct.ansteph.kazihealth.helper.SessionManager;
 import mandela.cct.ansteph.kazihealth.model.RiskProfileItem;
 import mandela.cct.ansteph.kazihealth.model.User;
@@ -49,26 +52,18 @@ import mandela.cct.ansteph.kazihealth.view.tip.Tips;
 public class RiskProfile extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    GlobalRetainer mGlobalRetainer;
+    KaziApp mKaziApp;
     TextView txtName, txtEmail;
-
     String mEmail, mPwd;
     TextView txtbpcolor, txtchlcolor, txtbmicolor, txtbglcolor;
     TextView txtbpmeasurement, txtchlmeasurement, txtbmimeasurement, txtbglmeasurement;
     TextView txtbpcomment, txtchlcomment, txtbmicomment, txtbglcomment;
-
-    RiskProfileItem rBp, rHeartRate, rChol, rBgl,rBMI, rW2H;
-
+    RiskProfileItem rBp, rHeartRate, rChol, rBgl, rBMI, rW2H;
     ImageView mImgAvatar;
-
     RelativeLayout ltyNoriskp;
     SessionManager sessionManager;
-
-   // int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-   // int colorModerateRisk =ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
-   // int colorHighRisk =ContextCompat.getColor(this, R.color.riskColorHigh);  //getResources().getColor(R.color.riskColorHigh);
+    private KaziDatabase kDB;
     User cUser;
-
     FirebaseAuth mAuth;
 
 
@@ -85,12 +80,12 @@ public class RiskProfile extends AppCompatActivity
             finish();
             startActivity(new Intent(this, Login_Firebase.class));
         }
+        kDB = KaziDatabase.getInstance(getApplicationContext());
 
+        sessionManager = new SessionManager(getApplicationContext());
 
-        sessionManager =new SessionManager(getApplicationContext());
-
-        mGlobalRetainer = (GlobalRetainer) getApplicationContext();
-        mImgAvatar =(ImageView)findViewById(R.id.avatar);
+        mKaziApp = (KaziApp) getApplicationContext();
+        mImgAvatar = (ImageView) findViewById(R.id.avatar);
 
         initFields();
 
@@ -112,67 +107,32 @@ public class RiskProfile extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ltyNoriskp  = (RelativeLayout)findViewById(R.id.lytNoRiskP) ;
+        ltyNoriskp = (RelativeLayout) findViewById(R.id.lytNoRiskP);
 
         txtName = (TextView) findViewById(R.id.txtName);
-        txtEmail= (TextView) findViewById(R.id.txtUserEmail);
+        txtEmail = (TextView) findViewById(R.id.txtUserEmail);
 
         String unit = "kg.m<sup>2</sup>";
         ((TextView) findViewById(R.id.txtBMIUnit)).setText(Html.fromHtml(unit));
 
+        AppExecutors.getInstance().getDiskIO().execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        // HashMap<String, String >userMap = sessionManager.getUserDetails();
+                        User currentUser = kDB.userDao().findUserByUID(sessionManager.getUserDetails().get(SessionManager.KEY_UID));
+                        fillRecord(currentUser);
 
-        Bundle bundle = getIntent().getExtras();
-
-        if (bundle != null) {
-            mEmail = bundle.getString("email");
-            mPwd = bundle.getString("pwd");
-
-            retrieveUser(mEmail, mPwd);
-
-        }
-
-
-        if(cUser!=null)
-        {
-            fillRecord();
-        }else{
-            if(mGlobalRetainer.get_grUser()!=null && mGlobalRetainer.get_grUser().getId()!=0){
-
-
-                cUser =mGlobalRetainer.get_grUser();
-                fillRecord();
-            }else {
-                HashMap<String, String> user = sessionManager.getUserDetails();
-                String fullname =  user.get(SessionManager.KEY_NAME);
-                try{
-                    int id = Integer.parseInt(user.get(SessionManager.KEY_ID));
-
-                    mGlobalRetainer.set_grUser(new User(id, fullname,
-                            user.get(SessionManager.KEY_EMAIL),
-                            user.get(SessionManager.KEY_DOB),
-                            user.get(SessionManager.KEY_PASSWORD),
-                            user.get(SessionManager.KEY_GENDER)
-                    ));
-
-                    cUser =mGlobalRetainer.get_grUser();
-                    fillRecord();
-                }catch (Exception e){
-                    e.printStackTrace();
+                    }
                 }
+        );
 
-
-
-            }
-        }
         setNoRiskPanel();
         initDrawer();
-
         subscribeToPushService();
     }
 
-
-    void initDrawer()
-    {
+    void initDrawer() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         TextView navName = (TextView) headerView.findViewById(R.id.txtNavName);
@@ -188,12 +148,8 @@ public class RiskProfile extends AppCompatActivity
         }
 
         navAvatar.setImageBitmap(bitmap);
-
-
-        navName.setText(mGlobalRetainer.get_grUser().getName());
-        navEmail.setText(mGlobalRetainer.get_grUser().getEmail());
-
-
+        navName.setText(mKaziApp.get_grUser().getName());
+        navEmail.setText(mKaziApp.get_grUser().getEmail());
 
     }
 
@@ -215,27 +171,21 @@ public class RiskProfile extends AppCompatActivity
 
     }
 
-
-    void setNoRiskPanel()
-    {
-        if(cUser != null){
-
-            String id = String.valueOf(cUser.getId());
-
-            if(!checkRiskProfile(id)){
-                ltyNoriskp.setVisibility(View.VISIBLE);
-            }else{
-                ltyNoriskp.setVisibility(View.GONE);
-            }
+    void setNoRiskPanel() {
+        if (cUser != null) {
+            int id = cUser.getId();
+            AppExecutors.getInstance().getMainThread().execute(
+                    () -> {
+                        List<RiskProfileItem> riskProfileItems = kDB.riskProfileDao().getAllRiskProfileItem(id);
+                        if (riskProfileItems.size() > 0) {
+                            ltyNoriskp.setVisibility(View.VISIBLE);
+                        } else {
+                            ltyNoriskp.setVisibility(View.GONE);
+                        }
+                    }
+            );
         }
-
-
     }
-
-
-
-
-
 
     @Override
     public void onBackPressed() {
@@ -272,9 +222,8 @@ public class RiskProfile extends AppCompatActivity
     private void signOut() {
         mAuth.signOut();
         startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
-        //updateUI(null);
-    }
 
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -285,16 +234,15 @@ public class RiskProfile extends AppCompatActivity
         if (id == R.id.nav_profile) {
             startActivity(new Intent(getApplicationContext(), Profile.class));
         } else if (id == R.id.nav_risk) {
-            //  startActivity(new Intent(getApplicationContext(), RiskProfileItem.class));
+
         } else if (id == R.id.nav_tips) {
             startActivity(new Intent(getApplicationContext(), Tips.class));
         } else if (id == R.id.nav_apps) {
             startActivity(new Intent(getApplicationContext(), Apps.class));
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(getApplicationContext(), About.class));
-        }else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_logout) {
             signOut();
-           // startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -302,80 +250,18 @@ public class RiskProfile extends AppCompatActivity
         return true;
     }
 
-
-    public void retrieveUser(String email, String password) {
-        ContentResolver resolver = getContentResolver();
-
-        Cursor cursor = resolver.query(ContentTypes.USER_CONTENT_URI, UserColumns.PROJECTION, UserColumns.EMAIL + " = ?" + " AND " + UserColumns.PASSWORD + " = ?",
-                new String[]{email, password}, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                User user = new User();
-                user.setId((cursor.getString(0)) != null ? Integer.parseInt(cursor.getString(0)) : 0);
-                user.setEmail(cursor.getString(cursor.getColumnIndex(UserColumns.EMAIL)));
-                user.setName(cursor.getString(cursor.getColumnIndex(UserColumns.NAME)));
-                user.setDob(cursor.getString(cursor.getColumnIndex(UserColumns.DOB)));
-                user.setGender(cursor.getString(cursor.getColumnIndex(UserColumns.GENDER)));
-
-                try{
-                    user.setProfilePic(cursor.getBlob(cursor.getColumnIndex(UserColumns.PROFILE_IMAGE)));
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-                mGlobalRetainer.set_grUser(user);
-                cUser = user;
-
-            } while (cursor.moveToNext());
-        }
-
-
-        if (cursor != null && !cursor.isClosed()) {
-            cursor.close();
-        }
-
-
-    }
-
     public RiskProfileItem retrieveRecord(String userID, String riskId) {
-
-
         RiskProfileItem risk = new RiskProfileItem();
-        ContentResolver resolver = getContentResolver();
-        // cursor = resolver.query(ContentTypes.RECORDEDACTIVITY_CONTENT_URI, RecordedActivtyColumns.PROJECTION,
-        // RecordedActivtyColumns.TIME_CREATED +">=? and " + RecordedActivtyColumns.TIME_CREATED+"<=?", new String[]{startDate, endDate},null);
-
-        Cursor cursor = resolver.query(ContentTypes.RISK_PROFILE_CONTENT_URI, RiskProfileColumns.PROJECTION, RiskProfileColumns.USER_ID + " = ?" + " AND " + RiskProfileColumns.RISK_ITEM_ID + " = ?",
-                new String[]{userID, riskId}, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                RiskProfileItem riskProfileItem = new RiskProfileItem();
-                riskProfileItem.setId((cursor.getString(0)) != null ? Integer.parseInt(cursor.getString(0)) : 0);
-                riskProfileItem.setRisk_item_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(RiskProfileColumns.RISK_ITEM_ID))));
-                riskProfileItem.setUser_id(Integer.parseInt(cursor.getString(cursor.getColumnIndex(RiskProfileColumns.USER_ID))));
-                riskProfileItem.setMeasurement(cursor.getString(cursor.getColumnIndex(RiskProfileColumns.MEASUREMENT)));
-                riskProfileItem.setComment(cursor.getString(cursor.getColumnIndex(RiskProfileColumns.COMMENT)));
-
-                risk = riskProfileItem;
-
-
-
-
-
-            } while (cursor.moveToNext());
-        }
+        risk = kDB.riskProfileDao().getRiskProfileItem(Integer.parseInt(userID), Integer.parseInt(riskId));
         return risk;
-
     }
 
 
-    public void fillRecord() {
-
-       txtName.setText(cUser.getName());
-       txtEmail.setText(cUser.getEmail());
+    public void fillRecord(User user) {
+        cUser = user;
+        mKaziApp.set_grUser(user);
+        txtName.setText(cUser.getName());
+        txtEmail.setText(cUser.getEmail());
 
         rBp = retrieveRecord(String.valueOf(cUser.getId()), String.valueOf(RiskItemID.RID_BP));
         rBgl = retrieveRecord(String.valueOf(cUser.getId()), String.valueOf(RiskItemID.RID_BGL));
@@ -384,42 +270,34 @@ public class RiskProfile extends AppCompatActivity
         rW2H = retrieveRecord(String.valueOf(cUser.getId()), String.valueOf(RiskItemID.RID_W2H));
 
         //Set the BMI Fields
-
-        try{
+        try {
             setBMIFields(rBMI);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         //Set the Blood Glucose Levels Fields
-        try{
+        try {
             setBGLFields(rBgl);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         //Set the Cholesterol Levels Fields
-        try{
+        try {
             setCHLFields(rChol);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         //Set the Blood Pressure Levels Fields
-        try{
-        setBPFields(rBp);
-
-        }catch(Exception e){
+        try {
+            setBPFields(rBp);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(cUser.getProfilePic()!=null)
-        {
+        if (cUser.getProfilePic() != null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(cUser.getProfilePic(), 0, cUser.getProfilePic().length);
             mImgAvatar.setImageBitmap(bitmap);
-
         }
-
     }
 
 
@@ -427,15 +305,15 @@ public class RiskProfile extends AppCompatActivity
         String comment = "";
 
         int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk =ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
-        int colorHighRisk =ContextCompat.getColor(this, R.color.riskColorHigh);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
-        Drawable dotLow = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebglow, null);
-        Drawable dotModerate = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebgmoderate,null);
-        Drawable dotHigh = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebgfill,null);
+        Drawable dotLow = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebglow, null);
+        Drawable dotModerate = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebgmoderate, null);
+        Drawable dotHigh = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebgfill, null);
 
-        Drawable used= null;
+        Drawable used = null;
 
         double measurement = Double.parseDouble(riskBMI.getMeasurement());
 
@@ -459,7 +337,6 @@ public class RiskProfile extends AppCompatActivity
             used = dotHigh;
         }
 
-
         txtbmicolor.setTextColor(color);
         txtbmicolor.setBackground(used);
         txtbmimeasurement.setText(riskBMI.getMeasurement());
@@ -467,26 +344,21 @@ public class RiskProfile extends AppCompatActivity
 
         txtbmicomment.setText(riskBMI.getComment());
         txtbmicomment.setTextColor(color);
-
-
     }
-
 
     public void setBGLFields(RiskProfileItem riskBGL) {
         String comment = "";
         int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk =ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
-        int colorHighRisk =ContextCompat.getColor(this, R.color.riskColorHigh);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
 
-        Drawable dotLow = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebglow, null);
-        Drawable dotModerate = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebgmoderate,null);
-        Drawable dotHigh = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebgfill,null);
+        Drawable dotLow = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebglow, null);
+        Drawable dotModerate = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebgmoderate, null);
+        Drawable dotHigh = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebgfill, null);
 
-        Drawable used= null;
-
-
+        Drawable used = null;
 
         double measurement = Double.parseDouble(riskBGL.getMeasurement());
 
@@ -497,57 +369,34 @@ public class RiskProfile extends AppCompatActivity
         } else if (measurement >= 7.9 && measurement <= 11.1) {
             color = colorModerateRisk;
             comment = "Moderate";
-            used =dotModerate;
+            used = dotModerate;
         } else if (measurement >= 11.2) {
             color = colorHighRisk;
-            used=dotHigh;
+            used = dotHigh;
             comment = "High risk";
         }
-
 
         txtbglcolor.setTextColor(color);
         txtbglcolor.setBackground(used);
         txtbglmeasurement.setText(riskBGL.getMeasurement());
         txtbglmeasurement.setTextColor(color);
-
-        //txtbglcomment.setText(riskBGL.getComment());
         txtbglcomment.setText(comment);
         txtbglcomment.setTextColor(color);
-
-
     }
-
-
-    private void subscribeToPushService() {
-        FirebaseMessaging.getInstance().subscribeToTopic("kazi");
-
-        Log.d("kazi", "Subscribed");
-        //  Toast.makeText(Home.this, "Subscribed", Toast.LENGTH_SHORT).show();
-
-        String token = FirebaseInstanceId.getInstance().getToken();
-
-        // Log and toast
-     //   Log.d("kazi", token);
-        // Toast.makeText(Home.this, token, Toast.LENGTH_SHORT).show();
-    }
-
 
     public void setCHLFields(RiskProfileItem risk) {
         String comment = "";
         int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk =ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
-        int colorHighRisk =ContextCompat.getColor(this, R.color.riskColorHigh);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
 
-        Drawable dotLow = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebglow, null);
-        Drawable dotModerate = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebgmoderate,null);
-        Drawable dotHigh = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebgfill,null);
+        Drawable dotLow = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebglow, null);
+        Drawable dotModerate = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebgmoderate, null);
+        Drawable dotHigh = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebgfill, null);
 
-        Drawable used= null;
-
-
-
+        Drawable used = null;
         double measurement = Double.parseDouble(risk.getMeasurement());
 
         if (measurement < 5.2) {
@@ -557,10 +406,10 @@ public class RiskProfile extends AppCompatActivity
         } else if (measurement >= 5.2 && measurement <= 6.2) {
             color = colorModerateRisk;
             comment = "Moderate";
-            used =dotModerate;
+            used = dotModerate;
         } else if (measurement >= 6.21) {
             color = colorHighRisk;
-            used=dotHigh;
+            used = dotHigh;
             comment = "High risk";
         }
 
@@ -568,121 +417,65 @@ public class RiskProfile extends AppCompatActivity
         txtchlcolor.setBackground(used);
         txtchlmeasurement.setText(risk.getMeasurement());
         txtchlmeasurement.setTextColor(color);
-
-        //txtbglcomment.setText(riskBGL.getComment());
         txtchlcomment.setText(comment);
         txtchlcomment.setTextColor(color);
-
-
     }
-
 
     public void setBPFields(RiskProfileItem risk) {
         String comment = "";
         int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk =ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
-        int colorHighRisk =ContextCompat.getColor(this, R.color.riskColorHigh);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
 
-        Drawable dotLow = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebglow, null);
-        Drawable dotModerate = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebgmoderate,null);
-        Drawable dotHigh = ResourcesCompat.getDrawable(this.getResources(),R.drawable.circlebgfill,null);
+        Drawable dotLow = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebglow, null);
+        Drawable dotModerate = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebgmoderate, null);
+        Drawable dotHigh = ResourcesCompat.getDrawable(this.getResources(), R.drawable.circlebgfill, null);
 
-        Drawable used= null;
+        Drawable used = null;
 
-        String [] bp = risk.getMeasurement().split("/");
-        int systolic =Integer.parseInt( bp[0]);
-        int diastolic =Integer.parseInt( bp[1]);
+        String[] bp = risk.getMeasurement().split("/");
+        int systolic = Integer.parseInt(bp[0]);
+        int diastolic = Integer.parseInt(bp[1]);
 
-
-       /* double measurement = 0.3;
-
-        if (measurement < 0.35) {
-            color = colorLowRisk;
-            used = dotLow;
-            comment = "LOW RISK";
-        } else if (measurement > 0.35 && measurement <= 1) {
-            color = colorLowRisk;
-            comment = "LOW RISK";
-            used =dotModerate;
-        } else if (measurement >= 1) {
-            color = colorHighRisk;
-            used=dotHigh;
-            comment = "HIGH RISK";
-        }*/
-
-
-
-        if (systolic <129 || diastolic <84) {
+        if (systolic < 129 || diastolic < 84) {
             color = colorLowRisk;
             used = dotLow;
             comment = "Low risk";
-        } else if ((systolic >130 && systolic <= 139)||(diastolic > 84 && diastolic <= 89) ) {
+        } else if ((systolic > 130 && systolic <= 139) || (diastolic > 84 && diastolic <= 89)) {
             color = colorLowRisk;
             comment = "Moderate";
-            used =dotModerate;
+            used = dotModerate;
         } else if (systolic >= 140 || diastolic >= 90) {
             color = colorHighRisk;
-            used=dotHigh;
+            used = dotHigh;
             comment = "High risk";
         }
 
-
-
-       // color = colorLowRisk;
         txtbpcolor.setTextColor(color);
         txtbpcolor.setBackground(used);
-        txtbpmeasurement.setText(systolic+"\n/"+diastolic);
+        txtbpmeasurement.setText(systolic + "\n/" + diastolic);
         txtbpmeasurement.setTextColor(color);
-
-        //txtbglcomment.setText(riskBGL.getComment());
         txtbpcomment.setText(comment);
         txtbpcomment.setTextColor(color);
-
-
     }
-
-
-
-    boolean checkRiskProfile(String id)
-    {
-        ContentResolver resolver = getContentResolver();
-        // cursor = resolver.query(ContentTypes.RECORDEDACTIVITY_CONTENT_URI, RecordedActivtyColumns.PROJECTION,
-        // RecordedActivtyColumns.TIME_CREATED +">=? and " + RecordedActivtyColumns.TIME_CREATED+"<=?", new String[]{startDate, endDate},null);
-
-        Cursor cursor = resolver.query(ContentTypes.RISK_PROFILE_CONTENT_URI, RiskProfileColumns.PROJECTION,RiskProfileColumns.USER_ID+ " = ?" ,
-                new String[]{id}, null);
-
-
-
-        int cursorCount = cursor.getCount();
-        if (cursor != null && !cursor.isClosed()) {
-            cursor.close();
-        }
-
-        if(cursorCount>0)
-        {
-            return true;
-        }
-
-        return false;
-
-    }
-
-
 
     @Override
     protected void onStart() {
         super.onStart();
-
         if (mAuth.getCurrentUser() != null) {
-           // finish();
-           // startActivity(new Intent(this, RiskProfile.class));
-        }else{
+            // finish();
+            // startActivity(new Intent(this, RiskProfile.class));
+        } else {
             startActivity(new Intent(this, Login_Firebase.class));
         }
     }
 
-
+    private void subscribeToPushService() {
+        FirebaseMessaging.getInstance().subscribeToTopic("kazi");
+        Log.d("kazi", "Subscribed");
+        //  Toast.makeText(Home.this, "Subscribed", Toast.LENGTH_SHORT).show();
+        String token = FirebaseInstanceId.getInstance().getToken();
+    }
 }

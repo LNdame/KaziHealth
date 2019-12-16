@@ -33,7 +33,7 @@ public class SessionManager {
     // All Shared Preferences Keys
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
 
-    public static final String KEY_ID = "id";
+    public static final String KEY_UID = "uid";
     public static final String KEY_GENDER = "gender";
     public static final String KEY_NAME = "name";
     public static final String KEY_LASTNAME = "lastname";
@@ -53,12 +53,12 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession (String id, String name,String lastname, String email, String dob, String pwd, String gender)
+    public void createLoginSession (String uid, String name,String lastname, String email, String dob, String pwd, String gender)
     {
         //storing login value as true
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
 
-       editor.putString(KEY_ID, id);
+       editor.putString(KEY_UID, uid);
         editor.putString(KEY_DOB, dob);
         editor.putString(KEY_NAME, name);
         editor.putString(KEY_LASTNAME, lastname);
@@ -71,6 +71,16 @@ public class SessionManager {
         editor.commit();
     }
 
+
+    public void createLoginSession (String uid, String email, String pwd)
+    {
+        //storing login value as true
+        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        editor.putString(KEY_UID, uid);
+        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_PASSWORD, pwd);
+        editor.commit();
+    }
     /**
      * Clear session details
      * */
@@ -133,8 +143,8 @@ public class SessionManager {
 
         HashMap<String, String> user = new HashMap<>();
 
-        //user id
-        user.put(KEY_ID, preferences.getString(KEY_ID,null));
+        //user uid
+        user.put(KEY_UID, preferences.getString(KEY_UID,null));
         //user name
         //user.put(KEY_USERNAME, preferences.getString(KEY_USERNAME,null));
         user.put(KEY_NAME, preferences.getString(KEY_NAME,null));

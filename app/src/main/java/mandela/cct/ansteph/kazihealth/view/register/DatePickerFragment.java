@@ -3,6 +3,7 @@ package mandela.cct.ansteph.kazihealth.view.register;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
@@ -17,25 +18,21 @@ import mandela.cct.ansteph.kazihealth.R;
  * Created by loicstephan on 2018/06/22.
  */
 
-public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         //Use the current date as default date in picker
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-
-        return new DatePickerDialog(getActivity(), this, year, month,day);
+        return new DatePickerDialog(getActivity(), this, year, month, day);
     }
-
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
         TextView mDOB = (TextView) getActivity().findViewById(R.id.editDob);
 
         String monthSt, day;
@@ -50,10 +47,6 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         } else {
             day = String.valueOf(dayOfMonth);
         }
-
-
-            mDOB.setText(String.valueOf(year) + "-" + monthSt + "-" + day);
-
-
+        mDOB.setText(String.valueOf(year) + "-" + monthSt + "-" + day);
     }
-    }
+}

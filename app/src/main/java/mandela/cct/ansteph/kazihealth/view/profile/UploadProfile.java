@@ -1,19 +1,19 @@
 package mandela.cct.ansteph.kazihealth.view.profile;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,13 +30,15 @@ import com.yarolegovich.lovelydialog.LovelyTextInputDialog;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import mandela.cct.ansteph.kazihealth.R;
-import mandela.cct.ansteph.kazihealth.api.ContentTypes;
-import mandela.cct.ansteph.kazihealth.api.columns.RiskProfileColumns;
-import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.app.KaziApp;
+import mandela.cct.ansteph.kazihealth.data.AppExecutors;
+import mandela.cct.ansteph.kazihealth.data.KaziDatabase;
+import mandela.cct.ansteph.kazihealth.helper.SessionManager;
 import mandela.cct.ansteph.kazihealth.model.RiskProfileItem;
 import mandela.cct.ansteph.kazihealth.model.User;
 
@@ -55,42 +57,36 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
 
     private static final int ID_SAVED_DIALOG = R.id.btnSaveAssess;
 
-
-
-    private static final int RID_BP= 1;
-    private static final int RID_HR= 2;
-    private static final int RID_CHL= 3;
-    private static final int RID_BGL= 4;
-    private static final int RID_HEIGHT= 5;
-    private static final int RID_WEIGHT= 6;
-    private static final int RID_BMI= 7;
-    private static final int RID_WAIST= 8;
-    private static final int RID_HIP= 9;
-    private static final int RID_W2H= 10;
-
-
+    private static final int RID_BP = 1;
+    private static final int RID_HR = 2;
+    private static final int RID_CHL = 3;
+    private static final int RID_BGL = 4;
+    private static final int RID_HEIGHT = 5;
+    private static final int RID_WEIGHT = 6;
+    private static final int RID_BMI = 7;
+    private static final int RID_WAIST = 8;
+    private static final int RID_HIP = 9;
+    private static final int RID_W2H = 10;
 
     private LovelySaveStateHandler saveStateHandler;
-    LinearLayout lytBloodPressure ;
-    LinearLayout lytHeartRate ;
-    LinearLayout lytCholesterol ;
-    LinearLayout lytBloodGlucose ;
-    LinearLayout lytHeight ;
-    LinearLayout lytWeight ;
-    LinearLayout lytWaist ;
-    LinearLayout lytHip ;
+    LinearLayout lytBloodPressure;
+    LinearLayout lytHeartRate;
+    LinearLayout lytCholesterol;
+    LinearLayout lytBloodGlucose;
+    LinearLayout lytHeight;
+    LinearLayout lytWeight;
+    LinearLayout lytWaist;
+    LinearLayout lytHip;
 
-
-    double mWeight, mHeight, mWaist , mHip;
-
-    GlobalRetainer mGlobalRetainer;
-
+    double mWeight, mHeight, mWaist, mHip;
+    KaziApp mKaziApp;
     TextView txtName, txtEmail;
-
-    RiskProfileItem rBp, rHeartRate,rChol, rBgl,rHeight,rWeight,rBMI, rWaist,rHip, rW2H;
+    RiskProfileItem rBp, rHeartRate, rChol, rBgl, rHeight, rWeight, rBMI, rWaist, rHip, rW2H;
     Button btnSave;
     User cUser;
     CircleImageView circleImageView;
+    SessionManager sessionManager;
+    private KaziDatabase kDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,34 +94,25 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_upload_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        kDB = KaziDatabase.getInstance(getApplicationContext());
+        sessionManager = new SessionManager(getApplicationContext());
 
-        mGlobalRetainer = (GlobalRetainer)getApplicationContext();
-
+        mKaziApp = (KaziApp) getApplicationContext();
         circleImageView = (CircleImageView) findViewById(R.id.avatar);
-
         txtName = (TextView) findViewById(R.id.txtName);
-        txtEmail= (TextView) findViewById(R.id.txtUserEmail);;
-
+        txtEmail = (TextView) findViewById(R.id.txtUserEmail);
         btnSave = (Button) findViewById(R.id.btnSaveAssess);
 
-        if(mGlobalRetainer.get_grUser()!=null)
-        {
-            cUser = mGlobalRetainer.get_grUser();
-
+        if (mKaziApp.get_grUser() != null) {
+            cUser = mKaziApp.get_grUser();
             txtName.setText(cUser.getName());
             txtEmail.setText(cUser.getEmail());
 
-            if(mGlobalRetainer.get_grUser().getProfilePic()!=null)
-            {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(mGlobalRetainer.get_grUser().getProfilePic(), 0, mGlobalRetainer.get_grUser().getProfilePic().length);
+            if (mKaziApp.get_grUser().getProfilePic() != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(mKaziApp.get_grUser().getProfilePic(), 0, mKaziApp.get_grUser().getProfilePic().length);
                 circleImageView.setImageBitmap(bitmap);
             }
         }
-
-
-
-
-
         saveStateHandler = new LovelySaveStateHandler();
 
         lytBloodPressure = (LinearLayout) findViewById(R.id.lytBloodPressure);
@@ -137,7 +124,6 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
         lytWaist = (LinearLayout) findViewById(R.id.lytWaist);
         lytHip = (LinearLayout) findViewById(R.id.lytHip);
 
-
         lytBloodPressure.setOnClickListener(this);
         lytHeartRate.setOnClickListener(this);
         lytCholesterol.setOnClickListener(this);
@@ -147,9 +133,10 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
         lytWaist.setOnClickListener(this);
         lytHip.setOnClickListener(this);
 
-       // btnSave.setOnClickListener(this);
-
-        mWeight=75; mHeight= 160;mWaist= 60 ; mHip= 60;
+        mWeight = 75;
+        mHeight = 160;
+        mWaist = 60;
+        mHip = 60;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -160,14 +147,22 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        fillRecord();
-
-
+        initRiskVars();
+        retrieveItems(cUser.getId());
     }
 
-
-
+    private void initRiskVars() {
+        rBp = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+        rHeartRate = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+        rChol = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+        rBgl = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+        rHeight = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+        rWeight = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+        rBMI = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+        rWaist = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+        rHip = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+        rW2H = new RiskProfileItem(0, cUser.getId(), 0, "0", "");
+    }
 
     @Override
     public void onClick(View v) {
@@ -175,11 +170,8 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
         showLovelyDialog(v.getId(), null);
     }
 
-
-    public void onSaveAssessClicked(View view){
-        onDoneClicked();
-
-        showLovelyDialog(view.getId(), null);
+    public void onSaveAssessClicked(View view) {
+        onDoneClicked(view);
     }
 
     @Override
@@ -191,24 +183,16 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_done) {
-            onDoneClicked();
-        }
 
+        }
         return super.onOptionsItemSelected(item);
     }
 
-
-
     private void showLovelyDialog(int dialogId, Bundle savedInstanceState) {
         switch (dialogId) {
-
             case ID_BP_INPUT_DIALOG:
                 showBPInputDialog(savedInstanceState);
                 break;
@@ -236,8 +220,6 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
             case ID_SAVED_DIALOG:
                 showSavedDialog(savedInstanceState);
                 break;
-
-
         }
     }
 
@@ -257,10 +239,6 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
-
-
-
     private void showBPInputDialog(Bundle savedInstanceState) {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
                 .setTopColorRes(R.color.colorPrimary)
@@ -274,24 +252,19 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                         return text.matches("^\\d{1,3}\\/\\d{1,3}$");
                     }
                 })
-
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        ( (TextView) findViewById(R.id.txtBloodPres)).setText(text +" mmHg");
-
-                        rBp = new RiskProfileItem(cUser.getId(), RID_BP,text,"");
+                        ((TextView) findViewById(R.id.txtBloodPres)).setText(text + " mmHg");
+                        int tId = rBp.getId();
+                        rBp = new RiskProfileItem(tId, cUser.getId(), RID_BP, text, "");
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
-
+                .configureEditText(editText -> editText.setMaxLines(1))
                 .show();
     }
-
-
-
 
     private void showHeartRateInputDialog(Bundle savedInstanceState) {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
@@ -306,22 +279,19 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                         return text.matches("^\\d{1,3}$");
                     }
                 })
-
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        ( (TextView) findViewById(R.id.txtHeartRate)).setText(text +" bpm");
-                        rHeartRate = new RiskProfileItem(cUser.getId(), RID_HR,text,"");
+                        ((TextView) findViewById(R.id.txtHeartRate)).setText(text + " bpm");
+                        int tId = rHeartRate.getId();
+                        rHeartRate = new RiskProfileItem(tId, cUser.getId(), RID_HR, text, "");
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
-
+                .configureEditText(editText -> editText.setMaxLines(1))
                 .show();
     }
-
-
 
     private void showCholesterolInputDialog(Bundle savedInstanceState) {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
@@ -336,21 +306,19 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                         return text.matches("^\\d+(\\.\\d{1,2})?$");
                     }
                 })
-
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        ( (TextView) findViewById(R.id.txtCholesterol)).setText(text +" mmol/L");
-                        rChol = new RiskProfileItem(cUser.getId(), RID_CHL,text,"");
+                        ((TextView) findViewById(R.id.txtCholesterol)).setText(text + " mmol/L");
+                        int tId = rChol.getId();
+                        rChol = new RiskProfileItem(tId, cUser.getId(), RID_CHL, text, "");
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
-
+                .configureEditText(editText -> editText.setMaxLines(1))
                 .show();
     }
-
 
     private void showBGlucoseInputDialog(Bundle savedInstanceState) {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
@@ -365,23 +333,19 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                         return text.matches("^\\d+(\\.\\d{1,2})?$");
                     }
                 })
-
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        ( (TextView) findViewById(R.id.txtBloodGlu)).setText(text +" mmol/L");
-                        rBgl = new RiskProfileItem(cUser.getId(), RID_BGL,text,"");
+                        ((TextView) findViewById(R.id.txtBloodGlu)).setText(text + " mmol/L");
+                        int tId = rBgl.getId();
+                        rBgl = new RiskProfileItem(tId, cUser.getId(), RID_BGL, text, "");
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
-
+                .configureEditText(editText -> editText.setMaxLines(1))
                 .show();
     }
-
-
-
 
     private void showHeightInputDialog(Bundle savedInstanceState) {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
@@ -396,25 +360,21 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                         return text.matches("^\\d{1,3}(\\.\\d{1,2})?$");
                     } // ^\d{1,3}(\.\d{1,2})?$  //^\d{1,3}$
                 })
-
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        ( (TextView) findViewById(R.id.txtHeight)).setText(text +" cm");
+                        ((TextView) findViewById(R.id.txtHeight)).setText(text + " cm");
+                        int tId = rHeight.getId();
+                        rHeight = new RiskProfileItem(tId, cUser.getId(), RID_HEIGHT, text, "");
 
-                        rHeight = new RiskProfileItem(cUser.getId(), RID_HEIGHT,text,"");
-
-                        calculateBMI(null,Double.parseDouble(text));
+                        calculateBMI(null, Double.parseDouble(text));
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
-
+                .configureEditText(editText -> editText.setMaxLines(1))
                 .show();
     }
-
-
 
     private void showWeightInputDialog(Bundle savedInstanceState) {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
@@ -433,20 +393,18 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        ( (TextView) findViewById(R.id.txtBloodWeight)).setText(text +" kg");
-                        rWeight = new RiskProfileItem(cUser.getId(), RID_WEIGHT,text,"");
-                        calculateBMI(Double.parseDouble(text),null);
+                        ((TextView) findViewById(R.id.txtBloodWeight)).setText(text + " kg");
+                        int tId = rWeight.getId();
+                        rWeight = new RiskProfileItem(tId, cUser.getId(), RID_WEIGHT, text, "");
+                        calculateBMI(Double.parseDouble(text), null);
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
+                .configureEditText(editText -> editText.setMaxLines(1))
 
                 .show();
     }
-
-
-
 
     private void showBMIInputDialog(Bundle savedInstanceState) {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
@@ -470,13 +428,10 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
+                .configureEditText(editText -> editText.setMaxLines(1))
 
                 .show();
     }
-
-
-
 
     private void showWaistInputDialog(Bundle savedInstanceState) {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
@@ -495,21 +450,18 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        ( (TextView) findViewById(R.id.txtWaist)).setText(text +" cm");
-                        rWaist = new RiskProfileItem(cUser.getId(), RID_WAIST,text,"");
-                        calculateW2Hratio( Double.parseDouble(text),null);
+                        ((TextView) findViewById(R.id.txtWaist)).setText(text + " cm");
+                        int tId = rWaist.getId();
+                        rWaist = new RiskProfileItem(tId, cUser.getId(), RID_WAIST, text, "");
+                        calculateW2Hratio(Double.parseDouble(text), null);
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
+                .configureEditText(editText -> editText.setMaxLines(1))
 
                 .show();
     }
-
-
-
-
 
     private void showHipInputDialog(Bundle savedInstanceState) {
         new LovelyTextInputDialog(this, R.style.EditTextTintTheme)
@@ -528,23 +480,23 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                 .setConfirmButton(android.R.string.ok, new LovelyTextInputDialog.OnTextInputConfirmListener() {
                     @Override
                     public void onTextInputConfirmed(String text) {
-                        ( (TextView) findViewById(R.id.txtHip)).setText(text +" cm");
-                        rHip = new RiskProfileItem(cUser.getId(), RID_HIP,text,"");
+                        ((TextView) findViewById(R.id.txtHip)).setText(text + " cm");
+                        int tId = rHip.getId();
+                        rHip = new RiskProfileItem(tId, cUser.getId(), RID_HIP, text, "");
                         calculateW2Hratio(null, Double.parseDouble(text));
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
                 .setSavedInstanceState(savedInstanceState)
-                .configureEditText(  editText -> editText.setMaxLines(1))
+                .configureEditText(editText -> editText.setMaxLines(1))
 
                 .show();
     }
 
-
-
+    @Deprecated
     private void showSavedDialog(Bundle savedInstanceState) {
         new LovelyStandardDialog(this, LovelyStandardDialog.ButtonLayout.HORIZONTAL)
-                .setTopColorRes( R.color.colorAccent)
+                .setTopColorRes(R.color.colorAccent)
                 .setButtonsColorRes(R.color.colorPrimaryDark)
                 .setIcon(R.drawable.ic_save_white)
                 .setTitle(R.string.text_save_title)
@@ -554,15 +506,12 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                 .setPositiveButton(R.string.text_save_ok, LovelyDialogCompat.wrap(new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getApplicationContext(),RiskProfile.class);
-                               // intent.setData(Uri.parse("market://details?id=ee.mtakso.client&hl=en"));
+                                Intent intent = new Intent(getApplicationContext(), RiskProfile.class);
                                 startActivity(intent);
-
                             }
                         })
-
                 )
-                .setNegativeButton(R.string.text_save_cancel,LovelyDialogCompat.wrap(new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.text_save_cancel, LovelyDialogCompat.wrap(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -571,250 +520,222 @@ public class UploadProfile extends AppCompatActivity implements View.OnClickList
                 .show();
     }
 
-
-    void calculateBMI(@Nullable Double weight, @Nullable Double height)
-    {
-
-        if(weight== null)
-        {
+    void calculateBMI(@Nullable Double weight, @Nullable Double height) {
+        if (weight == null) {
             weight = mWeight;
-        }else{mWeight= weight;}
+        } else {
+            mWeight = weight;
+        }
+        if (height == null) {
+            height = mHeight;
+        } else {
+            mHeight = height;
+        }
 
-        if(height== null){height = mHeight;}else{ mHeight= height;}
-
-        double bmi = (mWeight)/((mHeight/100)*(mHeight/100)) ;
-
+        double bmi = (mWeight) / ((mHeight / 100) * (mHeight / 100));
         String comment = getBMIComment(bmi);
-
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.UK);
-        DecimalFormat df = (DecimalFormat)nf;
-
+        DecimalFormat df = (DecimalFormat) nf;
         nf.setMaximumFractionDigits(1);
         String val = nf.format(bmi);
 
-
-      //  ( (TextView) findViewById(R.id.txtBMI)).setText(String.format("%.1f", bmi) + Html.fromHtml(" kg.m<sup>2</sup> |")+comment);
-        ( (TextView) findViewById(R.id.txtBMI)).setText(val + Html.fromHtml(" kg.m<sup>2</sup> |")+comment);
-
-       // rBMI = new RiskProfileItem(cUser.getId(), RID_BMI,String.format("%.1f", bmi),comment);
-        rBMI = new RiskProfileItem(cUser.getId(), RID_BMI,val,comment);
-
-
+        ((TextView) findViewById(R.id.txtBMI)).setText(val + Html.fromHtml(" kg.m<sup>2</sup> |") + comment);
+        int tId = rBMI.getId();
+        rBMI = new RiskProfileItem(tId, cUser.getId(), RID_BMI, val, comment);
     }
 
-    void calculateW2Hratio(@Nullable Double waist, @Nullable Double hip)
-    {
-
-        if(waist== null)
-        {
+    void calculateW2Hratio(@Nullable Double waist, @Nullable Double hip) {
+        if (waist == null) {
             waist = mWaist;
-        }else{mWaist= waist;}
+        } else {
+            mWaist = waist;
+        }
 
-        if(hip== null){hip = mHip;}else{ mHip= hip;}
+        if (hip == null) {
+            hip = mHip;
+        } else {
+            mHip = hip;
+        }
 
-        double w2hratio = (mWaist)/(mHip) ;
-
+        double w2hratio = (mWaist) / (mHip);
         String comment = getW2HComment(w2hratio);
-
-        ( (TextView) findViewById(R.id.txtWaistHipRatio)).setText(String.format("%.2f", w2hratio) +"|"+comment);
-
-        rW2H = new RiskProfileItem(cUser.getId(), RID_W2H,String.format("%.2f", w2hratio),comment);
-
-
+        ((TextView) findViewById(R.id.txtWaistHipRatio)).setText(String.format("%.2f", w2hratio) + "|" + comment);
+        int tId = rW2H.getId();
+        rW2H = new RiskProfileItem(tId, cUser.getId(), RID_W2H, String.format("%.2f", w2hratio), comment);
     }
 
 
-    public void onDoneClicked()
-    {
-        //save all the record  rBp, rHeartRate,rChol, rBgl,rHeight,rWeight,rBMI, rWaist,rHip, rW2H;
-        recordProfileItem(rBp);
-
-        recordProfileItem(rHeartRate);
-        recordProfileItem(rChol);
-        recordProfileItem(rBgl);
-
-        recordProfileItem(rHeight);
-        recordProfileItem(rWeight);
-        recordProfileItem(rBMI);
-        recordProfileItem(rWaist);
-
-        recordProfileItem(rHip);
-        recordProfileItem(rW2H);
-
-
-        Toast.makeText(getApplicationContext(),"RisK Profile Saved", Toast.LENGTH_LONG).show();
-
-
+    public void onDoneClicked(View view) {
+        RiskProfileItem[] riskProfileItems = {
+                rBp, rHeartRate, rChol, rBgl, rHeight, rWeight, rBMI, rWaist, rHip, rW2H
+        };
+        for (RiskProfileItem rpfi : riskProfileItems
+        ) {
+            recordRiskProfileItem(rpfi);
+        }
+        Toast.makeText(getApplicationContext(), "RisK Profile Saved", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getApplicationContext(), RiskProfile.class);
+        startActivity(intent);
     }
 
+    private void recordRiskProfileItem(RiskProfileItem riskProfileItem) {
+        if (riskProfileItem.getId() <= 0) {
+            AppExecutors.getInstance().getDiskIO().execute(
+                    () -> kDB.riskProfileDao().insert(riskProfileItem)
+            );
+        } else {
+            AppExecutors.getInstance().getDiskIO().execute(
+                    () -> kDB.riskProfileDao().updateRiskProfileItem(riskProfileItem)
+            );
+        }
+    }
 
+    @Deprecated
+    public RiskProfileItem retrieveRecord(int userID, int riskId) {
+        RiskProfileItem risk = new RiskProfileItem();
+        risk = kDB.riskProfileDao().getRiskProfileItem(userID, riskId);
+        return risk;
+    }
 
+    public void retrieveItems(int userID) {
+        AppExecutors.getInstance().getDiskIO().execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        final List<RiskProfileItem> riskProfileItems = kDB.riskProfileDao().getAllRiskProfileItem(userID);
+                        // runOnUiThread(()->fillRecord(riskProfileItems));
+                        fillRecord(riskProfileItems);
+                    }
+                }
+        );
+    }
 
-    public int recordProfileItem(RiskProfileItem riskProfileItem){
+    public void fillRecord(List<RiskProfileItem> riskProfileItems) {
+        for (RiskProfileItem riskProfileItem : riskProfileItems) {
+            switch (riskProfileItem.getRisk_item_id()) {
+                case RID_BP:
+                    rBp = riskProfileItem;
+                    break;
+                case RID_HR:
+                    rHeartRate = riskProfileItem;
+                    break;
+                case RID_CHL:
+                    rChol = riskProfileItem;
+                    break;
+                case RID_BGL:
+                    rBgl = riskProfileItem;
+                    break;
+                case RID_HEIGHT:
+                    rHeight = riskProfileItem;
+                    break;
+                case RID_WEIGHT:
+                    rWeight = riskProfileItem;
+                    break;
+                case RID_BMI:
+                    rBMI = riskProfileItem;
+                    break;
+                case RID_WAIST:
+                    rWaist = riskProfileItem;
+                    break;
+                case RID_HIP:
+                    rHip = riskProfileItem;
+                    break;
+                case RID_W2H:
+                    rW2H = riskProfileItem;
+                    break;
+            }
+        }
 
+        String rBpValue = "0";
+        String rHeartRateValue = "0";
+        String rCholValue = "0";
+        String rBglValue = "0";
+        String rHeightValue = "0";
+        String rWeightValue = "0";
+        String rWaistValue = "0";
+        String rHipValue = "0";
 
         try {
-            ContentValues values = new ContentValues();
+            rBpValue = (rBp.getMeasurement() != null) ? rBp.getMeasurement() : "0";
+            rHeartRateValue = (rHeartRate.getMeasurement() != null) ? rHeartRate.getMeasurement() : "0";
+            rCholValue = (rChol.getMeasurement() != null) ? rChol.getMeasurement() : "0";
+            rBglValue = (rBgl.getMeasurement() != null) ? rBgl.getMeasurement() : "0";
+            rHeightValue = (rHeight.getMeasurement() != null) ? rHeight.getMeasurement() : "0";
+            rWeightValue = (rWeight.getMeasurement() != null) ? rWeight.getMeasurement() : "0";
+            rWaistValue = (rWaist.getMeasurement() != null) ? rWaist.getMeasurement() : "0";
+            rHipValue = (rHip.getMeasurement() != null) ? rHip.getMeasurement() : "0";
 
-          values.put(RiskProfileColumns.USER_ID, riskProfileItem.getUser_id()) ;
-            values.put(RiskProfileColumns.RISK_ITEM_ID , riskProfileItem.getRisk_item_id()) ;
-            values.put(RiskProfileColumns.MEASUREMENT , riskProfileItem.getMeasurement()) ;
-            values.put(RiskProfileColumns.COMMENT , riskProfileItem.getComment()) ;
-
-
-            getContentResolver().insert(ContentTypes.RISK_PROFILE_CONTENT_URI, values);
-
-            return 1;
-
-
-        }catch (SQLException e)
-        {
-            e.printStackTrace();
-
-            return 0;
-        }
-
-    }
-
-
-
-    public RiskProfileItem retrieveRecord(String userID, String riskId){
-
-
-        RiskProfileItem risk = new RiskProfileItem();
-        ContentResolver resolver = getContentResolver();
-        // cursor = resolver.query(ContentTypes.RECORDEDACTIVITY_CONTENT_URI, RecordedActivtyColumns.PROJECTION,
-        // RecordedActivtyColumns.TIME_CREATED +">=? and " + RecordedActivtyColumns.TIME_CREATED+"<=?", new String[]{startDate, endDate},null);
-
-        Cursor cursor = resolver.query(ContentTypes.RISK_PROFILE_CONTENT_URI, RiskProfileColumns.PROJECTION,RiskProfileColumns.USER_ID+ " = ?" + " AND " + RiskProfileColumns.RISK_ITEM_ID + " = ?",
-                new String[]{userID, riskId}, null);
-
-        if(cursor.moveToFirst()){
-            do{
-                RiskProfileItem riskProfileItem = new RiskProfileItem();
-                riskProfileItem.setId((cursor.getString(0))!=null ? Integer.parseInt(cursor.getString(0)):0);
-                riskProfileItem.setRisk_item_id (Integer.parseInt(cursor.getString(cursor.getColumnIndex(RiskProfileColumns.RISK_ITEM_ID))));
-                riskProfileItem.setUser_id (Integer.parseInt(cursor.getString(cursor.getColumnIndex(RiskProfileColumns.USER_ID))));
-                riskProfileItem.setMeasurement(cursor.getString(cursor.getColumnIndex(RiskProfileColumns.MEASUREMENT)));
-                riskProfileItem.setComment(cursor.getString(cursor.getColumnIndex(RiskProfileColumns.COMMENT)));
-
-               risk= riskProfileItem;
-
-
-            }while(cursor.moveToNext());
-        }
-        return risk;
-
-    }
-
-
-
-    public void fillRecord(){
-
-        rBp =retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_BP) );
-        rHeartRate=retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_HR) );
-        rChol=retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_CHL) );
-        rBgl=retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_BGL) );
-        rHeight=retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_HEIGHT) );
-        rWeight=retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_WEIGHT) );
-        rBMI=retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_BMI) );
-        rWaist=retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_WAIST) );
-        rHip=retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_HIP) );
-        rW2H=retrieveRecord(String.valueOf(cUser.getId()) ,String.valueOf(RID_W2H) );
-
-
-        String rBpValue = (rBp.getMeasurement()!=null)?rBp.getMeasurement():"0";
-        String rHeartRateValue =(rHeartRate.getMeasurement()!=null)?rHeartRate.getMeasurement():"0";
-        String rCholValue = (rChol.getMeasurement()!=null)?rChol.getMeasurement():"0" ;
-        String rBglValue =(rBgl.getMeasurement()!=null)?rBgl.getMeasurement():"0" ;
-        String rHeightValue =(rHeight.getMeasurement()!=null)?rHeight.getMeasurement():"0" ;
-        String rWeightValue = (rWeight.getMeasurement()!=null)?rWeight.getMeasurement():"0";
-        String rWaistValue = (rWaist.getMeasurement()!=null)?rWaist.getMeasurement():"0";
-        String rHipValue = (rHip.getMeasurement()!=null)?rHip.getMeasurement():"0" ;
-
-
-
-
-
-        ( (TextView) findViewById(R.id.txtBloodPres)).setText( rBpValue+" mmHg");
-        ( (TextView) findViewById(R.id.txtHeartRate)).setText(rHeartRateValue +" bpm");
-        ( (TextView) findViewById(R.id.txtCholesterol)).setText( rCholValue+" mmol/L");
-        ( (TextView) findViewById(R.id.txtBloodGlu)).setText( rBglValue+" mmol/L");
-
-        ( (TextView) findViewById(R.id.txtHeight)).setText( rHeightValue+" cm");
-        ( (TextView) findViewById(R.id.txtBloodWeight)).setText(rWeightValue +" kg");
-        ( (TextView) findViewById(R.id.txtWaist)).setText( rWaistValue+" cm");
-        ( (TextView) findViewById(R.id.txtHip)).setText(rHipValue+" cm");
-
-      //  ( (TextView) findViewById(R.id.txtWaistHipRatio)).setText(String.format("%.2f", rW2H.getMeasurement()) +"|"+rW2H.getComment());
-
-        String rW2HValue =(rW2H.getMeasurement()!=null)?rW2H.getMeasurement():"0";
-        String rW2HComment =(rW2H.getComment()!=null)?rW2H.getComment():" ";
-
-        ( (TextView) findViewById(R.id.txtWaistHipRatio)).setText( rW2HValue +"|"+ rW2HComment);
-
-        String rBMIValue =(rBMI.getMeasurement()!=null)?rBMI.getMeasurement():"0";
-        String rBMIComment =(rBMI.getComment()!=null)?rBMI.getComment():" ";
-
-          ( (TextView) findViewById(R.id.txtBMI)).setText(Html.fromHtml( rBMIValue +" kg.m<sup>2</sup>|"+rBMIComment));
-
-    }
-
-
-    public String getBMIComment(double measurement)
-    {
-        String comment="";
-
-        if(measurement<18.5)
-        {
-            comment="Low risk";
-        }else if (measurement>18.5 && measurement<=24.9){
-            comment="Low risk";
-        }else if (measurement>24.9 && measurement<=29.9){
-            comment="Moderate risk";
-        }else if (measurement>29.9 && measurement<=34.9){
-            comment="High risk";
-        }else if (measurement>34.9 && measurement<=39.9){
-            comment="High risk";
-        }else if ( measurement<=40.0){
-            comment="High risk";
+        } catch (Exception e) {
         }
 
 
+        ((TextView) findViewById(R.id.txtBloodPres)).setText(rBpValue + " mmHg");
+        ((TextView) findViewById(R.id.txtHeartRate)).setText(rHeartRateValue + " bpm");
+        ((TextView) findViewById(R.id.txtCholesterol)).setText(rCholValue + " mmol/L");
+        ((TextView) findViewById(R.id.txtBloodGlu)).setText(rBglValue + " mmol/L");
+
+        ((TextView) findViewById(R.id.txtHeight)).setText(rHeightValue + " cm");
+        ((TextView) findViewById(R.id.txtBloodWeight)).setText(rWeightValue + " kg");
+        ((TextView) findViewById(R.id.txtWaist)).setText(rWaistValue + " cm");
+        ((TextView) findViewById(R.id.txtHip)).setText(rHipValue + " cm");
+
+        String rW2HValue = "0";
+        String rW2HComment = "";
+        try {
+            rW2HValue = (rW2H.getMeasurement() != null) ? rW2H.getMeasurement() : "0";
+            rW2HComment = (rW2H.getComment() != null) ? rW2H.getComment() : " ";
+        } catch (Exception e) {
+        }
+
+        ((TextView) findViewById(R.id.txtWaistHipRatio)).setText(rW2HValue + "|" + rW2HComment);
+
+        String rBMIValue = "0";
+        String rBMIComment = " ";
+        try {
+            rBMIValue = (rBMI.getMeasurement() != null) ? rBMI.getMeasurement() : "0";
+            rBMIComment = (rBMI.getComment() != null) ? rBMI.getComment() : " ";
+        } catch (Exception e) {
+        }
+
+        ((TextView) findViewById(R.id.txtBMI)).setText(Html.fromHtml(rBMIValue + " kg.m<sup>2</sup>|" + rBMIComment));
+    }
+
+    public String getBMIComment(double measurement) {
+        String comment = "";
+
+        if (measurement < 18.5) {
+            comment = "Low risk";
+        } else if (measurement > 18.5 && measurement <= 24.9) {
+            comment = "Low risk";
+        } else if (measurement > 24.9 && measurement <= 29.9) {
+            comment = "Moderate risk";
+        } else if (measurement > 29.9 && measurement <= 34.9) {
+            comment = "High risk";
+        } else if (measurement > 34.9 && measurement <= 39.9) {
+            comment = "High risk";
+        } else if (measurement <= 40.0) {
+            comment = "High risk";
+        }
         return comment;
-
     }
 
+    public String getW2HComment(double measurement) {
+        String comment = "";
 
-    public String getW2HComment(double measurement)
-    {
-        String comment="";
-
-        if(cUser.getGender().equals("female"))
-        {
-            if(measurement<=	0.85)
-            {
-                comment="Normal";
-            }else if (measurement>0.85 ){
-                comment="High risk";
+        if (cUser.getGender().equals("female")) {
+            if (measurement <= 0.85) {
+                comment = "Normal";
+            } else if (measurement > 0.85) {
+                comment = "High risk";
             }
-        }else{
-            if(measurement<=	0.90)
-            {
-                comment="Normal";
-            }else if (measurement>0.90 ){
-                comment="High risk";
+        } else {
+            if (measurement <= 0.90) {
+                comment = "Normal";
+            } else if (measurement > 0.90) {
+                comment = "High risk";
             }
         }
-
-
         return comment;
-
     }
-
-
-
-
-
 
 }

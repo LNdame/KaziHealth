@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import org.json.JSONObject;
 import org.json.JSONArray;
 
@@ -48,7 +49,7 @@ public class RestAPI {
 
     private String load(String contents) throws IOException {
         URL url = new URL(urlString);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setConnectTimeout(60000);
         conn.setDoOutput(true);
@@ -66,14 +67,12 @@ public class RestAPI {
         Object finalValue = null;
         if (o.getClass() == String.class) {
             finalValue = o;
-        }
-        else if (Number.class.isInstance(o)) {
+        } else if (Number.class.isInstance(o)) {
             finalValue = String.valueOf(o);
         } else if (Date.class.isInstance(o)) {
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss", new Locale("en", "USA"));
-            finalValue = sdf.format((Date)o);
-        }
-        else if (Collection.class.isInstance(o)) {
+            finalValue = sdf.format((Date) o);
+        } else if (Collection.class.isInstance(o)) {
             Collection<?> col = (Collection<?>) o;
             JSONArray jarray = new JSONArray();
             for (Object item : col) {
@@ -103,15 +102,15 @@ public class RestAPI {
         return finalValue;
     }
 
-    public JSONObject KaziHealthParametersByTeacherUniqueID(String ID,String wsuUserName,String wsuPassword) throws Exception {
+    public JSONObject KaziHealthParametersByTeacherUniqueID(String ID, String wsuUserName, String wsuPassword) throws Exception {
         JSONObject result = null;
         JSONObject o = new JSONObject();
         JSONObject p = new JSONObject();
-        o.put("interface","RestAPI");
+        o.put("interface", "RestAPI");
         o.put("method", "KaziHealthParametersByTeacherUniqueID");
-        p.put("ID",mapObject(ID));
-        p.put("wsuUserName",mapObject(wsuUserName));
-        p.put("wsuPassword",mapObject(wsuPassword));
+        p.put("ID", mapObject(ID));
+        p.put("wsuUserName", mapObject(wsuUserName));
+        p.put("wsuPassword", mapObject(wsuPassword));
         o.put("parameters", p);
         String s = o.toString();
         String r = load(s);

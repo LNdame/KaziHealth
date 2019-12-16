@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.adapter.TipRecyclerViewAdapter;
-import mandela.cct.ansteph.kazihealth.app.GlobalRetainer;
+import mandela.cct.ansteph.kazihealth.app.KaziApp;
 import mandela.cct.ansteph.kazihealth.model.TipItem;
 import mandela.cct.ansteph.kazihealth.view.appmanagement.Apps;
 import mandela.cct.ansteph.kazihealth.view.firebasereg.Login_Firebase;
@@ -43,7 +43,7 @@ public class Tips extends AppCompatActivity
     ArrayList<TipItem> mTipList;
     TipRecyclerViewAdapter mTipAdapter;
 
-    GlobalRetainer mGlobalRetainer;
+    KaziApp mKaziApp;
     FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class Tips extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
 
-        mGlobalRetainer = (GlobalRetainer) getApplicationContext();
+        mKaziApp = (KaziApp) getApplicationContext();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -97,12 +97,12 @@ public class Tips extends AppCompatActivity
         TextView navEmail= (TextView) headerView.findViewById(R.id.txtNavEmail);
         ImageView navAvatar = (ImageView)headerView.findViewById(R.id.avatar);
 
-        if(mGlobalRetainer.get_grUser().getProfilePic()!=null)
-        {            Bitmap bitmap = BitmapFactory.decodeByteArray(mGlobalRetainer.get_grUser().getProfilePic(), 0, mGlobalRetainer.get_grUser().getProfilePic().length);
+        if(mKaziApp.get_grUser().getProfilePic()!=null)
+        {            Bitmap bitmap = BitmapFactory.decodeByteArray(mKaziApp.get_grUser().getProfilePic(), 0, mKaziApp.get_grUser().getProfilePic().length);
             navAvatar.setImageBitmap(bitmap);
         }
-        navName.setText(mGlobalRetainer.get_grUser().getName());
-        navEmail.setText(mGlobalRetainer.get_grUser().getEmail());
+        navName.setText(mKaziApp.get_grUser().getName());
+        navEmail.setText(mKaziApp.get_grUser().getEmail());
     }
 
 

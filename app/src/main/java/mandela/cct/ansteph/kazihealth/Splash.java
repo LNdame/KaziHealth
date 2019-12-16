@@ -30,9 +30,6 @@ public class Splash extends AppCompatActivity {
                   //  sessionManager.checkReg();
                     Intent intent = new Intent(getApplicationContext(), WelcomePage.class);
                     startActivity(intent);
-
-
-
                 }
             }
         };

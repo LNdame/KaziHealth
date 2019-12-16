@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="mandela.cct.ansteph.kazihealth">
 
     <permission android:name="permission"
@@ -11,13 +12,14 @@
 
 
     <application
-        android:name=".app.GlobalRetainer"
+        android:name=".app.KaziApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".Splash"
             android:theme="@style/SplashTheme">
@@ -89,22 +91,6 @@
                 android:value="mandela.cct.ansteph.kazihealth.view.profile.Profile" />
         </activity>
 
-        <provider
-            android:name=".contentprovider.UserContentProvider"
-            android:authorities="mandela.cct.ansteph.kazihealth.contentprovider.usercontentprovider"
-            android:enabled="true"
-            android:exported="false" />
-        <provider
-            android:name=".contentprovider.RiskProfileContentProvider"
-            android:authorities="mandela.cct.ansteph.kazihealth.contentprovider.riskprofilecontentprovider"
-            android:enabled="true"
-            android:exported="false" />
-        <provider
-            android:name=".contentprovider.RiskItemContentProvider"
-            android:authorities="mandela.cct.ansteph.kazihealth.contentprovider.riskitemcontentprovider"
-            android:enabled="true"
-            android:exported="false" />
-
         <activity
             android:name=".view.profile.EditProfile"
             android:label="@string/title_activity_edit_profile"
@@ -144,7 +130,7 @@
             android:name=".view.firebasereg.Register_Firebase"
             android:label="@string/title_activity_register__firebase"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.firebasereg.SaveFireDB" />
+
         <activity
             android:name=".view.firebasereg.ResetPassword"
             android:label="@string/title_activity_reset_password"
