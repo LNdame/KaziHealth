@@ -477,5 +477,6 @@ public class RiskProfile extends AppCompatActivity
         Log.d("kazi", "Subscribed");
         //  Toast.makeText(Home.this, "Subscribed", Toast.LENGTH_SHORT).show();
         String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d("kazi_token", token);
     }
 }

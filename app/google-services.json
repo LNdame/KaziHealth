@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "284880298151",
-    "firebase_url": "https://kazihealth.firebaseio.com",
-    "project_id": "kazihealth",
-    "storage_bucket": "kazihealth.appspot.com"
+    "project_number": "503388355723",
+    "firebase_url": "https://kazihealth-9a1b9.firebaseio.com",
+    "project_id": "kazihealth-9a1b9",
+    "storage_bucket": "kazihealth-9a1b9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:284880298151:android:4dd36bc7402fd1a6",
+        "mobilesdk_app_id": "1:503388355723:android:40257dcac40549ea41e88e",
         "android_client_info": {
           "package_name": "mandela.cct.ansteph.kazihealth"
         }
       },
       "oauth_client": [
         {
-          "client_id": "284880298151-iqm88fie7b82s76gpkds653n2la7gang.apps.googleusercontent.com",
+          "client_id": "503388355723-cualieohn7043sroo3sbeh8eql2mdem3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "mandela.cct.ansteph.kazihealth",
@@ -23,30 +23,23 @@
           }
         },
         {
-          "client_id": "284880298151-n3a9dpstp70j3uakctjrph7f3r4mnsal.apps.googleusercontent.com",
+          "client_id": "503388355723-n1qgsb1hh4rh3o8sd8qs0p0okuskpilv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBkRd2n9a61R3bA2u96gLreR1xCg7PwNA0"
+          "current_key": "AIzaSyA7vKG76huLkUcKnSpHFnuUqbSwwLXPkSE"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "284880298151-n3a9dpstp70j3uakctjrph7f3r4mnsal.apps.googleusercontent.com",
+              "client_id": "503388355723-n1qgsb1hh4rh3o8sd8qs0p0okuskpilv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }
