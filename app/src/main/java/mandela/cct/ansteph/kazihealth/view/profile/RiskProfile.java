@@ -6,9 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -29,9 +32,11 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
@@ -51,7 +56,7 @@ import mandela.cct.ansteph.kazihealth.view.tip.Tips;
 
 public class RiskProfile extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private static String TAG  = RiskProfile.class.getSimpleName();
     KaziApp mKaziApp;
     TextView txtName, txtEmail;
     String mEmail, mPwd;
@@ -473,10 +478,39 @@ public class RiskProfile extends AppCompatActivity
     }
 
     private void subscribeToPushService() {
-        FirebaseMessaging.getInstance().subscribeToTopic("kazi");
-        Log.d("kazi", "Subscribed");
+        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.default_notification_channel_name))
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = getString(R.string.msg_subscribed);
+                        if(!task.isSuccessful()){
+                            msg =getString(R.string.msg_subscribe_failed);
+                        }
+                        Log.d(TAG, msg);
+                        Toast.makeText(RiskProfile.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if(!task.isSuccessful()){
+                    Log.w(TAG, "getInstanceId failed", task.getException());
+                    return;
+                }
+
+                // Get new Instance ID token
+                String token = task.getResult().getToken();
+
+                // Log and toast
+                String msg = getString(R.string.msg_token_fmt, token);
+                Log.d(TAG, msg);
+                Toast.makeText(RiskProfile.this, msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+        //Log.d("kazi", "Subscribed");
         //  Toast.makeText(Home.this, "Subscribed", Toast.LENGTH_SHORT).show();
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.d("kazi_token", token);
+       // String token = FirebaseInstanceId.getInstance().getToken();
+       // Log.d("kazi_token", token);
     }
 }
