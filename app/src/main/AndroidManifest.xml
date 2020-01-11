@@ -117,11 +117,6 @@
                 android:value="mandela.cct.ansteph.kazihealth.view.profile.Profile" />
         </activity>
 
-        <service android:name=".service.KaziFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
         <service
             android:name=".service.KaziFirebaseMessagingService"
             android:exported="false">

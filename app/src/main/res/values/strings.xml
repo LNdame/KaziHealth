@@ -686,6 +686,6 @@ Be Active:\n\n
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="default_notification_channel_name" translatable="true">KaziHealth</string>
     <string name="msg_subscribe_failed">Failed to subscribe to KaziHealth topic</string>
-    <string name="fcm_message">FCM Message</string>
+    <string name="fcm_message">KaziHealth</string>
 
 </resources>
