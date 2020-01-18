@@ -677,4 +677,15 @@ Be Active:\n\n
     <string name="registration_success">Registered Successfully</string>
     <string name="title_activity_reset_password">Reset Password</string>
 
+    <string name="subscribe_to_weather">Subscribe To KaziHealth</string>
+    <string name="log_token">Log Token</string>
+
+    <string name="msg_subscribed">Subscribed to KaziHealth topic</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="default_notification_channel_name" translatable="true">KaziHealth</string>
+    <string name="msg_subscribe_failed">Failed to subscribe to KaziHealth topic</string>
+    <string name="fcm_message">KaziHealth</string>
+
 </resources>

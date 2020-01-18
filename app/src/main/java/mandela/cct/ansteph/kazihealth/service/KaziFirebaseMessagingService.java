@@ -1,11 +1,22 @@
 package mandela.cct.ansteph.kazihealth.service;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.IBinder;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -15,14 +26,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import mandela.cct.ansteph.kazihealth.R;
 import mandela.cct.ansteph.kazihealth.utils.NotificationUtils;
 import mandela.cct.ansteph.kazihealth.utils.NotificationVO;
 import mandela.cct.ansteph.kazihealth.view.profile.RiskProfile;
 
+
 public class KaziFirebaseMessagingService extends FirebaseMessagingService {
 
 
-    private static final String TAG = "KaziFMsgService";
+    private static final String TAG = "KaziMessagingService";
     Bitmap bitmap;
 
     private static final String TITLE = "title";
@@ -55,6 +68,11 @@ public class KaziFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            if(true){
+                scheduleJob();
+            }else {
+                handleNow();
+            }
             Map<String, String> data = remoteMessage.getData();
             handleDate(data);
         }
@@ -62,9 +80,9 @@ public class KaziFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         else if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            handleNotification(remoteMessage.getNotification());
+            //handleNotification(remoteMessage.getNotification());
         }
-
+        sendNotification(remoteMessage.getNotification());
         //The message which i send will have keys named [message, image, AnotherActivity] and corresponding values.
         //You can change as per the requirement.
 
@@ -83,19 +101,63 @@ public class KaziFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
+    @Override
+    public void onNewToken(@NonNull String token) {
+        //super.onNewToken(s);
+        sendRegistrationToServer(token);
+    }
 
-    private void handleNotification(RemoteMessage.Notification RemoteMsgNotification){
-        String message = RemoteMsgNotification.getBody();
-        String title = RemoteMsgNotification.getTitle();
+    private void sendRegistrationToServer(String token) {
+        // TODO: Implement this method to send token to your app server.
+    }
+    /**
+     * Schedule async work using WorkManager.
+     */
+    private void scheduleJob() {
+        // [START dispatch_job]
+        OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(MyWorker.class)
+                .build();
+        WorkManager.getInstance().beginWith(work).enqueue();
+        // [END dispatch_job]
+    }
+    private void handleNow() {
+        Log.d(TAG, "Short lived task is done.");
+    }
 
-        NotificationVO notificationVO = new NotificationVO();
-        notificationVO.setTitle(title);
-        notificationVO.setMessage(message);
+    /**
+     * Create and show a simple notification containing the received FCM message.
+     *
+     * @param notification FCM notification message received.
+     */
+    private void sendNotification(RemoteMessage.Notification notification) {
+        Intent intent = new Intent(this, RiskProfile.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
 
-        Intent resultIntent = new Intent(getApplicationContext(), RiskProfile.class);
-        NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
-        notificationUtils.displayNotification(notificationVO,resultIntent);
-        //notificationUtils.playNotificationSound();
+        String channelId = getString(R.string.default_notification_channel_id);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                        .setContentTitle(notification.getTitle())
+                        .setContentText(notification.getBody())
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
     private void handleDate(Map<String, String> data){
