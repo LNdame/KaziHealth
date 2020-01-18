@@ -160,21 +160,6 @@ public class KaziFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
 
-
-    private void handleNotification(RemoteMessage.Notification RemoteMsgNotification){
-        String message = RemoteMsgNotification.getBody();
-        String title = RemoteMsgNotification.getTitle();
-
-        NotificationVO notificationVO = new NotificationVO();
-        notificationVO.setTitle(title);
-        notificationVO.setMessage(message);
-
-        Intent resultIntent = new Intent(getApplicationContext(), RiskProfile.class);
-        NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
-        notificationUtils.displayNotification(notificationVO,resultIntent);
-        //notificationUtils.playNotificationSound();
-    }
-
     private void handleDate(Map<String, String> data){
         String title = data.get(TITLE);
         String message = data.get(MESSAGE);
