@@ -19,6 +19,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,6 +80,7 @@ public class EditProfile extends AppCompatActivity {
     private TextView mDateofBirth;
     private KaziDatabase kDB;
     SessionManager sessionManager;
+    MutableLiveData<Boolean> isSaved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,7 @@ public class EditProfile extends AppCompatActivity {
         kDB = KaziDatabase.getInstance(getApplicationContext());
         saveStateHandler = new LovelySaveStateHandler();
         sessionManager = new SessionManager(getApplicationContext());
+        isSaved = new MutableLiveData<>();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -199,74 +205,14 @@ public class EditProfile extends AppCompatActivity {
         }
     }
 
-
-    public Intent getIntentPicture() {
-
-        // Determine Uri of camera image to save.
-        Uri outputFileUri = getCaptureImageOutputUri();
-
-        List<Intent> allIntents = new ArrayList();
-        PackageManager packageManager = getPackageManager();
-
-        // collect all camera intents
-        Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-
-        for (ResolveInfo res : listCam) {
-
-            Intent intent = new Intent(captureIntent);
-            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(res.activityInfo.packageName);
-            if (outputFileUri != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-            }
-            allIntents.add(intent);
-        }
-
-        // collect all gallery intents
-        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image/*");
-        List<ResolveInfo> listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
-        for (ResolveInfo res : listGallery) {
-            Intent intent = new Intent(galleryIntent);
-            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-            intent.setPackage(res.activityInfo.packageName);
-            allIntents.add(intent);
-        }
+    public LiveData<Boolean> getSavedStatus(){return isSaved;}
 
 
-        // the main intent is the last in the list (fucking android) so pickup the useless one
-        Intent mainIntent = allIntents.get(allIntents.size() - 1);
-        for (Intent intent : allIntents) {
-            if (intent.getComponent().getClassName().equals("com.android.documentsui.DocumentsActivity")) {
-                mainIntent = intent;
-                break;
-            }
-        }
-        allIntents.remove(mainIntent);
-
-        // Create a chooser from the main intent
-        Intent chooserIntent = Intent.createChooser(mainIntent, "Select source");
-
-        // Add all other intents
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[allIntents.size()]));
-
-        return chooserIntent;
-
-
-    }
 
     /**
      * Get URI to image received from capture by camera.
      */
-    private Uri getCaptureImageOutputUri() {
-        Uri outputFileUri = null;
-        File getImage = getExternalCacheDir();
-        if (getImage != null) {
-            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "profile.png"));
-        }
-        return outputFileUri;
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -275,10 +221,14 @@ public class EditProfile extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
 
             mImgAvatar.setImageBitmap(imageBitmap);
-
-            if (SaveImage(imageBitmap) == 1) {
+            SaveImage(imageBitmap);
+            getSavedStatus().observe(this, aBoolean -> {
+                if(aBoolean==Boolean.TRUE)
+                    Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
+            });
+           /* if (isSaved.getValue()==Boolean.TRUE) {
                 Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
-            }
+            }*/
         }
 
         if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
@@ -288,28 +238,33 @@ public class EditProfile extends AppCompatActivity {
             Bundle extras = data.getExtras();
             try {
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageGallery);
-                if (SaveImage(imageBitmap) == 1) {
+                SaveImage(imageBitmap);
+                getSavedStatus().observe(this, aBoolean -> {
+                    if(aBoolean==Boolean.TRUE)
+                        Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
+                });
+               /* if (isSaved.getValue()==Boolean.TRUE) {
                     Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
-                }
+                }*/
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    int SaveImage(Bitmap picBitmap) {
+    void SaveImage(Bitmap picBitmap) {
         byte[] picByteArray = bitmaptoByte(picBitmap);
         final int u_id = cUser.getId();
 
-        AppExecutors.getInstance().getDiskIO().execute(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        kDB.userDao().updateUserImage(picByteArray, u_id);
-                    }
+        AppExecutors.getInstance().getMainThread().execute(//change to mainthread and see
+                () -> {
+                    cUser.setProfilePic(picByteArray);
+                    kDB.userDao().updateUserImage(picByteArray, u_id);
+                    mKaziApp.set_grUser(cUser);
+                    isSaved.postValue(Boolean.TRUE);
                 }
         );
-        return 1;
+
     }
 
 
