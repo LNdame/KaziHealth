@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import android.util.Log;
 import android.util.Patterns;
@@ -33,6 +35,7 @@ import mandela.cct.ansteph.kazihealth.data.KaziDatabase;
 import mandela.cct.ansteph.kazihealth.helper.SessionManager;
 import mandela.cct.ansteph.kazihealth.model.User;
 import mandela.cct.ansteph.kazihealth.view.profile.RiskProfile;
+import mandela.cct.ansteph.kazihealth.view.tip.About;
 
 public class Login_Firebase extends AppCompatActivity {
 
@@ -46,14 +49,18 @@ public class Login_Firebase extends AppCompatActivity {
     SessionManager sessionManager;
     KaziDatabase kDb;
     List<User> users = new ArrayList<>();
-    boolean doesUserExist;
+    MutableLiveData<Boolean> doesUserExist;
+    MutableLiveData<Boolean> backupEnacted;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_firebase);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        doesUserExist = new MutableLiveData<>();
+        backupEnacted= new MutableLiveData<>();
+        backupEnacted.setValue(Boolean.FALSE);
         mAuth = FirebaseAuth.getInstance();
         mKaziApp = (KaziApp)getApplicationContext();
         sessionManager = new SessionManager(getApplicationContext());
@@ -61,6 +68,7 @@ public class Login_Firebase extends AppCompatActivity {
         edtEmail=(EditText) findViewById(R.id.editEmail);
         edtPassword=(EditText) findViewById(R.id.editPass);
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        startRiskactivity();
     }
 
 
@@ -120,12 +128,13 @@ public class Login_Firebase extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()) {
                     String uid=FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    addUserIfMissing(uid);
                     sessionManager.createLoginSession(uid,email,password);
-                    finish();
+                    backupProcess(uid);
+
+                   /* finish();
                     Intent intent = new Intent(getApplicationContext(), RiskProfile.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    startActivity(intent);*/
                 } else {
                     Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -133,45 +142,65 @@ public class Login_Firebase extends AppCompatActivity {
         });
     }
 
+    private void backupProcess(String uid){
+        userExists(uid);
+
+        userSaveStatus().observe(this, aBoolean -> {
+           if(!aBoolean){
+               addUserIfMissing(uid);
+
+           }
+        });
+
+    }
+
     private void userExists(String uid){
         AppExecutors.getInstance().getMainThread().execute(new Runnable() {
             @Override
             public void run() {
                 users = kDb.userDao().checkUser(uid);
-                doesUserExist= users.size()>0;
+                doesUserExist.postValue( users.size()>0);
+                if(users.size()>0){
+                    Intent intent = new Intent(getApplicationContext(), RiskProfile.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
             }
         });
 
     }
 
+    LiveData<Boolean> userSaveStatus(){return doesUserExist;}
+    LiveData<Boolean> backupStatus(){return backupEnacted;}
+
+
+    void startRiskactivity(){
+        backupStatus().observe(this, aBoolean -> {
+            if(aBoolean==Boolean.TRUE){
+                Intent intent = new Intent(getApplicationContext(), About.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+    }
+
     private void addUserIfMissing(String uid){
-         DatabaseReference kDBRef= FirebaseDatabase.getInstance().getReference("Users").child(uid);
+         DatabaseReference kDBRef= FirebaseDatabase.getInstance().getReference("users").child(uid);
          kDBRef.addValueEventListener(new ValueEventListener() {
              @Override
              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                  User user = dataSnapshot.getValue(User.class);
+                 user.setUid(uid);
+                 AppExecutors.getInstance().getMainThread().execute(new Runnable() {
+                     @Override
+                     public void run() {
+                         Log.d(TAG, "try to insert user");
+                             Log.d(TAG, "Inserting User");
+                             kDb.userDao().insertAll(user);
+                         backupEnacted.postValue(Boolean.TRUE);
 
-//                 AppExecutors.getInstance().getSerialExecIO().execute(new Runnable() {
-//                     @Override
-//                     public void run() {
-//                         Log.d(TAG, "Checking user exist");
-//                         users = kDb.userDao().checkUser(uid);
-//                         doesUserExist= users.size()>0;
-//                     }
-//                 });
-//
-//                 AppExecutors.getInstance().getSerialExecIO().execute(new Runnable() {
-//                     @Override
-//                     public void run() {
-//                         Log.d(TAG, "try to insert user");
-//                         if(!doesUserExist){
-//                             Log.d(TAG, "Inserting User");
-//                             kDb.userDao().insertAll(user);
-//                         }
-//
-//                     }
-//                 }); Log.d(TAG, user.getName()+" "+user.getGender());
-
+                     }
+                 }); Log.d(TAG, user.getName()+" "+user.getGender());
 
              }
 

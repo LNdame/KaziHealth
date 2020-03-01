@@ -209,9 +209,7 @@ public class EditProfile extends AppCompatActivity {
 
 
 
-    /**
-     * Get URI to image received from capture by camera.
-     */
+
 
 
     @Override
@@ -226,9 +224,7 @@ public class EditProfile extends AppCompatActivity {
                 if(aBoolean==Boolean.TRUE)
                     Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
             });
-           /* if (isSaved.getValue()==Boolean.TRUE) {
-                Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
-            }*/
+
         }
 
         if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
@@ -243,9 +239,6 @@ public class EditProfile extends AppCompatActivity {
                     if(aBoolean==Boolean.TRUE)
                         Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
                 });
-               /* if (isSaved.getValue()==Boolean.TRUE) {
-                    Toast.makeText(getApplicationContext(), "Profile Image Changed", Toast.LENGTH_LONG).show();
-                }*/
             } catch (IOException e) {
                 e.printStackTrace();
             }

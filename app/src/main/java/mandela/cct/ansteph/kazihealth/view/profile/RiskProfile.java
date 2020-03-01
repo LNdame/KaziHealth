@@ -487,7 +487,7 @@ public class RiskProfile extends AppCompatActivity
                             msg =getString(R.string.msg_subscribe_failed);
                         }
                         Log.d(TAG, msg);
-                        Toast.makeText(RiskProfile.this, msg, Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
@@ -505,12 +505,9 @@ public class RiskProfile extends AppCompatActivity
                 // Log and toast
                 String msg = getString(R.string.msg_token_fmt, token);
                 Log.d(TAG, msg);
-                Toast.makeText(RiskProfile.this, msg, Toast.LENGTH_SHORT).show();
+
             }
         });
-        //Log.d("kazi", "Subscribed");
-        //  Toast.makeText(Home.this, "Subscribed", Toast.LENGTH_SHORT).show();
-       // String token = FirebaseInstanceId.getInstance().getToken();
-       // Log.d("kazi_token", token);
+
     }
 }
