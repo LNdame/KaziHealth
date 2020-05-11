@@ -51,14 +51,6 @@
             android:value="bd5e725a5ba4820e8068afcc3893bb8bf07a1ad0" />
 
         <activity
-            android:name=".view.register.Login"
-            android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".view.register.Register"
-            android:label="@string/title_activity_register"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".view.profile.Profile"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />

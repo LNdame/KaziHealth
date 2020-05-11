@@ -13,7 +13,7 @@ import mandela.cct.ansteph.kazihealth.model.User;
 @Dao
 public interface RiskItemDao {
     @Query("SELECT * FROM risk_item")
-    List<RiskItem> getall();
+    List<RiskItem> getAllRiskItem();
 
     @Query("SELECT * FROM risk_item WHERE _id LIKE :id LIMIT 1")
     User findById(int id);
