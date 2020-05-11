@@ -25,30 +25,13 @@ import mandela.cct.ansteph.kazihealth.model.User;
 
 public class PdfReport {
 
-    private KaziDatabase kDB;
     private final Context context;
-
-    private static final int RID_BP = 1;
-    private static final int RID_HR = 2;
-    private static final int RID_CHL = 3;
-    private static final int RID_BGL = 4;
-    private static final int RID_HEIGHT = 5;
-    private static final int RID_WEIGHT = 6;
-    private static final int RID_BMI = 7;
-    private static final int RID_WAIST = 8;
-    private static final int RID_HIP = 9;
-    private static final int RID_W2H = 10;
-
-    RiskProfileItem rBp, rHeartRate, rChol, rBgl, rHeight, rWeight, rBMI, rWaist, rHip, rW2H;
-
     private final List<RiskProfileItem> riskProfileItems;
     private final List<RiskItem> riskItems;
-
     private final User user;
 
     public PdfReport(Context context, List<RiskProfileItem> riskProfileItems, List<RiskItem> riskItems, User user) {
         this.context = context;
-        kDB = KaziDatabase.getInstance(context);
         this.riskProfileItems = riskProfileItems;
         this.riskItems = riskItems;
         this.user = user;
@@ -57,7 +40,6 @@ public class PdfReport {
     public User getUser() {
         return user;
     }
-
 
     public void createPdf( String destination) {
         File file = new File(destination);
@@ -78,7 +60,6 @@ public class PdfReport {
             document.addCreationDate();
             document.addAuthor("Kazihealth Report");
             document.addCreator("Kazibantu Project");
-
 
             //Title order Details
             //Adding title
@@ -104,12 +85,11 @@ public class PdfReport {
             table.addCell(PdfCreatorUtils.tableHeaderCell("Status",PdfCreatorUtils.bodyFontSize,PdfCreatorUtils.blackAccent));
 
             for (int i = 0; i < riskItems.size(); i++) {
-                //value header BloodPressure
+                //value header
                 table.addCell(PdfCreatorUtils.tableBodyCell(riskItems.get(i).getName(),PdfCreatorUtils.bodyFontSize,PdfCreatorUtils.colorAccent));
                 //value
                 table.addCell(PdfCreatorUtils.tableBodyCell( String.format("%s %s",riskProfileItems.get(i).getMeasurement(),riskItems.get(i).getUnit()),PdfCreatorUtils.valueFontSize,PdfCreatorUtils.blackAccent));
                 table.addCell(PdfCreatorUtils.tableBodyCell( String.format("%s",riskProfileItems.get(i).getComment()),PdfCreatorUtils.bodyFontSize,PdfCreatorUtils.blackAccent));
-
             }
 
             document.add(table);

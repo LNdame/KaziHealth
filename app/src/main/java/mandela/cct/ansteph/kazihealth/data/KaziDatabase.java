@@ -13,6 +13,7 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.Date;
+import java.util.List;
 
 import mandela.cct.ansteph.kazihealth.model.RiskItem;
 import mandela.cct.ansteph.kazihealth.model.RiskProfileItem;
@@ -63,22 +64,19 @@ public abstract class KaziDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            riskItemDao.deleteAll();
-            String sdt_ = DateFormat.format("yyyy-MM-dd  kk:mm", new Date()).toString();
-            RiskItem[] riskItems ={
-                    new RiskItem("Blood Pressure", "mmHg", sdt_),
-                    new RiskItem("Heart Rate", "bpm", sdt_),
-                    new RiskItem("Cholesterol", "mmol/L", sdt_),
-                    new RiskItem("Blood Glucose Level", "mg/dl", sdt_),
-                    new RiskItem("Height", "cm", sdt_),
-                    new RiskItem("Weight", "kg", sdt_),
-                    new RiskItem("Body Mass Index", "-", sdt_),
-                    new RiskItem("Waist", "cm", sdt_),
-                    new RiskItem("Hip", "cm", sdt_),
-                    new RiskItem("Waist to hip Ration (W2HRatio)", "-", sdt_),
-            };
-            riskItemDao.insertAll(riskItems);
+            List<RiskItem> list= riskItemDao.getAllRiskItem();
+            if(list.isEmpty()) {
 
+                String sdt_ = DateFormat.format("yyyy-MM-dd  kk:mm", new Date()).toString();
+                RiskItem[] riskItems = {
+                        new RiskItem("Blood Pressure", "mmHg", sdt_), new RiskItem("Heart Rate", "bpm", sdt_),
+                        new RiskItem("Cholesterol", "mmol/L", sdt_), new RiskItem("Blood Glucose Level", "mg/dl", sdt_),
+                        new RiskItem("Height", "cm", sdt_), new RiskItem("Weight", "kg", sdt_),
+                        new RiskItem("Body Mass Index", "kg.m2", sdt_), new RiskItem("Waist", "cm", sdt_),
+                        new RiskItem("Hip", "cm", sdt_), new RiskItem("Waist to hip Ration (W2HRatio)", "-", sdt_),
+                };
+                riskItemDao.insertAll(riskItems);
+            }
             return null;
         }
     }

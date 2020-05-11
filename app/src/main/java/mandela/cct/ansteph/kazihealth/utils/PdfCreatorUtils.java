@@ -3,15 +3,10 @@ package mandela.cct.ansteph.kazihealth.utils;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPHeaderCell;
 import com.itextpdf.text.pdf.draw.LineSeparator;
-
 import java.io.IOException;
 
 public class PdfCreatorUtils {
-
-    private BaseFont baseFont;
-    private Font headerFont;
 
     public static BaseColor colorAccent = new BaseColor(0, 153, 204, 255);
     public static BaseColor blackAccent = new BaseColor(0, 0, 0, 255);
@@ -19,22 +14,6 @@ public class PdfCreatorUtils {
     public static float valueFontSize = 14.0f;
     public static float valueCellSize = 30.0f;
 
-
-
-//    private PdfCreatorUtils() throws IOException, DocumentException {
-//        setBaseFont();
-//    }
-//
-//    public PdfCreatorUtils getInstance() throws IOException, DocumentException {
-//        if (instance==null){
-//            instance = new PdfCreatorUtils();
-//        }
-//        return instance;
-//    }
-
-    private void setBaseFont() throws IOException, DocumentException {
-
-    }
 
     static Paragraph headerParagraph(String title) throws IOException, DocumentException {
         BaseFont  baseFont = BaseFont.createFont("assets/fonts/brandon_medium.otf", "UTF-8", BaseFont.EMBEDDED);
@@ -86,7 +65,6 @@ public class PdfCreatorUtils {
     static PdfPCell tableHeaderCell(String body, float fontSize, BaseColor color)throws IOException, DocumentException{
         BaseFont  baseFont = BaseFont.createFont("assets/fonts/brandon_medium.otf", "UTF-8", BaseFont.EMBEDDED);
         Font cellFont  = new Font(baseFont, fontSize, Font.BOLD, color);
-       // PdfPHeaderCell headerCell = new PdfPHeaderCell();
         PdfPCell cell = new PdfPCell(new Phrase(body,cellFont));
         cell.setFixedHeight(valueCellSize);
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -95,8 +73,5 @@ public class PdfCreatorUtils {
         cell.setBorder(Rectangle.BOTTOM);
         return cell;
     }
-
-
-
 
 }

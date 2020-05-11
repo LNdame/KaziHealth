@@ -320,7 +320,6 @@ public class RiskProfile extends AppCompatActivity implements NavigationView.OnN
             }
         });
 
-        setNoRiskPanel();
     }
 
     public void setBMIFields(RiskProfileItem riskBMI) {
@@ -350,8 +349,8 @@ public class RiskProfile extends AppCompatActivity implements NavigationView.OnN
             color = colorModerateRisk;
             used = dotModerate;
         } else if (measurement > 29.9 && measurement <= 34.9) {
-            color = colorModerateRisk;
-            used = dotModerate;
+            color = colorHighRisk;
+            used = dotHigh;
         } else if (measurement > 34.9 && measurement <= 39.9) {
             color = colorHighRisk;
             used = dotHigh;
