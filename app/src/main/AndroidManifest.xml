@@ -50,6 +50,16 @@
             android:name="io.fabric.ApiKey"
             android:value="bd5e725a5ba4820e8068afcc3893bb8bf07a1ad0" />
 
+        <provider
+            android:authorities="${applicationId}.provider"
+            android:name=".utils.GenericFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
         <activity
             android:name=".view.profile.Profile"
             android:label="@string/title_activity_profile"

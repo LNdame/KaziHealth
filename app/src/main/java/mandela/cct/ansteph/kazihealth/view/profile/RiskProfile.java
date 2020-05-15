@@ -319,15 +319,13 @@ public class RiskProfile extends AppCompatActivity implements NavigationView.OnN
                 riskItemList = kDB.riskItemDao().getAllRiskItem();
             }
         });
-
     }
 
     public void setBMIFields(RiskProfileItem riskBMI) {
         String comment = "";
 
         int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);
-        int colorModerateRisk =
-                ContextCompat.getColor(this, R.color.riskColorModerate);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);
         int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
@@ -370,9 +368,8 @@ public class RiskProfile extends AppCompatActivity implements NavigationView.OnN
 
     public void setBGLFields(RiskProfileItem riskBGL) {
         String comment = "";
-        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk =
-                ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);
         int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
@@ -409,9 +406,9 @@ public class RiskProfile extends AppCompatActivity implements NavigationView.OnN
 
     public void setCHLFields(RiskProfileItem risk) {
         String comment = "";
-        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk =
-                ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);
+        ;
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);
         int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
@@ -447,9 +444,8 @@ public class RiskProfile extends AppCompatActivity implements NavigationView.OnN
 
     public void setBPFields(RiskProfileItem risk) {
         String comment = "";
-        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk =
-                ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);
         int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;

@@ -1,10 +1,17 @@
 package mandela.cct.ansteph.kazihealth.utils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.FileUriExposedException;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
-
+import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.PageSize;
@@ -18,13 +25,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import mandela.cct.ansteph.kazihealth.data.KaziDatabase;
 import mandela.cct.ansteph.kazihealth.model.RiskItem;
 import mandela.cct.ansteph.kazihealth.model.RiskProfileItem;
 import mandela.cct.ansteph.kazihealth.model.User;
 
 public class PdfReport {
 
+    private static String TAG = PdfReport.class.getSimpleName();
     private final Context context;
     private final List<RiskProfileItem> riskProfileItems;
     private final List<RiskItem> riskItems;
@@ -98,7 +105,9 @@ public class PdfReport {
             Toast.makeText(context, "Created... :)", Toast.LENGTH_SHORT).show();
 
             //FileUtils.openFile(context, new File(destination));
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                openPdf(file);
+            }
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -108,6 +117,26 @@ public class PdfReport {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private  void openPdf(File  file){
+        try {
+        Uri fileUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName()+".provider", file  );
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if(fileUri !=null){
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        }
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(fileUri,"application/pdf");
+
+        context.startActivity(intent);
+        }catch (ActivityNotFoundException e){
+            Toast.makeText(context, "No Application found", Toast.LENGTH_SHORT).show();
+        }catch (FileUriExposedException ue){
+            Log.e(TAG, ue.getMessage());
+        }
+    }
 }
 
 
