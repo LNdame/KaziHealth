@@ -177,12 +177,12 @@ public class Register_Firebase extends AppCompatActivity {
                             if (task.isSuccessful()) {
 
                                 User user = new User(
-                                        fullname, email, password, dob
+                                        fullname, email, "", dob
                                 );
 
                                 user.setGender((String) spnGender.getSelectedItem());
 
-                                FirebaseDatabase.getInstance().getReference("Users").
+                                FirebaseDatabase.getInstance().getReference("users").
                                         child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                         .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -192,11 +192,12 @@ public class Register_Firebase extends AppCompatActivity {
                                             Toast.makeText(Register_Firebase.this, getString(R.string.registration_success), Toast.LENGTH_LONG).show();
 
                                         } else {
-                                            ///failure message
+                                            Toast.makeText(Register_Firebase.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 });
                                 user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                user.setPassword(password);
                                 registerUserRoom(user);
                             } else {
                                 Toast.makeText(Register_Firebase.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();

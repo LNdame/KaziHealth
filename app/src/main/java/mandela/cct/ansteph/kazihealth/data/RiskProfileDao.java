@@ -18,7 +18,7 @@ public interface RiskProfileDao {
     @Query("SELECT * FROM risk_profile ORDER BY _id ASC")
     List<RiskProfileItem> getAllRiskProfileItem();
 
-    @Query("SELECT * FROM risk_profile WHERE user_id = :userId ORDER BY _id DESC")
+    @Query("SELECT * FROM risk_profile WHERE user_id = :userId ORDER BY _id")
     List<RiskProfileItem> getAllRiskProfileItem(int userId);
 
     @Query("SELECT * FROM risk_profile WHERE user_id = :userId AND risk_item_id = :riskItemId ")

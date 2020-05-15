@@ -8,6 +8,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_export">Export Report</string>
     <string name="title_activity_risk_profile">Risk Profile</string>
     <string name="title_activity_apps">Apps</string>
     <string name="title_activity_tips">Tips</string>
@@ -687,5 +688,16 @@ Be Active:\n\n
     <string name="default_notification_channel_name" translatable="true">KaziHealth</string>
     <string name="msg_subscribe_failed">Failed to subscribe to KaziHealth topic</string>
     <string name="fcm_message">KaziHealth</string>
+
+    <string name="header_blood_pressure">Blood Pressure</string>
+    <string name="header_heart_rate">Heart Rate</string>
+    <string name="header_cholesterol">Total Cholesterol</string>
+    <string name="header_blood_glucose_level">Blood Glucose Level</string>
+    <string name="header_height">Height</string>
+    <string name="header_weight">Weight</string>
+    <string name="header_bmi">Body Mass Index</string>
+    <string name="header_waist">Waist Circumference</string>
+    <string name="header_hip">Hip Circumference</string>
+    <string name="header_waist2hip">Waist to Hip Ratio</string>
 
 </resources>

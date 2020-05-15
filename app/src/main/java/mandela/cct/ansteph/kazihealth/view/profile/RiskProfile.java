@@ -1,6 +1,8 @@
 package mandela.cct.ansteph.kazihealth.view.profile;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -12,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -32,13 +35,13 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.io.File;
 import java.util.List;
 
 import mandela.cct.ansteph.kazihealth.R;
@@ -47,16 +50,22 @@ import mandela.cct.ansteph.kazihealth.app.KaziApp;
 import mandela.cct.ansteph.kazihealth.data.AppExecutors;
 import mandela.cct.ansteph.kazihealth.data.KaziDatabase;
 import mandela.cct.ansteph.kazihealth.helper.SessionManager;
+import mandela.cct.ansteph.kazihealth.model.RiskItem;
 import mandela.cct.ansteph.kazihealth.model.RiskProfileItem;
 import mandela.cct.ansteph.kazihealth.model.User;
+import mandela.cct.ansteph.kazihealth.utils.PdfReport;
 import mandela.cct.ansteph.kazihealth.view.appmanagement.Apps;
 import mandela.cct.ansteph.kazihealth.view.firebasereg.Login_Firebase;
 import mandela.cct.ansteph.kazihealth.view.tip.About;
 import mandela.cct.ansteph.kazihealth.view.tip.Tips;
 
-public class RiskProfile extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    private static String TAG  = RiskProfile.class.getSimpleName();
+public class RiskProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static final int PERMISSIONS_GRANTED = 0;
+    public static final int PERMISSIONS_DENIED = 1;
+
+    public static final int PERMISSION_REQUEST_CODE = 0;
+    private static String TAG = RiskProfile.class.getSimpleName();
     KaziApp mKaziApp;
     TextView txtName, txtEmail;
     String mEmail, mPwd;
@@ -70,7 +79,8 @@ public class RiskProfile extends AppCompatActivity
     private KaziDatabase kDB;
     User cUser;
     FirebaseAuth mAuth;
-
+    List<RiskProfileItem> riskProfileItemList;
+    List<RiskItem> riskItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,14 +108,13 @@ public class RiskProfile extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -120,19 +129,16 @@ public class RiskProfile extends AppCompatActivity
         String unit = "kg.m<sup>2</sup>";
         ((TextView) findViewById(R.id.txtBMIUnit)).setText(Html.fromHtml(unit));
 
-        AppExecutors.getInstance().getDiskIO().execute(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        // HashMap<String, String >userMap = sessionManager.getUserDetails();
-                        User currentUser = kDB.userDao().findUserByUID(sessionManager.getUserDetails().get(SessionManager.KEY_UID));
-                        fillRecord(currentUser);
+        AppExecutors.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                // HashMap<String, String >userMap = sessionManager.getUserDetails();
+                User currentUser = kDB.userDao().findUserByUID(sessionManager.getUserDetails().get(SessionManager.KEY_UID));
 
-                    }
-                }
-        );
+                fillRecord(currentUser);
+            }
+        });
 
-        setNoRiskPanel();
         initDrawer();
         subscribeToPushService();
     }
@@ -155,7 +161,6 @@ public class RiskProfile extends AppCompatActivity
         navAvatar.setImageBitmap(bitmap);
         navName.setText(mKaziApp.get_grUser().getName());
         navEmail.setText(mKaziApp.get_grUser().getEmail());
-
     }
 
     void initFields() {
@@ -173,22 +178,19 @@ public class RiskProfile extends AppCompatActivity
         txtchlcomment = findViewById(R.id.txtchlcomment);
         txtbmicomment = findViewById(R.id.txtbmicomment);
         txtbglcomment = findViewById(R.id.txtbglcomment);
-
     }
 
     void setNoRiskPanel() {
         if (cUser != null) {
             int id = cUser.getId();
-            AppExecutors.getInstance().getMainThread().execute(
-                    () -> {
-                        List<RiskProfileItem> riskProfileItems = kDB.riskProfileDao().getAllRiskProfileItem(id);
-                        if (riskProfileItems.size() > 0) {
-                            ltyNoriskp.setVisibility(View.VISIBLE);
-                        } else {
-                            ltyNoriskp.setVisibility(View.GONE);
-                        }
-                    }
-            );
+            AppExecutors.getInstance().getMainThread().execute(() -> {
+                List<RiskProfileItem> riskProfileItems = kDB.riskProfileDao().getAllRiskProfileItem(id);
+                if (riskProfileItems.size() > 0) {
+                    ltyNoriskp.setVisibility(View.VISIBLE);
+                } else {
+                    ltyNoriskp.setVisibility(View.GONE);
+                }
+            });
         }
     }
 
@@ -220,6 +222,14 @@ public class RiskProfile extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_export) {
+            if (!checkPermissions()) {
+                requestPermissions();
+            } else {
+                PdfReport pdfReport = new PdfReport(this, riskProfileItemList, riskItemList, cUser);
+                pdfReport.createPdf(new File(getExternalFilesDir("report_data"), "riskreport.pdf").getPath());
+            }
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -227,7 +237,6 @@ public class RiskProfile extends AppCompatActivity
     private void signOut() {
         mAuth.signOut();
         startActivity(new Intent(getApplicationContext(), Login_Firebase.class));
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -260,7 +269,6 @@ public class RiskProfile extends AppCompatActivity
         risk = kDB.riskProfileDao().getRiskProfileItem(Integer.parseInt(userID), Integer.parseInt(riskId));
         return risk;
     }
-
 
     public void fillRecord(User user) {
         cUser = user;
@@ -303,14 +311,21 @@ public class RiskProfile extends AppCompatActivity
             Bitmap bitmap = BitmapFactory.decodeByteArray(cUser.getProfilePic(), 0, cUser.getProfilePic().length);
             mImgAvatar.setImageBitmap(bitmap);
         }
-    }
 
+        AppExecutors.getInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                riskProfileItemList = kDB.riskProfileDao().getAllRiskProfileItem(user.getId());
+                riskItemList = kDB.riskItemDao().getAllRiskItem();
+            }
+        });
+    }
 
     public void setBMIFields(RiskProfileItem riskBMI) {
         String comment = "";
 
-        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);
         int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
@@ -332,8 +347,8 @@ public class RiskProfile extends AppCompatActivity
             color = colorModerateRisk;
             used = dotModerate;
         } else if (measurement > 29.9 && measurement <= 34.9) {
-            color = colorModerateRisk;
-            used = dotModerate;
+            color = colorHighRisk;
+            used = dotHigh;
         } else if (measurement > 34.9 && measurement <= 39.9) {
             color = colorHighRisk;
             used = dotHigh;
@@ -353,8 +368,8 @@ public class RiskProfile extends AppCompatActivity
 
     public void setBGLFields(RiskProfileItem riskBGL) {
         String comment = "";
-        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);
         int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
@@ -391,8 +406,9 @@ public class RiskProfile extends AppCompatActivity
 
     public void setCHLFields(RiskProfileItem risk) {
         String comment = "";
-        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);
+        ;
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);
         int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
@@ -428,8 +444,8 @@ public class RiskProfile extends AppCompatActivity
 
     public void setBPFields(RiskProfileItem risk) {
         String comment = "";
-        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);  //getResources().getColor(R.color.riskColorlow);
-        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);//  getResources().getColor(R.color.riskColorModerate);
+        int colorLowRisk = ContextCompat.getColor(this, R.color.riskColorlow);
+        int colorModerateRisk = ContextCompat.getColor(this, R.color.riskColorModerate);
         int colorHighRisk = ContextCompat.getColor(this, R.color.riskColorHigh);
 
         int color = colorLowRisk;
@@ -483,18 +499,17 @@ public class RiskProfile extends AppCompatActivity
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         String msg = getString(R.string.msg_subscribed);
-                        if(!task.isSuccessful()){
-                            msg =getString(R.string.msg_subscribe_failed);
+                        if (!task.isSuccessful()) {
+                            msg = getString(R.string.msg_subscribe_failed);
                         }
                         Log.d(TAG, msg);
-                        Toast.makeText(RiskProfile.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
 
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if(!task.isSuccessful()){
+                if (!task.isSuccessful()) {
                     Log.w(TAG, "getInstanceId failed", task.getException());
                     return;
                 }
@@ -505,12 +520,35 @@ public class RiskProfile extends AppCompatActivity
                 // Log and toast
                 String msg = getString(R.string.msg_token_fmt, token);
                 Log.d(TAG, msg);
-                Toast.makeText(RiskProfile.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
-        //Log.d("kazi", "Subscribed");
-        //  Toast.makeText(Home.this, "Subscribed", Toast.LENGTH_SHORT).show();
-       // String token = FirebaseInstanceId.getInstance().getToken();
-       // Log.d("kazi_token", token);
+    }
+
+    private boolean checkPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                        PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        return false;
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this,
+                new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                PERMISSION_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startActivity(new Intent(this, RiskProfile.class));
+            } else {
+                this.finish();
+            }
+        }
     }
 }
